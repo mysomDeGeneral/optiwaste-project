@@ -1,1 +1,21 @@
-OPTIWASTE : WORKED ON BY JOSHUA,MICHAEL AND RODNEY
+# Optiwaste
+
+## Table of Contents
+
+## Features
+
+## Prerequisites
+
+## Installation
+
+## Configuration
+
+## Usage
+
+## API Endpoints
+
+## Folder Structure
+
+## Contributing
+
+## License
