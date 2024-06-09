@@ -23,7 +23,40 @@ Optiwaste is a waste collection request application built with Node.js, Express,
 
 ## Installation
 
-## Configuration
+
+### Backend Setup
+
+1. **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/joshuaquarcoonii1/optiwaste-project.git
+    cd optiwaste-project/backend
+    ```
+
+2. **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3. **Set up environment variables:**
+
+    Create a `.env` file in the `backend` directory and add the following:
+
+    ```env
+    PORT=5000
+    MONGODB_URI=your-mongodb-uri
+    JWT_SECRET_KEY=your-jwt-secret
+    ```
+
+4. **Start the backend server:**
+
+    For development (with nodemon):
+
+    ```sh
+    npm run dev
+    ```
+
 
 ## Usage
 
@@ -36,12 +69,17 @@ optiwaste-project/
     ├── src/
         ├── apis/
         ├── config/
+            └── db.js
         ├── controllers/
+            └── users.js
         ├── middlewares/
         ├── models/
+            └── user.js
         ├── routes/
+            └── users.js
         ├── services/
         ├── utils/
+            └── jwt.js
         └── app.js
     ├── package.json
 ├── frontend

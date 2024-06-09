@@ -1,19 +1,22 @@
 const express = require('express');
-let app = express();
-const PORT = 9000;
+const app = express();
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+const bodyParser = require('body-parser');
+const PORT = process.env.PORT || 5000;
+const userRoutes = require('./routes/users');
 
-app.use(express.static('public'));
-
-
-app.get('/',(req,res)=>{
-    res.send('hello');
-})
-
-
+dotenv.config();
+connectDB();
 
 
-app.listen(PORT,()=>{
-    console.log('go');
-})
+app.use(bodyParser.json());
+
+app.use('/api/users', userRoutes);
+
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 
