@@ -34,18 +34,18 @@ Optiwaste is a waste collection request application built with Node.js, Express,
 optiwaste-project/
 ├── backend/
     ├── src/
-        ├── apis
-        ├── config
-        ├── controllers
-        ├── middlewares
-        ├── models
-        ├── routes
-        ├── services
-        ├── utils
+        ├── apis/
+        ├── config/
+        ├── controllers/
+        ├── middlewares/
+        ├── models/
+        ├── routes/
+        ├── services/
+        ├── utils/
         └── app.js
     ├── package.json
 ├── frontend
-    └── public
+    └── public/
 ├── .gitignore
 └── README.md
 
