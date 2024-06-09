@@ -1,0 +1,130 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components/
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# gatsby files
+.cache/
+# Comment in the public line in if your project uses Gatsby and not Next.js
+# public
+
+# Next.js build output
+.next/
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Store VS Code files
+.vscode/*
+
+# Ignore all test files except those in the test directory
+# This will match test files only if they are not within a test directory
+# Reference: https://git-scm.com/docs/gitignore#_pattern_format
+**/*.test.js
+!test/**
+
+# Mac specific files
+.DS_Store
+
+# Linux specific files
+*.swp
+
+# Windows specific files
+Thumbs.db
+*.lnk
+
+# Parcel cache directory
+.cache
+
+# Storybook
+.storybook/
+
+# SvelteKit build / generate output
+.svelte-kit
+
+# Razzle
+.razzle
+
+# Snowpack
+.snowpack
+
+# Sapper
+__sapper__
+
+# Remix build output
+build
+
+# MongoDB
+*.lock
+
+# Firebase
+.firebase
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# JetBrains
+.idea/
+
+# Haste cache
+.haste/
+
+# Expo
+.expo/
+web-build/
