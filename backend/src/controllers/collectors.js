@@ -1,0 +1,81 @@
+const Collector = require('../models/collector');
+const generateToken = require('../utils/jwt');
+
+exports.register = async (req, res) => {
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, location } = req.body;
+
+    try {
+        const collectorExists = await Collector.findOne({ email});
+
+        if (collectorExists) {
+            return res.status(400).json({ message: 'Collector already exists'});
+        }
+
+        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, location });
+        await collector.save();
+        res.status(201).json({
+            _id: collector._id,
+            name: collector.name,
+            email: collector.email,
+            nationalId: collector.nationalId,
+            licenseId: collector.licenseId,
+            dob: collector.dob,
+            wasteTypes: collector.wasteTypes,
+            location: collector.location,
+            token: generateToken(collector._id),
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error: ' + error});
+    };
+}
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const collector = await Collector.findOne({ email });
+        
+        if(collector && (await collector.matchPassword(password))) {
+            res.json({
+                _id: collector._id,
+                name: collector.name,
+                email: collector.email,
+                nationalId: collector.nationalId,
+                licenseId: collector.licenseId,
+                dob: collector.dob,
+                wasteTypes: collector.wasteTypes,
+                location: collector.location,
+                token: generateToken(collector._id),
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid email or password'});
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error: ' + error});
+    }
+}
+
+exports.logout = async (req, res) => {
+    const collector = await Collector.findById(req.collector._id);
+    collector.available = false;
+    res.json({ message: 'Logged out'});
+}
+
+exports.getCollectorProfile = async (req, res) => {
+    const { email } = req.body;
+
+    const collector = await Collector.findOne( {email });
+    res.json({
+        _id: collector._id,
+        name: collector.name,
+        email: collector.email,
+        nationalId: collector.nationalId,
+        licenseId: collector.licenseId,
+        dob: collector.dob,
+        wasteTypes: collector.wasteTypes,
+        location: collector.location,
+    });
+}
+

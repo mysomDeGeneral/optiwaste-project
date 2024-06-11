@@ -71,11 +71,14 @@ optiwaste-project/
         ├── config/
             └── db.js
         ├── controllers/
+            ├── collectors.js
             └── users.js
         ├── middlewares/
         ├── models/
+            ├── collector.js
             └── user.js
         ├── routes/
+            ├── collectors.js
             └── users.js
         ├── services/
         ├── utils/
