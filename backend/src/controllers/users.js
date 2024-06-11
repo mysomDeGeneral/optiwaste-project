@@ -55,7 +55,9 @@ exports.logout = async (req, res) => {
 }
 
 exports.getUserProfile = async (req, res) => {
-    const user = await User.findById(req.user._id);
+    const {email} = req.body;
+
+    const user = await User.findOne({ email });
     res.json({
         _id: user._id,
         name: user.name,

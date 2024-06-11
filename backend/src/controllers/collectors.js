@@ -58,8 +58,6 @@ exports.login = async (req, res) => {
 }
 
 exports.logout = async (req, res) => {
-    const collector = await Collector.findById(req.collector._id);
-    collector.available = false;
     res.json({ message: 'Logged out'});
 }
 
