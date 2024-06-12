@@ -77,3 +77,38 @@ exports.getCollectorProfile = async (req, res) => {
     });
 }
 
+exports.updateCollectorProfile = async (req, res) => {
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, location } = req.body;
+
+    const collector = await Collector.findById(req.collector._id);
+
+    if (collector) {
+        collector.name = name || collector.name;
+        collector.email = email || collector.email;
+        collector.nationalId = nationalId || collector.nationalId;
+        collector.licenseId = licenseId || collector.licenseId;
+        collector.dob = dob || collector.dob;
+        collector.wasteTypes = wasteTypes || collector.wasteTypes;
+        collector.location = location || collector.location;
+
+        if(password) {
+            collector.password = password;
+        }
+
+        await collector.save();
+        res.json({
+            _id: collector._id,
+            name: collector.name,
+            email: collector.email,
+            nationalId: collector.nationalId,
+            licenseId: collector.licenseId,
+            dob: collector.dob,
+            wasteTypes: collector.wasteTypes,
+            location: collector.location,
+            token: generateToken(collector._id),
+        });
+    }
+    else {
+        res.status(404).json({ message: 'Collector not found'});
+    }
+}
