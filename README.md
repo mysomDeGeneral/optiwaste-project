@@ -74,6 +74,7 @@ optiwaste-project/
             ├── collectors.js
             └── users.js
         ├── middlewares/
+            └── auth.js
         ├── models/
             ├── collector.js
             └── user.js

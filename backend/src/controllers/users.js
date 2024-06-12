@@ -66,3 +66,33 @@ exports.getUserProfile = async (req, res) => {
         mobile: user.mobile,
     });
 }
+
+exports.updateUserProfile = async (req, res) => {
+    const { name, email, password, address, mobile } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        user.name = name || user.name;
+        user.email = email || user.email;
+        user.address = address || user.address;
+        user.mobile = mobile || user.mobile;
+
+        if (password) {
+            user.password = password;
+        }
+
+        await user.save();
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            address: user.address,
+            mobile: user.mobile,
+            token: generateToken(user._id),
+        });
+    }
+    else {
+        res.status(404).json({ message: 'User not found'});
+    }
+}
