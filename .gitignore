@@ -116,8 +116,8 @@ build
 .firebase
 
 # Lock files
-package-lock.json
-yarn.lock
+#package-lock.json
+#yarn.lock
 
 # JetBrains
 .idea/
