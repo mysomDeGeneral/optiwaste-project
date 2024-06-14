@@ -20,11 +20,13 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
         const suitableCollectors = await Collector.find(query);
 
         if (suitableCollectors.length === 0) {
-            throw new Error('No collectors available');
+            request.collector = null;
+            request.requestStatus = 'Unassigned';
+        } else {
+            request.collector = suitableCollectors[0]._id;
+            request.requestStatus = 'Pending';
         }
 
-        request.collector = suitableCollectors[0]._id;
-        request.requestStatus = 'Pending';
         await request.save();
 
         return request;

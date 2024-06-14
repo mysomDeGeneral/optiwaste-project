@@ -106,9 +106,9 @@ exports.rejectRequest = async (req, res) => {
             request.requestStatus = 'Rejected';
             await request.save();
 
-            await assignCollectorToRequest(req.params.id, req.collector._id);
+            await assignCollectorToRequest(request._id , req.collector._id);
 
-            res.json({message: 'Request rejected and reassigned', request});
+            res.json({message: 'Request rejected and reassigned if possible', request});
         } else {
             res.status(404).json({ message: 'Request not found or you are not assigned to this request' });
         }

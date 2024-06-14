@@ -9,7 +9,7 @@ const requestSchema = new mongoose.Schema({
         latitude: { type: Number, required: true, min: -90, max: 90 },
         longitude: { type: Number, required: true, min: -180, max: 180 },
     },
-    requestStatus: { type: String, enum: ['Pending', 'Accepted', 'Rejected'], default: 'Pending' },
+    requestStatus: { type: String, enum: ['Unassigned', 'Pending', 'Accepted', 'Rejected'], default: 'Pending' },
     paymentStatus: { type: String, required: true, default: 'unpaid' },
 }, {
     timestamps: true,
