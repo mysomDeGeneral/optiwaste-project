@@ -1,7 +1,7 @@
 const mongoose =  require('mongoose');
 
 const requestSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User'},
     collector: { type: mongoose.Schema.Types.ObjectId, ref: 'Collector'},
     binId: { type: String, required: true },
     wasteType: { type: String, required: true },
@@ -9,7 +9,7 @@ const requestSchema = new mongoose.Schema({
         latitude: { type: Number, required: true, min: -90, max: 90 },
         longitude: { type: Number, required: true, min: -180, max: 180 },
     },
-    requestStatus: { type: String, required: true, default: 'pending' },
+    requestStatus: { type: String, enum: ['Pending', 'Accepted', 'Rejected'], default: 'Pending' },
     paymentStatus: { type: String, required: true, default: 'unpaid' },
 }, {
     timestamps: true,
