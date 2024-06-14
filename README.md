@@ -72,16 +72,20 @@ optiwaste-project/
             └── db.js
         ├── controllers/
             ├── collectors.js
+            ├── requests.js
             └── users.js
         ├── middlewares/
             └── auth.js
         ├── models/
             ├── collector.js
+            ├── request.js
             └── user.js
         ├── routes/
             ├── collectors.js
+            ├── requests.js
             └── users.js
         ├── services/
+            └── assignment.js
         ├── utils/
             └── jwt.js
         └── app.js
