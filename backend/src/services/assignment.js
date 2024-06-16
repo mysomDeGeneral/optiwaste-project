@@ -1,24 +1,32 @@
 const Collector = require('../models/collector');
 const Request = require('../models/request');
 
-async function assignCollectoroRequest(requestId) {
+async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
     try {
         const request = await Request.findById(requestId);
         if (!request) {
             throw new Error('Request not found');
         }
 
-        const suitableCollectors = await Collector.find({
+        const query = {
             available: true,
             wasteTypes: { $in: [request.wasteType]},
-        });
+        };
 
-        if (suitableCollectors.length === 0) {
-            throw new Error('No collectors available');
+        if (rejectedCollectorId) {
+            query._id = { $ne: rejectedCollectorId };
         }
 
-        request.collector = suitableCollectors[0]._id;
-        request.requestStatus = 'assigned';
+        const suitableCollectors = await Collector.find(query);
+
+        if (suitableCollectors.length === 0) {
+            request.collector = null;
+            request.requestStatus = 'Unassigned';
+        } else {
+            request.collector = suitableCollectors[0]._id;
+            request.requestStatus = 'Pending';
+        }
+
         await request.save();
 
         return request;
@@ -27,4 +35,4 @@ async function assignCollectoroRequest(requestId) {
     }
 }
 
-module.exports = { assignCollectoroRequest };
+module.exports = { assignCollectorToRequest };

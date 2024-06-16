@@ -4,15 +4,17 @@ Optiwaste is a waste collection request application built with Node.js, Express,
 
 ## Table of Contents
 
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Folder Structure](#folder-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Optiwaste](#optiwaste)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Backend Setup](#backend-setup)
+  - [Usage](#usage)
+  - [API Endpoints](#api-endpoints)
+  - [Folder Structure](#folder-structure)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Features
 
@@ -63,11 +65,12 @@ Optiwaste is a waste collection request application built with Node.js, Express,
 ## API Endpoints
 
 ## Folder Structure
-
+```
 optiwaste-project/
 ├── backend/
     ├── src/
         ├── apis/
+            └── ghanaPostGPS.js
         ├── config/
             └── db.js
         ├── controllers/
@@ -94,7 +97,7 @@ optiwaste-project/
     └── public/
 ├── .gitignore
 └── README.md
-
+```
 
 
 ## Contributing
