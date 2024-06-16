@@ -68,6 +68,7 @@ optiwaste-project/
 ├── backend/
     ├── src/
         ├── apis/
+            └── ghanaPostGPS.js
         ├── config/
             └── db.js
         ├── controllers/
