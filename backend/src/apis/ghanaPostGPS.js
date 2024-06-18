@@ -2,13 +2,13 @@ const axios = require('axios');
 const qs = require('qs');
 
 exports.getLocation = async (req, res) => {
-  const { digitalAddress } = req.body;
+  const { DigitalAddress } = req.body;
 
-  if (!digitalAddress) {
+  if (!DigitalAddress) {
     return res.status(400).json({ message: 'DigitalAddress is required' });
   }
 
-  const data = qs.stringify({ address: digitalAddress });
+  const data = qs.stringify({ address: DigitalAddress });
 
   try {
     const response = await axios.post('http://localhost:9091/get-location', data, {
@@ -23,6 +23,7 @@ exports.getLocation = async (req, res) => {
       const result = {
         latitude: locationData.CenterLatitude,
         longitude: locationData.CenterLongitude,
+        district: locationData.District,
       };
       return res.status(200).json(result);
     } else {
