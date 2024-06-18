@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 5000;
 const userRoutes = require('./routes/users');
 const collectorRoutes = require('./routes/collectors');
 const requestRoutes = require('./routes/requests');
+const locationRoutes = require('./routes/location');
+
 
 dotenv.config();
 connectDB();
@@ -18,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/collectors', collectorRoutes);
 app.use('/api/requests', requestRoutes);
+app.use('/api/location', locationRoutes);
 
 
 app.listen(PORT, () => {
