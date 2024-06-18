@@ -78,7 +78,7 @@ exports.getCollectorProfile = async (req, res) => {
 }
 
 exports.updateCollectorProfile = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, location } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress } = req.body;
 
     const collector = await Collector.findById(req.collector._id);
 
@@ -113,9 +113,9 @@ exports.updateCollectorProfile = async (req, res) => {
     }
 }
 
-exports.deleteCollector = async (req, res) => {
+exports.deleteCollectorProfile = async (req, res) => {
     try {
-        const collector = await Collector.findById(req.params.id);
+        const collector = await Collector.findById(req.Collector._id);
 
         if (collector) {
             await collector.deleteOne();
