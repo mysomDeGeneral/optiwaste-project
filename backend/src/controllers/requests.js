@@ -3,13 +3,13 @@ const { assignCollectorToRequest } = require('../services/assignment');
 
 exports.createRequest = async (req, res) => {
     try {
-        const { binId, wasteType, location } = req.body;
+        const { binId, wasteType, digitalAddress } = req.body;
 
         const request = new Request({
             user: req.user._id,
             binId,
             wasteType,
-            location,
+            digitalAddress,
         });
 
         await request.save();
@@ -52,11 +52,14 @@ exports.getRequest = async (req, res) => {
 }
 
 exports.updateRequest = async (req, res) => {
+    const { requestStatus, digitalAddress } = req.body;
+
     try {
         const request = await Request.findById(req.params.id);
 
         if (request) {
-            request.requestStatus = req.body.requestStatus;
+            request.requestStatus = requestStatus || request.requestStatus;
+            request.digitalAddress = digitalAddress || request.digitalAddress;
             await request.save();
             res.json(request);
         } else {

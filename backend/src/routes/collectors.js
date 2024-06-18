@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, logout,getCollectorProfile, updateCollectorProfile } = require('../controllers/collectors');
+const { register, login, logout,getCollectorProfile, updateCollectorProfile, deleteCollectorProfile } = require('../controllers/collectors');
 const { protect } = require('../middlewares/auth');
 
 
@@ -9,5 +9,6 @@ router.post('/login', login);
 router.post('/logout', logout);
 router.get('/profile', getCollectorProfile);
 router.put('/profile', protect, updateCollectorProfile);
+router.delete('/profile', protect, deleteCollectorProfile);
 
 module.exports = router;
