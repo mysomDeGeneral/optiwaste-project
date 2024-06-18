@@ -85,6 +85,7 @@ optiwaste-project/
             └── user.js
         ├── routes/
             ├── collectors.js
+            ├── location.js
             ├── requests.js
             └── users.js
         ├── services/
