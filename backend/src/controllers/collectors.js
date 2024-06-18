@@ -2,7 +2,7 @@ const Collector = require('../models/collector');
 const generateToken = require('../utils/jwt');
 
 exports.register = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, location } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress } = req.body;
 
     try {
         const collectorExists = await Collector.findOne({ email});
@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'Collector already exists'});
         }
 
-        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, location });
+        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress });
         await collector.save();
         res.status(201).json({
             _id: collector._id,
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
             licenseId: collector.licenseId,
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
-            location: collector.location,
+            digitalAddress: collector.digitalAddress,
             token: generateToken(collector._id),
         });
     }
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
                 licenseId: collector.licenseId,
                 dob: collector.dob,
                 wasteTypes: collector.wasteTypes,
-                location: collector.location,
+                digitalAddress: collector.digitalAddress,
                 token: generateToken(collector._id),
             });
         } else {
@@ -73,7 +73,7 @@ exports.getCollectorProfile = async (req, res) => {
         licenseId: collector.licenseId,
         dob: collector.dob,
         wasteTypes: collector.wasteTypes,
-        location: collector.location,
+        digitalAddress: collector.digitalAddress,
     });
 }
 
@@ -89,7 +89,7 @@ exports.updateCollectorProfile = async (req, res) => {
         collector.licenseId = licenseId || collector.licenseId;
         collector.dob = dob || collector.dob;
         collector.wasteTypes = wasteTypes || collector.wasteTypes;
-        collector.location = location || collector.location;
+        collector.digitalAddress = digitalAddress || collector.digitalAddress;
 
         if(password) {
             collector.password = password;
@@ -104,7 +104,7 @@ exports.updateCollectorProfile = async (req, res) => {
             licenseId: collector.licenseId,
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
-            location: collector.location,
+            digitalAddress: collector.digitalAddress,
             token: generateToken(collector._id),
         });
     }
@@ -112,3 +112,19 @@ exports.updateCollectorProfile = async (req, res) => {
         res.status(404).json({ message: 'Collector not found'});
     }
 }
+
+exports.deleteCollector = async (req, res) => {
+    try {
+        const collector = await Collector.findById(req.params.id);
+
+        if (collector) {
+            await collector.deleteOne();
+            res.json({ message: 'Collector removed' });
+        } else {
+            res.status(404).json({ message: 'Collector not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting collector', error: error.message });
+    }
+}
+

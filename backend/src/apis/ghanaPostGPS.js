@@ -1,9 +1,9 @@
 const request = require('request');
 
 exports.getLocation = async (req, res) => {
-    const { DigitalAddress } = req.body;
+    const { digitalAddress } = req.body;
 
-    if(!DigitalAddress) {
+    if(!digitalAddress) {
         return res.status(400).json({ message: 'DigitalAddress is required' });
     }
 
@@ -14,7 +14,7 @@ exports.getLocation = async (req, res) => {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         form: {
-            address: DigitalAddress,
+            address: digitalAddress,
         },
     };
 
