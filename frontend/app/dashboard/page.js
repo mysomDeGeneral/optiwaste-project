@@ -1,17 +1,12 @@
+"use client"
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import DashboardPage from "@/components/dashboard";
 
 export default function Dashboard(){
     return (
         <div>
-            <div>
-                <h1>Dashboard</h1>
-            <p>Welcome to the dashboard page</p>
-            </div>
-
-            <div>
-                <Link href="/dashboard/settings">Settings</Link>
-            </div>
-            
+            <DashboardPage />
         </div>
     );
 }
