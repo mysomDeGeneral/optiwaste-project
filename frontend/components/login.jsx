@@ -6,7 +6,7 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-export default function Settings() {
+export default function LoginPage() {
   return (
     (<div className="flex min-h-screen">
       <div className="w-1/2">

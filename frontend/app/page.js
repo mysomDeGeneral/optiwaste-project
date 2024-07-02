@@ -1,6 +1,8 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/lib/theme.util";
 
 
 export const metadata = {
@@ -21,9 +23,10 @@ export default function Home() {
         height={200}
       />
       </div>
-
-      <div>
-        <Link href="/dashboard">Dashboard</Link>
+      {/* <ModeToggle /> */}
+    
+      <div className="">
+        <Button><Link href="/dashboard">Dashboard</Link></Button>
       </div>
       
     </div>
