@@ -27,7 +27,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 
-export function profile() {
+export function ProfilePage() {
   return (
     (<div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside

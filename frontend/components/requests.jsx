@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 
-export function requests() {
+export function RequestsPage() {
   const [requests, setRequests] = useState([
     {
       id: "REQ001",

@@ -27,7 +27,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 
-export function payment() {
+export function PaymentPage() {
   return (
     (<div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside

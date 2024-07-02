@@ -30,7 +30,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 
-export function collectors() {
+export function CollectorsPage() {
   return (
     (<div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside

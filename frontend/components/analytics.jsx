@@ -24,7 +24,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { ResponsiveBar } from "@nivo/bar"
 import { ResponsivePie } from "@nivo/pie"
 
-export function analytics() {
+export function AnalyticsPage() {
   const [requests, setRequests] = useState([
     {
       id: "REQ001",

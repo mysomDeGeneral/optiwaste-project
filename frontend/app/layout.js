@@ -2,6 +2,7 @@ import { Inter as FontSans } from "next/font/google";
 import "@/styles/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Root } from "postcss";
+import Link from "next/link";
 //const inter = Inter({ subsets: ["latin"] });
 
 const fontSans = FontSans({
@@ -14,7 +15,7 @@ export const metadata = {
   description: "OptiWaste app",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ auth, children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={(fontSans.Variable)}>
@@ -24,9 +25,13 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-        {children}
+          {/* <nav>
+            <Link href="/login">Open modal</Link>
+          </nav> */}
+          <div>{auth}</div>
+          <div>{children}</div>
         </ThemeProvider>
-        </body>
+      </body>
     </html>
   );
 }
