@@ -7,22 +7,27 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from "next/image"
+import logo from "@/public/OPTIWASTE.png"
+import truckImage from "@/public/waste truck.PNG"
 
 export default function LoginPage() {
   return (
     (<div className="flex min-h-screen">
       <div className="flex-1">
-        <img
-          src="/placeholder.svg"
+        <Image
+          src={truckImage}
           alt="Garbage truck"
-          className="object-cover w-full h-full" />
+          className="object-cover w-full h-full"
+      />
       </div>
       <div
         className="flex flex-col items-center justify-center w-full max-w-md p-8 space-y-8">
         <div className="flex flex-col items-center space-y-2">
-          <TrashIcon className="w-12 h-12" />
-          <h1 className="text-4xl font-bold">OPTIWASTE</h1>
-          <p className="text-sm text-muted-foreground">ESTD 2024</p>
+          <Image
+            src={logo}
+            alt="logo"
+          />
         </div>
         <div className="flex gap-2">
             <Button>Sign In</Button><Link

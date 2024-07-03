@@ -31,362 +31,138 @@ import { ResponsiveLine } from "@nivo/line"
 
 export default function DashboardPage() {
   return (
-    (<div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside
-        className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <TooltipProvider>
-            <Link
-              href="#"
-              className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-              prefetch={false}>
-              <Package2Icon className="h-4 w-4 transition-all group-hover:scale-110" />
-              <span className="sr-only">OptiWaste</span>
-            </Link>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}>
-                  <HomeIcon className="h-5 w-5" />
-                  <span className="sr-only">Dashboard</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Dashboard</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}>
-                  <UsersIcon className="h-5 w-5" />
-                  <span className="sr-only">Users</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Users</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}>
-                  <TruckIcon className="h-5 w-5" />
-                  <span className="sr-only">Collectors</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Collectors</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}>
-                  <ClipboardIcon className="h-5 w-5" />
-                  <span className="sr-only">Requests</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Requests</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}>
-                  <SettingsIcon className="h-5 w-5" />
-                  <span className="sr-only">Settings</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Settings</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </nav>
-        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  prefetch={false}>
-                  <LogOutIcon className="h-5 w-5" />
-                  <span className="sr-only">Logout</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Logout</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </nav>
-      </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header
-          className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="sm:hidden">
-                <MenuIcon className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="sm:max-w-xs">
-              <nav className="grid gap-6 text-lg font-medium">
-                <Link
-                  href="#"
-                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-                  prefetch={false}>
-                  <Package2Icon className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">OptiWaste</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
-                  prefetch={false}>
-                  <HomeIcon className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  prefetch={false}>
-                  <UsersIcon className="h-5 w-5" />
-                  Users
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  prefetch={false}>
-                  <TruckIcon className="h-5 w-5" />
-                  Collectors
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  prefetch={false}>
-                  <ClipboardIcon className="h-5 w-5" />
-                  Requests
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  prefetch={false}>
-                  <SettingsIcon className="h-5 w-5" />
-                  Settings
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <Breadcrumb className="hidden md:flex">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#" prefetch={false}>
-                    Dashboard
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-          <div className="ml-auto flex items-center gap-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-                  <img
-                    src="/placeholder.svg"
-                    width="36"
-                    height="36"
-                    className="rounded-full"
-                    alt="Avatar" />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Total Waste Collected</CardTitle>
-                <CardDescription>The total amount of waste collected by all collectors.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-bold">12,345 tons</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Active Collectors</CardTitle>
-                <CardDescription>The number of collectors currently active and collecting waste.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-bold">125</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Pending Requests</CardTitle>
-                <CardDescription>The number of waste collection requests that are still pending.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-bold">32</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Recycling Rate</CardTitle>
-                <CardDescription>The percentage of collected waste that is being recycled.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-bold">85%</div>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Waste Collection by Type</CardTitle>
-                <CardDescription>A breakdown of the types of waste collected.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <PieChart className="w-full aspect-[4/3]" />
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Collector Performance</CardTitle>
-                <CardDescription>A chart showing the performance of collectors over time.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <LineChart className="w-full aspect-[4/3]" />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Payments Received</CardTitle>
-                <CardDescription>View and manage your payment information.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-between">
-                    <div>Total Payments Received</div>
-                    <div className="text-4xl font-bold">$10,234.56</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>Payment Method</div>
-                    <div>
-                      <Button variant="outline" size="sm">
-                        Update
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>Last Payment Received</div>
-                    <div>June 1, 2024</div>
-                  </div>
-                  <Button className="w-full">View Payment History</Button>
+    <main>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Waste Collected</CardTitle>
+          <CardDescription>The total amount of waste collected by all collectors.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-bold">12,345 tons</div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Active Collectors</CardTitle>
+          <CardDescription>The number of collectors currently active and collecting waste.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-bold">125</div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Pending Requests</CardTitle>
+          <CardDescription>The number of waste collection requests that are still pending.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-bold">32</div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Recycling Rate</CardTitle>
+          <CardDescription>The percentage of collected waste that is being recycled.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-bold">85%</div>
+        </CardContent>
+      </Card>
+    </div><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Waste Collection by Type</CardTitle>
+            <CardDescription>A breakdown of the types of waste collected.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PieChart className="w-full aspect-[4/3]" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Collector Performance</CardTitle>
+            <CardDescription>A chart showing the performance of collectors over time.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LineChart className="w-full aspect-[4/3]" />
+          </CardContent>
+        </Card>
+      </div><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Payments Received</CardTitle>
+            <CardDescription>View and manage your payment information.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div className="flex items-center justify-between">
+                <div>Total Payments Received</div>
+                <div className="text-4xl font-bold">$10,234.56</div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>Payment Method</div>
+                <div>
+                  <Button variant="outline" size="sm">
+                    Update
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Payment History</CardTitle>
-                <CardDescription>View your past payment transactions.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>June 1, 2024</TableCell>
-                      <TableCell>$1,234.56</TableCell>
-                      <TableCell>
-                        <Badge variant="success">Paid</Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>May 1, 2024</TableCell>
-                      <TableCell>$1,234.56</TableCell>
-                      <TableCell>
-                        <Badge variant="success">Paid</Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>April 1, 2024</TableCell>
-                      <TableCell>$1,234.56</TableCell>
-                      <TableCell>
-                        <Badge variant="success">Paid</Badge>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>Last Payment Received</div>
+                <div>June 1, 2024</div>
+              </div>
+              <Button className="w-full">View Payment History</Button>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Payment History</CardTitle>
+            <CardDescription>View your past payment transactions.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>June 1, 2024</TableCell>
+                  <TableCell>$1,234.56</TableCell>
+                  <TableCell>
+                    <Badge variant="success">Paid</Badge>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>May 1, 2024</TableCell>
+                  <TableCell>$1,234.56</TableCell>
+                  <TableCell>
+                    <Badge variant="success">Paid</Badge>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>April 1, 2024</TableCell>
+                  <TableCell>$1,234.56</TableCell>
+                  <TableCell>
+                    <Badge variant="success">Paid</Badge>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
-    </div>)
-  );
-}
-
-function ClipboardIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-      <path
-        d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-    </svg>)
+     </main> 
   );
 }
 
 
-function HomeIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-      <polyline points="9 22 9 12 15 12 15 22" />
-    </svg>)
-  );
-}
+
 
 
 function LineChart(props) {
@@ -462,46 +238,7 @@ function LineChart(props) {
 }
 
 
-function LogOutIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <polyline points="16 17 21 12 16 7" />
-      <line x1="21" x2="9" y1="12" y2="12" />
-    </svg>)
-  );
-}
 
-
-function MenuIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>)
-  );
-}
 
 
 function Package2Icon(props) {
@@ -571,68 +308,3 @@ function PieChart(props) {
 }
 
 
-function SettingsIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path
-        d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>)
-  );
-}
-
-
-function TruckIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
-      <path d="M15 18H9" />
-      <path
-        d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
-      <circle cx="17" cy="18" r="2" />
-      <circle cx="7" cy="18" r="2" />
-    </svg>)
-  );
-}
-
-
-function UsersIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>)
-  );
-}

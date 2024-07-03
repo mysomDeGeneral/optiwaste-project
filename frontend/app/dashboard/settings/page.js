@@ -1,9 +1,10 @@
 import { SettingsPage } from "@/components/settings";
+import Layout from "@/components/Layout";
 
 export default function Settings() {
     return (
-        <div>
+        <Layout>
             <SettingsPage />
-        </div>
+        </Layout>
     )
 }

@@ -1,9 +1,10 @@
 import { CollectorsPage } from "@/components/collectors";
+import Layout from "@/components/Layout";
 
 export default function Collectors() {
     return (
-        <div>
+        <Layout>
             <CollectorsPage />
-        </div>
+        </Layout>
     )
 }

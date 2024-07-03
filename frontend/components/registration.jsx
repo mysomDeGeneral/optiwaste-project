@@ -28,19 +28,21 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
+import Image from "next/image"
+import logo from "@/public/OPTIWASTE.png"
 
 export default function RegistrationPage() {
   return (
     (<div className="flex min-h-[100dvh]">
       <div
-        className="hidden lg:block lg:w-1/2 bg-[url('/placeholder.svg')] bg-cover bg-center" />
+        className="hidden lg:block lg:w-1/2 bg-[url('/waste-truck.svg')] bg-cover bg-center" />
       <div
         className="flex flex-col justify-between w-full lg:w-1/2 p-6 md:p-10 lg:p-12 xl:p-16">
         <div className="flex items-center justify-between">
-          <Link href="#" className="flex items-center" prefetch={false}>
-            <MountainIcon className="h-6 w-6" />
-            <span className="sr-only">OptiWaste</span>
-          </Link>
+          <Image
+            src={logo}
+            alt="logo"
+          />
           <div className="flex gap-2">
             <Link
               href="/login"
@@ -89,20 +91,3 @@ export default function RegistrationPage() {
   );
 }
 
-function MountainIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-    </svg>)
-  );
-}

@@ -24,10 +24,6 @@ export default function Home() {
       />
       </div>
       {/* <ModeToggle /> */}
-    
-      <div className="">
-        <Button><Link href="/dashboard">Dashboard</Link></Button>
-      </div>
       
     </div>
 

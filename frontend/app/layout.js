@@ -1,6 +1,7 @@
 import { Inter as FontSans } from "next/font/google";
 import "@/styles/global.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import Layout from "@/components/Layout";
 import { Root } from "postcss";
 import Link from "next/link";
 //const inter = Inter({ subsets: ["latin"] });
@@ -29,7 +30,8 @@ export default function RootLayout({ auth, children }) {
             <Link href="/login">Open modal</Link>
           </nav> */}
           <div>{auth}</div>
-          <div>{children}</div>
+            <div>{children}</div>
+          
         </ThemeProvider>
       </body>
     </html>

@@ -2,11 +2,12 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import DashboardPage from "@/components/dashboard";
+import Layout from "@/components/Layout";
 
 export default function Dashboard(){
     return (
-        <div>
+        <Layout>
             <DashboardPage />
-        </div>
+        </Layout>
     );
 }
