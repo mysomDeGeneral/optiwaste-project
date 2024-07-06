@@ -24,7 +24,7 @@ exports.createRequest = async (req, res) => {
 
 exports.getRequests = async (req, res) => {
     try {
-        const requests = await Request.find({ user: req.user._id });
+        const requests = await Request.find();
 
         if (requests.length === 0) {
             res.status(404).json({ message: 'No requests found' });

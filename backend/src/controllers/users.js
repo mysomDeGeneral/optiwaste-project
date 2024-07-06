@@ -55,16 +55,25 @@ exports.logout = async (req, res) => {
 }
 
 exports.getUserProfile = async (req, res) => {
-    const {email} = req.body;
-
-    const user = await User.findOne({ email });
-    res.json({
+    try {
+        const user = await User.findById(req.user._id);
+        if (user) {
+             res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         address: user.address,
         mobile: user.mobile,
     });
+    } else {
+        res.status(404).json({ message: 'User not found' })
+    }
+   
+    } catch(error) {
+        console.log("failed to get user profile:", error.message)
+    }
+
+    
 }
 
 exports.updateUserProfile = async (req, res) => {
@@ -110,4 +119,10 @@ exports.deleteUserProfile = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error deleting user', error: error.message});
     }
+}
+
+
+exports.getUsers = async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
 }
