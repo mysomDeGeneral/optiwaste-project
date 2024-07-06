@@ -8,12 +8,17 @@ const userRoutes = require('./routes/users');
 const collectorRoutes = require('./routes/collectors');
 const requestRoutes = require('./routes/requests');
 const locationRoutes = require('./routes/location');
+const cors = require('cors');
 
 
 dotenv.config();
 connectDB();
 
-
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -24,7 +24,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { ResponsiveBar } from "@nivo/bar"
 import { ResponsivePie } from "@nivo/pie"
 
-export function analytics() {
+export function Analytics() {
   const [requests, setRequests] = useState([
     {
       id: "REQ001",
@@ -93,9 +93,9 @@ export function analytics() {
     } else {
       const start = new Date(period.split("-")[0], 0, 1)
       const end = new Date(period.split("-")[1], 11, 31)
-      setFilteredRequests(requests.filter(
-        (request) => new Date(request.date) >= start && new Date(request.date) <= end
-      ))
+      setFilteredRequests(
+        requests.filter((request) => new Date(request.date) >= start && new Date(request.date) <= end),
+      )
     }
   }
   const totalRequests = requests.length
@@ -113,10 +113,10 @@ export function analytics() {
       const start = new Date(period.split(" - ")[0])
       const end = new Date(period.split(" - ")[1])
       const count = requests.filter(
-        (request) => new Date(request.date) >= start && new Date(request.date) <= end
+        (request) => new Date(request.date) >= start && new Date(request.date) <= end,
       ).length
       return { period, count }
-    });
+    })
   }, [requests])
   const pendingRequests = requests.filter((request) => request.status === "Pending").length
   const declinedRequests = requests.filter((request) => request.status === "Declined").length
@@ -133,15 +133,7 @@ export function analytics() {
       { type: "Metal", percentage: (metalRequests / totalRequests) * 100 },
     ]
   }, [plasticRequests, paperRequests, metalRequests, totalRequests])
-  return (
-    (<div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside
-        className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5" />
-      </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header
-          className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6" />
+  return(
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
@@ -206,17 +198,15 @@ export function analytics() {
             </CardContent>
           </Card>
         </main>
-      </div>
-    </div>)
-  );
+  )
 }
 
 function BarChart(props) {
   return (
-    (<div {...props}>
+    <div {...props}>
       <ResponsiveBar
         data={[
-          { name: "Jan", count: 111 },
+          { name: "Jan", count: 10 },
           { name: "Feb", count: 157 },
           { name: "Mar", count: 129 },
           { name: "Apr", count: 150 },
@@ -258,15 +248,16 @@ function BarChart(props) {
         tooltipLabel={({ id }) => `${id}`}
         enableLabel={false}
         role="application"
-        ariaLabel="A bar chart showing data" />
-    </div>)
-  );
+        ariaLabel="A bar chart showing data"
+      />
+    </div>
+  )
 }
 
 
 function PieChart(props) {
   return (
-    (<div {...props}>
+    <div {...props}>
       <ResponsivePie
         data={[
           { id: "Jan", value: 111 },
@@ -304,7 +295,8 @@ function PieChart(props) {
             },
           },
         }}
-        role="application" />
-    </div>)
-  );
+        role="application"
+      />
+    </div>
+  )
 }

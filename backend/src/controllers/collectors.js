@@ -57,6 +57,11 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.getCollectors = async (req, res) => {
+    const collectors = await Collector.find({});
+    res.json(collectors);
+}
+
 exports.logout = async (req, res) => {
     res.json({ message: 'Logged out'});
 }

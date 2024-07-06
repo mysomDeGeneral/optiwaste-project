@@ -24,6 +24,7 @@ exports.getLocation = async (req, res) => {
         latitude: locationData.CenterLatitude,
         longitude: locationData.CenterLongitude,
         district: locationData.District,
+        region: locationData.Region,
       };
       return res.status(200).json(result);
     } else {

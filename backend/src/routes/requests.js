@@ -4,7 +4,7 @@ const { createRequest, getRequests, getRequest, updateRequest, deleteRequest, ac
 const { protect } = require('../middlewares/auth');
 
 router.post('/', protect, createRequest);
-router.get('/', protect, getRequests);
+router.get('/', getRequests);
 router.get('/:id', protect, getRequest);
 router.put('/:id', protect, updateRequest);
 router.delete('/:id', protect, deleteRequest);
