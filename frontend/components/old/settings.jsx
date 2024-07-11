@@ -20,33 +20,62 @@ To read more about using these font, please visit the Next.js documentation:
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 export function SettingsPage() {
   return (
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Account</CardTitle>
-                <CardDescription>Manage your account settings.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <Label htmlFor="delete-account" className="flex flex-col gap-1">
-                      <span>Delete Account</span>
-                      <span className="font-normal leading-snug text-muted-foreground">
-                        Permanently delete your account and all associated data.
-                      </span>
-                    </Label>
+    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+            <CardDescription>Manage your account settings.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="delete-account" className="flex flex-col gap-1">
+                  <span>Delete Account</span>
+                  <span className="font-normal leading-snug text-muted-foreground">
+                    Permanently delete your account and all associated data.
+                  </span>
+                </Label>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
                     <Button id="delete-account" variant="destructive" className="shrink-0">
                       Delete
                     </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your
+                        account and remove your data from our servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </main>
   );
 }

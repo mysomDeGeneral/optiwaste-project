@@ -28,9 +28,11 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink } from "@/co
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { House, ChartLine, Clipboard, Users, Truck, Money, Gear, SignOut, List, Trash } from "@phosphor-icons/react"
 import { ModeToggle } from "./theme/mode-toggle"
+import { useAuth } from "@/contexts/auth-context"
 
 
 export function AdminLayout({ children }: { children: ReactNode }) {
+  const { handleLogout }: { handleLogout: () => Promise<void> } = useAuth();
   return (
     <div className="flex min-h-screen w-full flex-col" >
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background dark:bg-background-dark sm:flex">
@@ -141,14 +143,13 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  href="#"
+                <button
+                  onClick={handleLogout}
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
                 >
                   <SignOut className="h-5 w-5" />
                   <span className="sr-only">Logout</span>
-                </Link>
+                </button>
               </TooltipTrigger>
               <TooltipContent side="right">Logout</TooltipContent>
             </Tooltip>
@@ -264,7 +265,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                 <DropdownMenuItem><Link href="/dashboard/profile">Profile</Link></DropdownMenuItem>
                 <DropdownMenuItem><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem><Link href="#">Logout</Link></DropdownMenuItem>
+                <DropdownMenuItem><button onClick={handleLogout}>Logout</button></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

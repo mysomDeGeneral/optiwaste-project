@@ -3,6 +3,7 @@
 * @see https://v0.dev/t/1zNAwsnjhLc
 * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
 */
+"use client"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -11,8 +12,31 @@ import Image from "next/image"
 import logo from "@/public/OPTIWASTE.png"
 import truckImage from "@/public/waste-truck.svg"
 import { JSX, SVGProps } from "react"
+import { useAuth } from "@/contexts/auth-context"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { CircleDashed } from "lucide-react"
+
 
 export default function LoginPage() {
+  const { handleLogin }: { handleLogin: (credentials: { email: string, password: string }) => Promise<void> } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await handleLogin({ email, password });
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     (<div className="flex min-h-screen">
       <div className="flex-1">
@@ -38,14 +62,18 @@ export default function LoginPage() {
               Sign Up
             </Link>
           </div>
-        <form className="w-full space-y-4">
+        <form className="w-full space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Input id="email" type="email" placeholder="E-mail" />
+            <Input id="email" type="email" placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className="space-y-2">
-            <Input id="password" type="password" placeholder="Enter your password" />
+            <Input id="password" type="password" placeholder="Enter your password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}/>
           </div>
-          <Button className="w-full">Sign In</Button>
+          <Button className="w-full"type="submit">{ loading ? <CircleDashed /> : "Sign In"}</Button>
         </form>
         <div className="text-center">
           <p className="text-sm">

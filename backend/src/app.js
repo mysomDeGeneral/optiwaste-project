@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+dotenv.config();
+const { connectDB, connectOnlineDB } = require('./config/db');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
 const userRoutes = require('./routes/users');
@@ -11,8 +12,8 @@ const locationRoutes = require('./routes/location');
 const cors = require('cors');
 
 
-dotenv.config();
-connectDB();
+// connectDB();
+connectOnlineDB();
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,

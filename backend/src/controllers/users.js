@@ -2,16 +2,16 @@ const User = require('../models/user');
 const generateToken = require('../utils/jwt');
 
 exports.register = async (req, res) => {
-    const { name, email, password, address, mobile } = req.body;
+    const { name, email, password, address, mobile, role } = req.body;
 
     try {
-        const userExists = await User.findOne({ email});
+        const userExists = await User.findOne({email});
 
         if (userExists) {
             return res.status(400).json({ message: 'User already exists'});
         }
 
-        const user = new User({ name, email, password, address, mobile });
+        const user = new User({ name, email, password, address, mobile, role });
         await user.save();
         res.status(201).json({
             _id: user._id,
@@ -19,6 +19,7 @@ exports.register = async (req, res) => {
             email: user.email,
             address: user.address,
             mobile: user.mobile,
+            role: user.role,
             token: generateToken(user._id),
         });
     } catch (error) {
@@ -39,6 +40,7 @@ exports.login = async (req, res) => {
                 email: user.email,
                 address: user.address,
                 mobile: user.mobile,
+                role: user.role,
                 token: generateToken(user._id),
             });
         } else {
@@ -64,6 +66,8 @@ exports.getUserProfile = async (req, res) => {
         email: user.email,
         address: user.address,
         mobile: user.mobile,
+        role: user.role,
+        dateJoined: user.createdAt,
     });
     } else {
         res.status(404).json({ message: 'User not found' })

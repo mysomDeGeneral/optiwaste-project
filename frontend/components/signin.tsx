@@ -5,21 +5,21 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 export function SignIn() {
-  const { handleLogin } = useAuth();
+  const { handleLogin }: { handleLogin: (credentials: { email: string, password: string }) => Promise<void> } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-
     try {
-    await handleLogin({ email, password });
+      await handleLogin({ email, password });
     } catch (error) {
-      console.error("login error:", error);
+      console.error("Login error:", error);
     }
-
   };
 
   return (

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      href: "/favicon.ico",
-      url: "/favicon.ico",
+      href: "../public/optiwastelogo.png",
+      url: "../public/optiwastelogo.png",
     },
   ],
 };

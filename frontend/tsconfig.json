@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/old/analytics.tsxcomponents/old/collectors.jsx.jsx", "components/analytics.jsx", "components/old/dashboard.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/old/analytics.tsxcomponents/old/collectors.jsx.jsx", "components/analytics.jsx", "components/old/dashboard.jsx", "contexts/auth-context.tsx", "components/protectRoute.js"],
   "exclude": ["node_modules"]
 }
