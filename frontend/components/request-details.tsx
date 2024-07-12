@@ -50,7 +50,6 @@ export function RequestDetails() {
   const handleLocationSelect = (lng: number, lat: number) => {
     setSelectedLng(lng);
     setSelectedLat(lat);
-    console.log(selectedLat, selectedLng);
   };
 
   const handleConfirmLocation = async () => {
@@ -58,7 +57,6 @@ export function RequestDetails() {
       try {
       //send coordinates to ghanpostapi and store the digital address
       const address = await getAddress(selectedLng.toString(), selectedLat.toString());
-      console.log(address);
       // setLocation(`${selectedLng.toFixed(4)}, ${selectedLat.toFixed(4)}`);
       setLocation(address.DigitalAddress);
     } catch (error) {
