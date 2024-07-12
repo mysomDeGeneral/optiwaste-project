@@ -15,11 +15,12 @@ interface Coords {
     lat: number;
     }
 
-const Map: React.FC = ({ }) => {
+const Map: React.FC<MapProps> = ({ onSelectLocation }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [lng, setLng] = useState<number>(-70.9);
-  const [lat, setLat] = useState<number>(42.35);
+  const map = useRef<mapboxgl.Map | null>(null!);
+  const marker = useRef<mapboxgl.Marker | null>(null);
+  const [lng, setLng] = useState<number>(-1.546);
+  const [lat, setLat] = useState<number>(6.674);
   const [zoom, setZoom] = useState<number>(9);
   const [coords, setCoords] = useState<Coords[]>([]);
 
@@ -27,32 +28,38 @@ const Map: React.FC = ({ }) => {
     if (map.current) return; 
     if (mapContainer.current) {
       map.current = new mapboxgl.Map({
-        container: mapContainer.current,
+        container: mapContainer.current!,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [lng, lat],
         zoom: zoom
       });
 
-      map.current.on('click', (e) => {
-        const newLng = e.lngLat.lng;
-        const newLat = e.lngLat.lat;
-        // const { lng, lat } = e.lngLat;
-        // setCoords(prev => [...prev, { lng, lat }]);
+      map.current.on('load', () => {
+        map.current?.on('click', (e) => {
+          const newLng = e.lngLat.lng;
+          const newLat = e.lngLat.lat;
+          // const { lng, lat } = e.lngLat;
+          // setCoords(prev => [...prev, { lng, lat }]);
 
-        // new mapboxgl.Marker()
-        //     .setLngLat([lng, lat])
-        //     .addTo(map.current!);
+          // new mapboxgl.Marker()
+          //     .setLngLat([lng, lat])
+          //     .addTo(map.current!);
 
-        if (marker.current) {
-            marker.current.setLngLat([newLng, newLat]);
-        } else {
-            marker.current = new mapboxgl.Marker()
-                .setLngLat([newLng, newLat])
-                .addTo(map.current);
-      }
+          if (marker.current) {
+              marker.current.setLngLat([newLng, newLat]);
+          } else {
+              marker.current = new mapboxgl.Marker()
+                  .setLngLat([newLng, newLat])
+                  .addTo(map.current);
+        }
+
+        setLng(newLng);
+        setLat(newLat);
+        onSelectLocation(newLng, newLat);
         });
+      });
     }
-  }, [lng, lat, zoom]);
+  }, [onSelectLocation]);
 
 const handleRemoveCoords = (index: number) => {
     setCoords(prev => prev.filter((_, i) => i !== index));
@@ -67,3 +74,7 @@ const handleRemoveCoords = (index: number) => {
 };
 
 export default Map;
+
+function onSelectLocation(newLng: any, newLat: any) {
+    throw new Error('Function not implemented.');
+}

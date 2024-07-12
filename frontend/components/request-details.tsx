@@ -33,6 +33,7 @@ import { Textarea } from "@/components/ui/textarea"
 import dynamic from 'next/dynamic'
 import { useState } from "react"
 import DynamicMap from "./dynamic-map"
+import { getLocation, getAddress } from "@/apis/api"
 
 // const MapWithNoSSR = dynamic(() => import('@/components/map'), {
 //   ssr: false
@@ -52,12 +53,19 @@ export function RequestDetails() {
     console.log(selectedLat, selectedLng);
   };
 
-  const handleConfirmLocation = () => {
+  const handleConfirmLocation = async () => {
     if (selectedLng && selectedLat) {
+      try {
       //send coordinates to ghanpostapi and store the digital address
-      setLocation('${selectedLng.toFixed(4)}, ${selectedLat.toFixed(4)}');
+      const address = await getAddress(selectedLng.toString(), selectedLat.toString());
+      console.log(address);
+      // setLocation(`${selectedLng.toFixed(4)}, ${selectedLat.toFixed(4)}`);
+      setLocation(address.DigitalAddress);
+    } catch (error) {
+      console.log(error);
     }
   };
+}
 
   const handleCancelLocation = () => {
     setSelectedLat(null);
@@ -111,7 +119,7 @@ export function RequestDetails() {
               <DrawerFooter>
                 <Button onClick={handleConfirmLocation}>Confirm Location</Button>
                 <DrawerClose asChild>
-                  <Button variant="outline" onClick={handleCancelLocation}>Cancel</Button>
+                  <Button variant="outline" onClick={handleCancelLocation}>Close Map</Button>
                 </DrawerClose>
               </DrawerFooter>
             </DrawerContent>
