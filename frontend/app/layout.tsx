@@ -12,13 +12,13 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "OptiWaste",
   description: "OptiWaste App",
-  icons: [
-    {
-      rel: "icon",
-      href: "../public/optiwastelogo.png",
-      url: "../public/optiwastelogo.png",
-    },
-  ],
+  // icons: [
+  //   {
+  //     rel: "icon",
+  //     href: "../public/optiwastelogo.png",
+  //     url: "../public/optiwastelogo.png",
+  //   },
+  // ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

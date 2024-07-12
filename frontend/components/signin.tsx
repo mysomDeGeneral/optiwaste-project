@@ -6,19 +6,25 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
+import { CircleDashed } from "lucide-react";
+
 
 export function SignIn() {
   const { handleLogin }: { handleLogin: (credentials: { email: string, password: string }) => Promise<void> } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
+      setLoading(true);
       await handleLogin({ email, password });
     } catch (error) {
       console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +55,10 @@ export function SignIn() {
               />
             </div>
             <Button variant="outline" type="submit" className="w-full">
-              Sign In
+              {
+                loading ? <CircleDashed className="animate-spin" /> : "Sign In"
+              }
+              
             </Button>
           </form>
         </div>

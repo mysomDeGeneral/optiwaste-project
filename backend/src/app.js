@@ -12,8 +12,8 @@ const locationRoutes = require('./routes/location');
 const cors = require('cors');
 
 
-// connectDB();
-connectOnlineDB();
+connectDB();
+// connectOnlineDB();
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,

@@ -23,14 +23,53 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+"use client"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import dynamic from 'next/dynamic'
+import { useState } from "react"
+import DynamicMap from "./dynamic-map"
+
+// const MapWithNoSSR = dynamic(() => import('@/components/map'), {
+//   ssr: false
+// })
 
 export function RequestDetails() {
+  const [location, setLocation] = useState('');
+  const [selectedLng, setSelectedLng] = useState<number | null>(null);
+  const [selectedLat, setSelectedLat] = useState<number | null>(null);
+  const [wasteType, setWasteType] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [ instructions, setInstructions] = useState('');
+
+  const handleLocationSelect = (lng: number, lat: number) => {
+    setSelectedLng(lng);
+    setSelectedLat(lat);
+    console.log(selectedLat, selectedLng);
+  };
+
+  const handleConfirmLocation = () => {
+    if (selectedLng && selectedLat) {
+      //send coordinates to ghanpostapi and store the digital address
+      setLocation('${selectedLng.toFixed(4)}, ${selectedLat.toFixed(4)}');
+    }
+  };
+
+  const handleCancelLocation = () => {
+    setSelectedLat(null);
+    setSelectedLng(null);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    //handle request saving
+    console.log({ location, wasteType, quantity, instructions });
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20">
       <div className="px-4 md:px-6 lg:px-8">
@@ -40,11 +79,18 @@ export function RequestDetails() {
             Fill out the form below to schedule a waste pickup at your location.
           </p>
         </div>
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="location">Location</Label>
             <div className="flex items-center gap-2">
-              <Input id="location" type="text" placeholder="Enter your address" className="flex-1" />
+              <Input 
+                id="location" 
+                type="text" 
+                placeholder="Enter your address" 
+                className="flex-1" 
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                />
               <Drawer>
             <DrawerTrigger asChild>
               <Button variant="outline">
@@ -53,17 +99,19 @@ export function RequestDetails() {
               </Button>
             </DrawerTrigger>
             <DrawerContent>
-              <DrawerHeader>
+              <DrawerHeader >
                 <DrawerTitle>Select Location</DrawerTitle>
                 <DrawerDescription>Choose a location on the map for your waste pickup.</DrawerDescription>
               </DrawerHeader>
               <div className="flex-1">
-                <div className="h-[400px]" />
+                <div className="h-[400px]" >
+                  <DynamicMap onSelectLocation={handleLocationSelect} />
+                  </div> 
               </div>
               <DrawerFooter>
-                <Button>Confirm Location</Button>
+                <Button onClick={handleConfirmLocation}>Confirm Location</Button>
                 <DrawerClose asChild>
-                  <Button variant="outline">Cancel</Button>
+                  <Button variant="outline" onClick={handleCancelLocation}>Cancel</Button>
                 </DrawerClose>
               </DrawerFooter>
             </DrawerContent>
@@ -74,7 +122,7 @@ export function RequestDetails() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="waste-type">Waste Type</Label>
-              <Select>
+              <Select onValueChange={setWasteType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select waste type" />
                 </SelectTrigger>
@@ -88,15 +136,27 @@ export function RequestDetails() {
             </div>
             <div>
               <Label htmlFor="quantity">Quantity</Label>
-              <Input id="quantity" type="number" placeholder="Enter quantity" />
+              <Input 
+                  id="quantity" 
+                  type="number" 
+                  placeholder="Enter quantity" 
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  />
             </div>
           </div>
           <div>
             <Label htmlFor="instructions">Special Instructions</Label>
-            <Textarea id="instructions" rows={3} placeholder="Enter any special instructions" />
+            <Textarea 
+                id="instructions" 
+                rows={3} 
+                placeholder="Enter any special instructions" 
+                value={instructions}
+                onChange={(e) => setInstructions(e.target.value)}
+                />
           </div>
           <div className="flex justify-end">
-            <Button type="submit">Next</Button>
+            <Button type="submit">Request</Button>
           </div>
         </form>
       </div>
