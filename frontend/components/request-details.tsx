@@ -29,15 +29,12 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose } from "@/components/ui/drawer"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import dynamic from 'next/dynamic'
 import { useState } from "react"
 import DynamicMap from "./dynamic-map"
-import { getLocation, getAddress } from "@/apis/api"
-
-// const MapWithNoSSR = dynamic(() => import('@/components/map'), {
-//   ssr: false
-// })
+import { getAddress } from "@/apis/api"
 
 export function RequestDetails() {
   const [location, setLocation] = useState('');
@@ -45,7 +42,8 @@ export function RequestDetails() {
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
   const [wasteType, setWasteType] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [ instructions, setInstructions] = useState('');
+  const [instructions, setInstructions] = useState('');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleLocationSelect = (lng: number, lat: number) => {
     setSelectedLng(lng);
@@ -53,17 +51,20 @@ export function RequestDetails() {
   };
 
   const handleConfirmLocation = async () => {
-    if (selectedLng && selectedLat) {
+    if (selectedLng !==null && selectedLat !== null) {
       try {
-      //send coordinates to ghanpostapi and store the digital address
-      const address = await getAddress(selectedLng.toString(), selectedLat.toString());
-      // setLocation(`${selectedLng.toFixed(4)}, ${selectedLat.toFixed(4)}`);
-      setLocation(address.DigitalAddress);
-    } catch (error) {
-      console.log(error);
+        const address = await getAddress(selectedLng.toString(), selectedLat.toString());
+        if (address && address.DigitalAddress) {
+        setLocation(address.DigitalAddress);
+        // setIsDrawerOpen(false);
+        } else {
+          console.error('Invalid address format received');
+        }
+      } catch (error) {
+        console.error('Error fetching address:', error);
+      }
     }
   };
-}
 
   const handleCancelLocation = () => {
     setSelectedLat(null);
@@ -72,100 +73,119 @@ export function RequestDetails() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    //handle request saving
     console.log({ location, wasteType, quantity, instructions });
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20">
-      <div className="px-4 md:px-6 lg:px-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Request Waste Collection</h1>
-          <p className="text-muted-foreground md:text-xl">
-            Fill out the form below to schedule a waste pickup at your location.
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <Label htmlFor="location">Location</Label>
-            <div className="flex items-center gap-2">
-              <Input 
-                id="location" 
-                type="text" 
-                placeholder="Enter your address" 
-                className="flex-1" 
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                />
-              <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline">
-                <div className="h-5 w-5" />
-                Select on Map
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerHeader >
-                <DrawerTitle>Select Location</DrawerTitle>
-                <DrawerDescription>Choose a location on the map for your waste pickup.</DrawerDescription>
-              </DrawerHeader>
-              <div className="flex-1">
-                <div className="h-[400px]" >
-                  <DynamicMap onSelectLocation={handleLocationSelect} />
-                  </div> 
+    <main className="flex flex-col items-center justify-center min-h-screen py-8">
+      <div className="w-full max-w-4xl px-4 md:px-6 lg:px-8">
+        <Card className="mb-8">
+          <CardContent className="pt-6">
+            <div className="space-y-4 mb-8">
+              <div className="text-center">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Request Waste Collection</h1>
+                <p className="text-muted-foreground md:text-xl">
+                  Fill out the form below to schedule a waste pickup at your location.
+                </p>
               </div>
-              <DrawerFooter>
-                <Button onClick={handleConfirmLocation}>Confirm Location</Button>
-                <DrawerClose asChild>
-                  <Button variant="outline" onClick={handleCancelLocation}>Close Map</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="waste-type">Waste Type</Label>
-              <Select onValueChange={setWasteType}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select waste type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="general">General Waste</SelectItem>
-                  <SelectItem value="recycling">Recycling</SelectItem>
-                  <SelectItem value="organic">Organic Waste</SelectItem>
-                  <SelectItem value="hazardous">Hazardous Waste</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="quantity">Quantity</Label>
-              <Input 
-                  id="quantity" 
-                  type="number" 
-                  placeholder="Enter quantity" 
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+              <hr />
+              <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 relative">
+                    <Input
+                      id="location"
+                      type="text"
+                      placeholder="Enter your digital address(eg. AOK6806973)"
+                      className="pr-4"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                    {location && (
+                      <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
+                        Selected
+                        </div>
+                      )}
+                    </div>
+                    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                      <DrawerTrigger asChild>
+                        <Button variant="outline" onClick={() => setIsDrawerOpen(true)}>
+                          <div className="h-5 w-5" />
+                          Select on Map
+                        </Button>
+                      </DrawerTrigger>
+                      <DrawerContent className="h-[80vh]">
+                        <DrawerHeader>
+                          <DrawerTitle>Select Location</DrawerTitle>
+                          <DrawerDescription>Choose a location on the map for your waste pickup.</DrawerDescription>
+                        </DrawerHeader>
+                        <div className="flex-1 p-4">
+                          <div className="h-[calc(100%-80px)]">
+                            <DynamicMap onSelectLocation={handleLocationSelect} />
+                          </div>
+                          {location && (
+                            <div className="mt-4 p-3 bg-gray-100 rounded-md shadow-sm">
+                              <h4 className="text-sm font-semibold text-gray-700 mb-1">Selected Location</h4>
+                            <p className="mt-4 text-sm text-gray-600">{location}</p> 
+                            </div> 
+                          )}
+                        </div>
+                        <DrawerFooter>
+                          <Button onClick={handleConfirmLocation}>Confirm Location</Button>
+                          <DrawerClose asChild>
+                            <Button variant="outline" onClick={() => setIsDrawerOpen(false)}>Close Map</Button>
+                          </DrawerClose>
+                        </DrawerFooter>
+                      </DrawerContent>
+                    </Drawer>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="waste-type">Waste Type</Label>
+                    <Select onValueChange={setWasteType}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select waste type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="general">General Waste</SelectItem>
+                        <SelectItem value="recycling">Recycling</SelectItem>
+                        <SelectItem value="organic">Organic Waste</SelectItem>
+                        <SelectItem value="hazardous">Hazardous Waste</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="quantity">Quantity</Label>
+                    <Input
+                      id="quantity"
+                      type="number"
+                      placeholder="Enter quantity"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="instructions">Special Instructions</Label>
+                  <Textarea
+                    id="instructions"
+                    rows={3}
+                    placeholder="Enter any special instructions"
+                    value={instructions}
+                    onChange={(e) => setInstructions(e.target.value)}
                   />
+                </div>
+                <div className="mt-6">
+                  <Button type="submit" className="w-full py-6 text-lg">Request Pickup</Button>
+                </div>
+              </form>
             </div>
-          </div>
-          <div>
-            <Label htmlFor="instructions">Special Instructions</Label>
-            <Textarea 
-                id="instructions" 
-                rows={3} 
-                placeholder="Enter any special instructions" 
-                value={instructions}
-                onChange={(e) => setInstructions(e.target.value)}
-                />
-          </div>
-          <div className="flex justify-end">
-            <Button type="submit">Request</Button>
-          </div>
-        </form>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </main>
   )
 }

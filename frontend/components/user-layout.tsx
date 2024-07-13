@@ -14,7 +14,7 @@ export default function UserLayout({ children } : { children: React.ReactNode })
       </main>
       <nav className="flex items-center justify-around bg-background border-t h-14 px-4 sm:px-6">
         <Link
-          href="/user/request/history"
+          href="/users/request/history"
           className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
           prefetch={false}
         >
@@ -22,7 +22,7 @@ export default function UserLayout({ children } : { children: React.ReactNode })
           <span className="text-xs">History</span>
         </Link>
         <Link
-          href="users/request"
+          href="/users/request"
           className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
           prefetch={false}
         >
