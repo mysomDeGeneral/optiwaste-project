@@ -7,7 +7,7 @@ export default function CollectorLayoutPage({ children } : { children: React.Rea
   const pathname = usePathname()
 
   const tabs = [
-    { href: "#", icon: Navigation, label: "Route" },
+    { href: "/collector/route", icon: Navigation, label: "Route" },
     { href: "/collector/requests", icon: Clipboard, label: "Requests" },
     { href: "/collector/profile", icon: CircleUserRound, label: "Profile" },
   ]

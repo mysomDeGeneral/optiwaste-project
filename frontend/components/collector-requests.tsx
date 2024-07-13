@@ -18,8 +18,9 @@ To read more about using these font, please visit the Next.js documentation:
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
 "use client"
-import { SetStateAction, useState } from "react"
+import { SetStateAction, useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -32,13 +33,38 @@ const mockRequests = [
   { id: 1, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
   { id: 2, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
   { id: 3, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
+  { id: 4, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
+  { id: 5, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
+  { id: 6, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
+  { id: 7, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
+  { id: 8, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
+  { id: 9, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
   // ... add more mock requests here
 ]
 
 export function Requests() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedRequest, setSelectedRequest] = useState<null | { id: number; address: string; status: string; pickupTime: string; }>(null)
-  const requestsPerPage = 3
+  const [selectedRequest, setSelectedRequest] = useState<{ id: number; address: string; status: string; pickupTime: string; } | null>(null)
+  const [requestsPerPage, setRequestsPerPage] = useState(4)
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setRequestsPerPage(6)
+      } else if (window.innerWidth >= 768) {
+        setRequestsPerPage(4)
+      } else {
+        setRequestsPerPage(4)
+      }
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+
+  }, [])
+
   const indexOfLastRequest = currentPage * requestsPerPage
   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage
   const currentRequests = mockRequests.slice(indexOfFirstRequest, indexOfLastRequest)
@@ -58,16 +84,20 @@ export function Requests() {
     }
   }
 
+  const handleNavigation = (address: string) => {
+    router.push(`route?destination=${address}`)
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <main className="flex-1 overflow-y-auto flex items-center justify-center">
         <div className="grid gap-4 p-4 md:p-6">
           <Card>
             <CardHeader className="flex items-center justify-between">
-              <CardTitle>Incoming Requests</CardTitle>
+              <CardTitle>Requests</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {currentRequests.map((request) => (
                   <Dialog key={request.id}>
                     <DialogTrigger asChild>
@@ -102,6 +132,7 @@ export function Requests() {
                       <DialogFooter>
                         <Button variant="outline" onClick={() => console.log("Accept request", request.id)}>Accept</Button>
                         <Button variant="destructive" onClick={() => console.log("Reject request", request.id)}>Reject</Button>
+                        <Button variant="secondary" onClick={() => handleNavigation(request.address)}>Navigate</Button>
                         <DialogClose asChild>
                           <Button variant="secondary">Close</Button>
                         </DialogClose>
