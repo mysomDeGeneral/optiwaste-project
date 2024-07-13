@@ -30,7 +30,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 
 // Mock data for requests
 const mockRequests = [
-  { id: 1, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
+  { id: 1, address: "AOK6806973", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
   { id: 2, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
   { id: 3, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
   { id: 4, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },

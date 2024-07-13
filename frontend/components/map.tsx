@@ -38,19 +38,16 @@ const Map: React.FC<MapProps> = ({ onSelectLocation }) => {
         map.current?.on('click', (e) => {
           const newLng = e.lngLat.lng;
           const newLat = e.lngLat.lat;
-          // const { lng, lat } = e.lngLat;
-          // setCoords(prev => [...prev, { lng, lat }]);
-
-          // new mapboxgl.Marker()
-          //     .setLngLat([lng, lat])
-          //     .addTo(map.current!);
-
+         
           if (marker.current) {
               marker.current.setLngLat([newLng, newLat]);
           } else {
               marker.current = new mapboxgl.Marker()
-                  .setLngLat([newLng, newLat])
-                  .addTo(map.current);
+                  .setLngLat([newLng, newLat]);
+
+                  if (map.current) {
+                  marker.current.addTo(map.current);
+                  }
         }
 
         setLng(newLng);

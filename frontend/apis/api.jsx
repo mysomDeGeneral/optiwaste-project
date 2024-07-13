@@ -88,9 +88,9 @@ export const getRequests = async () => {
     }
 }
 
-export const getLocation = async (data) => {
+export const getLocation = async (address) => {
     try {
-      const response = await axios.post(`${API_URL}/location/get-location`, data);
+      const response = await axios.post(`${API_URL}/location/get-location`, {address});
       return response.data;
     } catch (error) {
       return error.response;
@@ -99,8 +99,10 @@ export const getLocation = async (data) => {
 
 export const getAddress = async (longitude, latitude) => {
     try {
+      console.log(longitude, latitude);
       const response = await axios.post(`${API_URL}/location/get-address`, {longitude,latitude});
       return response.data;
+      console.log("api",response);
     } catch (error) {
       return error.response;
     }

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-directions": "^4.3.1",
+    "@mapbox/mapbox-sdk": "^0.16.0",
     "@nivo/bar": "^0.87.0",
     "@nivo/core": "^0.87.0",
     "@nivo/line": "^0.87.0",
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@types/cookies": "^0.9.0",
     "@types/js-cookie": "^3.0.6",
+    "@types/mapbox__mapbox-sdk": "^0.15.0",
     "@types/mapbox-gl": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "^18",

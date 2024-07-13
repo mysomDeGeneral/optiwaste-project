@@ -27,9 +27,10 @@ export function RequestDetails() {
   const handleConfirmLocation = async () => {
     if (selectedLng !== null && selectedLat !== null) {
       try {
-        const address = await getAddress(selectedLng.toString(), selectedLat.toString());
-        if (address && address.DigitalAddress) {
-          setLocation(address.DigitalAddress);
+        const response = await getAddress(selectedLng.toString(), selectedLat.toString());
+        console.log(response);
+        if (response && response.address) {
+          setLocation(response.address);
           setIsDrawerOpen(false);
         } else {
           console.error('Invalid address format received');
