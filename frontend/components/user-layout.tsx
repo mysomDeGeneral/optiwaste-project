@@ -14,7 +14,7 @@ export default function UserLayout({ children } : { children: React.ReactNode })
   const tabs = [
     { href: "/users/request/history", icon: History, label: "History" },
     { href: "/users/request", icon: Clipboard, label: "Request" },
-    { href: "#", icon: CircleUserRound, label: "Profile" },
+    { href: "/users/profile", icon: CircleUserRound, label: "Profile" },
   ]
 
   return (
