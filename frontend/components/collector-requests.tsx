@@ -17,40 +17,49 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+"use client"
+import { SetStateAction, useState } from "react"
 import Link from "next/link"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "@/components/ui/pagination"
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 
-export function collector-requests() {
+// Mock data for requests
+const mockRequests = [
+  { id: 1, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
+  { id: 2, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
+  { id: 3, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
+  // ... add more mock requests here
+]
+
+export function Requests() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selectedRequest, setSelectedRequest] = useState<null | { id: number; address: string; status: string; pickupTime: string; }>(null)
+  const requestsPerPage = 3
+  const indexOfLastRequest = currentPage * requestsPerPage
+  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage
+  const currentRequests = mockRequests.slice(indexOfFirstRequest, indexOfLastRequest)
+
+  const paginate = (pageNumber: SetStateAction<number>) => setCurrentPage(pageNumber)
+
+  const getBadgeVariant = (status: string) => {
+    switch (status) {
+      case "Pending":
+        return "outline"
+      case "Accepted":
+        return "secondary"
+      case "Rejected":
+        return "destructive"
+      default:
+        return "outline"
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <header className="flex items-center h-16 px-4 border-b bg-card shadow-sm md:px-6">
-        <Link href="#" className="flex items-center gap-2 text-lg font-semibold" prefetch={false}>
-          <TrashIcon className="w-6 h-6" />
-          <span>Waste Collection</span>
-        </Link>
-        <div className="ml-auto flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <img src="/placeholder.svg" width="32" height="32" className="rounded-full" alt="Avatar" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Collector Name</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </header>
       <main className="flex-1 overflow-y-auto flex items-center justify-center">
         <div className="grid gap-4 p-4 md:p-6">
           <Card>
@@ -59,72 +68,63 @@ export function collector-requests() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <Link href="#" className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50" prefetch={false}>
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">123 Main St, Anytown USA</div>
-                    <Badge variant="outline">Pending</Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pickup Time: 2023-07-15 10:00 AM</div>
-                </Link>
-                <Link href="#" className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50" prefetch={false}>
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">456 Oak Rd, Somewhere City</div>
-                    <Badge variant="secondary">Accepted</Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pickup Time: 2023-07-16 2:30 PM</div>
-                </Link>
-                <Link href="#" className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50" prefetch={false}>
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">789 Elm St, Othertown</div>
-                    <Badge variant="outline" color="red">
-                      Rejected
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pickup Time: 2023-07-17 9:00 AM</div>
-                </Link>
-                <div className="hidden md:flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50">
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">123 Main St, Anytown USA</div>
-                    <Badge variant="outline">Pending</Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pickup Time: 2023-07-15 10:00 AM</div>
-                </div>
-                <div className="hidden md:flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50">
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">456 Oak Rd, Somewhere City</div>
-                    <Badge variant="secondary">Accepted</Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pickup Time: 2023-07-16 2:30 PM</div>
-                </div>
-                <div className="hidden md:flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50">
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium">789 Elm St, Othertown</div>
-                    <Badge variant="outline" color="red">
-                      Rejected
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pickup Time: 2023-07-17 9:00 AM</div>
-                </div>
+                {currentRequests.map((request) => (
+                  <Dialog key={request.id}>
+                    <DialogTrigger asChild>
+                      <div className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer" onClick={() => setSelectedRequest(request)}>
+                        <div className="flex items-center justify-between">
+                          <div className="font-medium">{request.address}</div>
+                          <Badge variant={getBadgeVariant(request.status)}>{request.status}</Badge>
+                        </div>
+                        <div className="text-sm text-muted-foreground">Pickup Time: {request.pickupTime}</div>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Request Details</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <span className="font-bold">Address:</span>
+                          <span className="col-span-3">{request.address}</span>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <span className="font-bold">Status:</span>
+                          <span className="col-span-3">
+                            <Badge variant={getBadgeVariant(request.status)}>{request.status}</Badge>
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <span className="font-bold">Pickup Time:</span>
+                          <span className="col-span-3">{request.pickupTime}</span>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => console.log("Accept request", request.id)}>Accept</Button>
+                        <Button variant="destructive" onClick={() => console.log("Reject request", request.id)}>Reject</Button>
+                        <DialogClose asChild>
+                          <Button variant="secondary">Close</Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                ))}
               </div>
               <div className="flex justify-center mt-4">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious href="#" />
+                      <PaginationPrevious onClick={() => paginate(currentPage - 1)} />
                     </PaginationItem>
+                    {[...Array(Math.ceil(mockRequests.length / requestsPerPage))].map((_, index) => (
+                      <PaginationItem key={index}>
+                        <PaginationLink onClick={() => paginate(index + 1)} isActive={currentPage === index + 1}>
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
                     <PaginationItem>
-                      <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink href="#" isActive>
-                        2
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink href="#">3</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext href="#" />
+                      <PaginationNext onClick={() => paginate(currentPage + 1)} />
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>
@@ -133,136 +133,6 @@ export function collector-requests() {
           </Card>
         </div>
       </main>
-      <nav className="flex items-center justify-around h-16 border-t bg-card shadow-sm">
-        <Link
-          href="#"
-          className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          <InboxIcon className="w-5 h-5" />
-          <span className="text-xs">Requests</span>
-        </Link>
-        <Link
-          href="#"
-          className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          <CheckIcon className="w-5 h-5" />
-          <span className="text-xs">Completed</span>
-        </Link>
-        <Link
-          href="#"
-          className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground"
-          prefetch={false}
-        >
-          <UserIcon className="w-5 h-5" />
-          <span className="text-xs">Profile</span>
-        </Link>
-      </nav>
     </div>
-  )
-}
-
-function CheckIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  )
-}
-
-
-function InboxIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
-      <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
-    </svg>
-  )
-}
-
-
-function TrashIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    </svg>
-  )
-}
-
-
-function UserIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  )
-}
-
-
-function XIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
   )
 }

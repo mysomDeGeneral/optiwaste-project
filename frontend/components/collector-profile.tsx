@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -98,6 +99,20 @@ export function CollectorProfile() {
           <CardContent>
             <div className="grid gap-4">
               <div className="flex justify-between items-center">
+                <Label htmlFor="availability" className="font-medium">Availability Status</Label>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="availability"
+                    checked={availabilityStatus === "available"}
+                    onCheckedChange={handleAvailabilityChange}
+                  />
+                  <span className={availabilityStatus === "available" ? "text-green-500" : "text-red-500"}>
+                    {availabilityStatus === "available" ? "Available" : "Unavailable"}
+                  </span>
+                </div>
+              </div>
+              <Separator />
+              <div className="flex justify-between items-center">
                 <span className="font-medium">Dark Mode</span>
                 <ModeToggle />
               </div>
@@ -114,20 +129,6 @@ export function CollectorProfile() {
                     <SelectItem value="fr">Français</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-              <Separator />
-              <div className="flex justify-between items-center">
-                <Label htmlFor="availability" className="font-medium">Availability Status</Label>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="availability"
-                    checked={availabilityStatus === "available"}
-                    onCheckedChange={handleAvailabilityChange}
-                  />
-                  <span className={availabilityStatus === "available" ? "text-green-500" : "text-red-500"}>
-                    {availabilityStatus === "available" ? "Available" : "Unavailable"}
-                  </span>
-                </div>
               </div>
             </div>
           </CardContent>

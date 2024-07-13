@@ -1,15 +1,15 @@
 "use client"
 import Link from "next/link"
-import { Clipboard, MapIcon, CircleUserRound } from "lucide-react"
+import { Clipboard, Navigation, CircleUserRound } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-export default function UserLayout({ children } : { children: React.ReactNode }) {
+export default function CollectorLayoutPage({ children } : { children: React.ReactNode }) {
   const pathname = usePathname()
 
   const tabs = [
-    { href: "#", icon: MapIcon, label: "Route" },
-    { href: "#", icon: Clipboard, label: "Requests" },
-    { href: "#", icon: CircleUserRound, label: "Profile" },
+    { href: "#", icon: Navigation, label: "Route" },
+    { href: "/collector/requests", icon: Clipboard, label: "Requests" },
+    { href: "/collector/profile", icon: CircleUserRound, label: "Profile" },
   ]
 
   return (
