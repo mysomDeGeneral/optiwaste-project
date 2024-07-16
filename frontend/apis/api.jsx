@@ -14,7 +14,7 @@ export const registerUser = async (data) => {
 export const loginUser = async (credentials) => {
   try {
     const response = await axios.post(`${API_URL}/users/login`, credentials);
-    return response.data;
+    return response;
   } catch (error) {
     return error.response;
   }
@@ -61,10 +61,10 @@ export const registerCollector = async (data) => {
   }
 }
 
-export const loginCollector = async (data) => {
+export const loginCollector = async (credentials) => {
     try {
-        const response = await axios.post(`${API_URL}/collectors/login`, data);
-        return response.data;
+        const response = await axios.post(`${API_URL}/collectors/login`, credentials);
+        return response;
     } catch (error) {
         return error.response;
     }
@@ -92,9 +92,14 @@ export const getCollectorProfile = async (token) => {
     }
 }
 
-export const getRequests = async () => {
+export const getRequests = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/requests`);
+      console.log("token: ", token);
+        const response = await axios.get(`${API_URL}/requests`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
     } catch (error) {
         return error.response;

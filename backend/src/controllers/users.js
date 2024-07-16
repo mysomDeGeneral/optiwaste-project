@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
             address: user.address,
             mobile: user.mobile,
             role: user.role,
-            token: generateToken(user._id),
+            token: generateToken(user._id, user.role),
         });
     } catch (error) {
         res.status(500).json({ message: 'Error: ' + error });
@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
                 address: user.address,
                 mobile: user.mobile,
                 role: user.role,
-                token: generateToken(user._id),
+                token: generateToken(user._id, user.role),
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -79,7 +79,7 @@ exports.getUserProfile = async (req, res) => {
 }
 
 exports.updateUserProfile = async (req, res) => {
-    const { name, email, password, address, mobile } = req.body;
+    const { name, email, password, address, mobile, role } = req.body;
 
     const user = await User.findById(req.user._id);
 
@@ -88,6 +88,7 @@ exports.updateUserProfile = async (req, res) => {
         user.email = email || user.email;
         user.address = address || user.address;
         user.mobile = mobile || user.mobile;
+        user.role = role || user.role;
 
         if (password) {
             user.password = password;
@@ -100,7 +101,8 @@ exports.updateUserProfile = async (req, res) => {
             email: user.email,
             address: user.address,
             mobile: user.mobile,
-            token: generateToken(user._id),
+            role: user.role,
+            token: generateToken(user._id, user.role),
         });
     }
     else {

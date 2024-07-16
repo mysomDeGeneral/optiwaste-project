@@ -21,6 +21,8 @@ export default function DashboardPage() {
   const { allCollectors } = useContext(CollectorContext);
 
 
+  console.log("allRequests", allRequests);
+
   // useEffect(() => {
   //   if (!user) {
   //     router.push("/login");

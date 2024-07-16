@@ -9,6 +9,7 @@ const userRoutes = require('./routes/users');
 const collectorRoutes = require('./routes/collectors');
 const requestRoutes = require('./routes/requests');
 const locationRoutes = require('./routes/location');
+const verifyToken = require('./utils/jwt')
 const cors = require('cors');
 
 
@@ -27,6 +28,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/collectors', collectorRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/location', locationRoutes);
+app.get('/api/verify-user', verifyToken);
 
 
 app.listen(PORT, () => {

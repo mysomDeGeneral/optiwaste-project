@@ -5,7 +5,7 @@ const { protect } = require('../middlewares/auth');
 const roleCheck = require('../middlewares/roleCheck');
 
 router.post('/', protect, createRequest);
-router.get('/', roleCheck(['admin', 'user', 'collector']), getRequests);
+router.get('/', protect, getRequests);
 router.get('/:id', protect, getRequest);
 router.put('/:id', protect, updateRequest);
 router.delete('/:id', protect, deleteRequest);

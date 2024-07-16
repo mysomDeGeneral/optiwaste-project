@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
                 dob: collector.dob,
                 wasteTypes: collector.wasteTypes,
                 digitalAddress: collector.digitalAddress,
-                token: generateToken(collector._id),
+                token: generateToken(collector._id, role = 'collector'),
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password'});
@@ -79,7 +79,7 @@ exports.getCollectorProfile = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
-                });
+            });
             }  
     else {
         res.status(404).json({ message: 'Collector not found'});
@@ -117,7 +117,7 @@ exports.updateCollectorProfile = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
-            token: generateToken(collector._id),
+            token: generateToken(collector._id, role = 'collector'),
         });
     }
     else {
