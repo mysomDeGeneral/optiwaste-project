@@ -1,5 +1,8 @@
 const axios = require('axios');
 const qs = require('qs');
+// dotenv.config();
+
+ghanpostapi = process.env.GHANAPOSTAPI_URI || ''
 
 exports.getLocation = async (req, res) => {
   const { address } = req.body;
@@ -11,7 +14,7 @@ exports.getLocation = async (req, res) => {
   const data = qs.stringify({ address: address });
 
   try {
-    const response = await axios.post('http://localhost:9091/get-location', data, {
+    const response = await axios.post(`${ghanpostapi}/get-location`, data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -45,7 +48,7 @@ exports.getDigitalAddress = async (req, res) => {
   const data = qs.stringify({ lat: latitude, long: longitude });
 
   try {
-    const response = await axios.post('http://localhost:9091/get-address', data, {
+    const response = await axios.post(`${ghanpostapi}/get-address`, data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },

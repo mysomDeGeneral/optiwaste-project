@@ -1,10 +1,12 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { getLocation } from '@/apis/api';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
+import * as turf from '@turf/turf';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || '';
 
@@ -18,7 +20,24 @@ const CollectorRoute = ({ requestAddress }: { requestAddress: string }) => {
   const map = useRef<mapboxgl.Map | null>(null);
   const directions = useRef<MapboxDirections | null>(null);
   const [collectorLocation, setCollectorLocation] = useState<Coordinates | null>(null);
-  const [profile, setProfile] = useState<'driving' | 'cycling' | 'walking'>('driving');
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const getRoute = useCallback(async () => {
+    if (!collectorLocation || !requestAddress || !directions.current || !mapLoaded) return;
+
+    try {
+      console.log('Getting route...');
+      console.log('Collector location:', collectorLocation);
+      console.log('Request address:', requestAddress);
+      const requestCoords: Coordinates = await fetchWithRetry(() => getLocation(requestAddress), 3, 1000);
+      console.log('Request coords:', requestCoords);
+
+      directions.current.setOrigin([collectorLocation.lng, collectorLocation.lat]);
+      directions.current.setDestination([requestCoords.lng, requestCoords.lat]);
+    } catch (error) {
+      console.error('Error getting route:', error);
+    }
+  }, [collectorLocation, requestAddress, mapLoaded]);
 
   useEffect(() => {
     if (map.current) return; // Initialize map only once
@@ -33,35 +52,42 @@ const CollectorRoute = ({ requestAddress }: { requestAddress: string }) => {
           style: 'mapbox://styles/mapbox/streets-v11',
           center: [collectorCoords.lng, collectorCoords.lat],
           zoom: 12,
+          bearing: 0, // Start with north up
+          pitch: 60, // Tilt the map for better 3D view
         });
 
         directions.current = new MapboxDirections({
           accessToken: mapboxgl.accessToken,
           unit: 'metric',
-          profile: 'mapbox/driving',
-          alternatives: true,
-          congestion: true,
+          profile: 'mapbox/driving-traffic',
+          alternatives: false, // Disable alternative routes
+          controls: {
+            inputs: false,
+            instructions: true,
+            profileSwitcher: false, // Disable profile switcher
+          },
+          interactive: false, // Disable interaction with the directions control
         });
 
         map.current.addControl(directions.current, 'top-left');
+
+        // Temporarily enable default navigation controls to test map interaction
         map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
         map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
-        const trafficToggle = new mapboxgl.ToggleControl({
-          className: 'mapboxgl-ctrl-traffic',
-          textOn: 'Hide Traffic',
-          textOff: 'Show Traffic',
-          onChange: (isEnabled: any) => {
-            const trafficLayers = ['traffic', 'traffic-flow', 'traffic-incidents'];
-            trafficLayers.forEach(layer => {
-              map.current!.setLayoutProperty(layer, 'visibility', isEnabled ? 'visible' : 'none');
-            });
-          }
+        map.current.on('idle', () => {
+          console.log('Map is fully loaded');
+          setMapLoaded(true);
         });
-        map.current.addControl(trafficToggle, 'top-right');
 
-        map.current.on('load', () => {
-          getRoute();
+        directions.current.on('route', (e) => {
+          console.log('Route event:', e);
+          if (e.route && e.route.length > 0) {
+            console.log('Route found:', e.route[0]);
+            rotateMapAlongRoute(e.route[0]);
+          } else {
+            console.error('No route found');
+          }
         });
       } catch (error) {
         console.error('Error initializing map:', error);
@@ -71,31 +97,17 @@ const CollectorRoute = ({ requestAddress }: { requestAddress: string }) => {
     initializeMap();
   }, []);
 
-  const getRoute = async () => {
-    if (!collectorLocation || !requestAddress || !directions.current) return;
-
-    try {
-      console.log('Request address:', requestAddress);
-      const requestCoords: Coordinates = await getLocation(requestAddress);
-      console.log('Request coords:', requestCoords);
-
-      directions.current.setOrigin([collectorLocation.lng, collectorLocation.lat]);
-      console.log('Request coords:', requestCoords.lng, requestCoords.lat);
-      directions.current.setDestination([requestCoords.lng, requestCoords.lat]);
-      directions.current.setProfile(`mapbox/${profile}`);
-    } catch (error) {
-      console.error('Error getting route:', error);
-    }
-  };
-
   useEffect(() => {
-    getRoute();
-  }, [collectorLocation, requestAddress, profile]);
+    if (mapLoaded) {
+      getRoute();
+    }
+  }, [mapLoaded, getRoute]);
 
   const getCollectorLocation = (): Promise<Coordinates> => {
     return new Promise((resolve) => {
       const useManualLocation = true;
       const manualLocation = { lat: 6.6355, lng: -1.4766 }; // Kumasi, Ghana
+
       if (useManualLocation) {
         resolve(manualLocation);
       } else {
@@ -113,18 +125,51 @@ const CollectorRoute = ({ requestAddress }: { requestAddress: string }) => {
     });
   };
 
-  const handleProfileChange = (newProfile: 'driving' | 'cycling' | 'walking') => {
-    setProfile(newProfile);
+  const rotateMapAlongRoute = (route: any) => {
+    if (!map.current || !route.geometry || !route.geometry.coordinates) return;
+
+    const coordinates = route.geometry.coordinates;
+    let bearing = 0;
+
+    // Animate the map to rotate along the route
+    const animate = () => {
+      if (coordinates.length > 1) {
+        const start = coordinates.shift();
+        const end = coordinates[0];
+        bearing = turf.bearing(start, end);
+
+        map.current!.easeTo({
+          center: start,
+          bearing: bearing,
+          duration: 1000,
+          easing: (t) => t,
+        });
+
+        requestAnimationFrame(animate);
+      }
+    };
+
+    animate();
+  };
+
+  const fetchWithRetry = async (fetchFunction: () => Promise<any>, retries: number, delay: number): Promise<any> => {
+    try {
+      return await fetchFunction();
+    } catch (error) {
+      if (retries === 1) throw error;
+      await new Promise((res) => setTimeout(res, delay));
+      return fetchWithRetry(fetchFunction, retries - 1, delay);
+    }
   };
 
   return (
-    <div style={{ height: '90vh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '10px', backgroundColor: '#f0f0f0' }}>
-        <button onClick={() => handleProfileChange('driving')}>Driving</button>
-        <button onClick={() => handleProfileChange('cycling')}>Cycling</button>
-        <button onClick={() => handleProfileChange('walking')}>Walking</button>
-      </div>
-      <div ref={mapContainer} style={{ flex: 1 }} />
+    <div
+      style={{
+        height: '100%',
+        position: 'relative',
+      }}
+    >
+      <div ref={mapContainer} style={{ width: '100%', height: 'calc(100% - 3.5rem)' }} /> {/* Adjust height to exclude the nav bar */}
     </div>
   );
 };

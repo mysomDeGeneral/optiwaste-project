@@ -67,20 +67,27 @@ exports.logout = async (req, res) => {
 }
 
 exports.getCollectorProfile = async (req, res) => {
-    const { email } = req.body;
-
-    const collector = await Collector.findOne( {email });
-    res.json({
-        _id: collector._id,
-        name: collector.name,
-        email: collector.email,
-        nationalId: collector.nationalId,
-        licenseId: collector.licenseId,
-        dob: collector.dob,
-        wasteTypes: collector.wasteTypes,
-        digitalAddress: collector.digitalAddress,
-    });
-}
+    try{
+    const collector = await Collector.findById(req.collector._id);
+    if (collector) {
+        res.json({
+            _id: collector._id,
+            name: collector.name,
+            email: collector.email,
+            nationalId: collector.nationalId,
+            licenseId: collector.licenseId,
+            dob: collector.dob,
+            wasteTypes: collector.wasteTypes,
+            digitalAddress: collector.digitalAddress,
+                });
+            }  
+    else {
+        res.status(404).json({ message: 'Collector not found'});
+    }
+    } catch (error) {
+        res.status(500).json({ message: 'Error: ' + error});
+    }
+} 
 
 exports.updateCollectorProfile = async (req, res) => {
     const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress } = req.body;

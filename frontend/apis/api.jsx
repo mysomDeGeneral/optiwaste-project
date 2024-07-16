@@ -79,6 +79,19 @@ export const getCollectors = async () => {
     }
 } 
 
+export const getCollectorProfile = async (token) => {
+    try {
+        const response = await axios.get(`${API_URL}/collectors/profile`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        return error.response;
+    }
+}
+
 export const getRequests = async () => {
     try {
         const response = await axios.get(`${API_URL}/requests`);
@@ -87,6 +100,72 @@ export const getRequests = async () => {
         return error.response;
     }
 }
+
+export const createRequest = async (data, token) => {
+  try {
+    const response = await axios.post(`${API_URL}/requests`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export const updateRequest = async (id, data, token) => {
+  try {
+    const response = await axios.put(`${API_URL}/requests/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export const deleteRequest = async (id, token) => {
+  try {
+    const response = await axios.delete(`${API_URL}/requests/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export const acceptRequest = async (id, token) => {
+  try {
+    const response = await axios.post(`${API_URL}/requests/${id}/accept`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export const rejectRequest = async (id, token) => {
+  try {
+    const response = await axios.post(`${API_URL}/requests/${id}/reject`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
 
 export const getLocation = async (address) => {
     try {

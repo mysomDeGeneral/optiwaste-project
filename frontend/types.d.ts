@@ -2,6 +2,12 @@ declare module '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions' {
     import { IControl } from 'mapbox-gl';
   
     export default class MapboxDirections implements IControl {
+      getDirections(arg0: { profile: string; waypoints: { coordinates: number[]; }[]; }) {
+          throw new Error('Method not implemented.');
+      }
+      on(arg0: string, arg1: (e: { route: string | any[]; }) => void) {
+          throw new Error('Method not implemented.');
+      }
       setProfile(currentMode: string) {
           throw new Error('Method not implemented.');
       }

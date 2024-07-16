@@ -14,7 +14,7 @@ export default function CollectorLayoutPage({ children } : { children: React.Rea
 
   return (
     <div className="flex flex-col h-screen">
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto relative">
         {children}
       </main>
       <nav className="flex items-center justify-around bg-background border-t h-14 px-4 sm:px-6">

@@ -1,4 +1,6 @@
 const Request = require('../models/request');
+const Collector = require('../models/collector');
+const User = require('../models/user');
 const { assignCollectorToRequest } = require('../services/assignment');
 
 exports.createRequest = async (req, res) => {

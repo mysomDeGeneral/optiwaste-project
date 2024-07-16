@@ -5,10 +5,10 @@ exports.register = async (req, res) => {
     const { name, email, password, address, mobile, role } = req.body;
 
     try {
-        const userExists = await User.findOne({email});
+        const userExists = await User.findOne({ email });
 
         if (userExists) {
-            return res.status(400).json({ message: 'User already exists'});
+            return res.status(400).json({ message: 'User already exists' });
         }
 
         const user = new User({ name, email, password, address, mobile, role });
@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
             token: generateToken(user._id),
         });
     } catch (error) {
-        res.status(500).json({ message: 'Error: ' + error});
+        res.status(500).json({ message: 'Error: ' + error });
     };
 };
 
@@ -32,8 +32,8 @@ exports.login = async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
-        
-        if(user && (await user.matchPassword(password))) {
+
+        if (user && (await user.matchPassword(password))) {
             res.json({
                 _id: user._id,
                 name: user.name,
@@ -44,40 +44,38 @@ exports.login = async (req, res) => {
                 token: generateToken(user._id),
             });
         } else {
-            res.status(401).json({ message: 'Invalid email or password'});
+            res.status(401).json({ message: 'Invalid email or password' });
         }
     }
     catch (error) {
-        res.status(500).json({ message: 'Error: ' + error});
+        res.status(500).json({ message: 'Error: ' + error });
     }
 }
 
 exports.logout = async (req, res) => {
-    res.json({ message: 'Logged out'});
+    res.json({ message: 'Logged out' });
 }
 
 exports.getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         if (user) {
-             res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        address: user.address,
-        mobile: user.mobile,
-        role: user.role,
-        dateJoined: user.createdAt,
-    });
-    } else {
-        res.status(404).json({ message: 'User not found' })
-    }
-   
-    } catch(error) {
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                address: user.address,
+                mobile: user.mobile,
+                role: user.role,
+                dateJoined: user.createdAt,
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' })
+        }
+
+    } catch (error) {
         console.log("failed to get user profile:", error.message)
     }
-
-    
 }
 
 exports.updateUserProfile = async (req, res) => {
@@ -106,7 +104,7 @@ exports.updateUserProfile = async (req, res) => {
         });
     }
     else {
-        res.status(404).json({ message: 'User not found'});
+        res.status(404).json({ message: 'User not found' });
     }
 }
 
@@ -121,7 +119,7 @@ exports.deleteUserProfile = async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: 'Error deleting user', error: error.message});
+        res.status(500).json({ message: 'Error deleting user', error: error.message });
     }
 }
 
