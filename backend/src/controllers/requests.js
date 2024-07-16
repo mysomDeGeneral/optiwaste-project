@@ -26,7 +26,18 @@ exports.createRequest = async (req, res) => {
 
 exports.getRequests = async (req, res) => {
     try {
-        const requests = await Request.find();
+        let requests;
+        if (req.user) {
+            if (req.user.role === 'admin') {
+                requests = await Request.find();
+            } else {
+                requests = await Request.find({ user: req.user._id });
+            }
+        } else if (req.collector) {
+            requests = await Request.find({ collector: req.collector._id });
+        } else {
+            res.status(403).json({ message: 'Unauthorized' });
+        }
 
         if (requests.length === 0) {
             res.status(404).json({ message: 'No requests found' });
