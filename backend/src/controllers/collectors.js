@@ -22,7 +22,8 @@ exports.register = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
-            token: generateToken(collector._id),
+            role: 'collector',
+            token: generateToken(collector._id, role = 'collector'),
         });
     }
     catch (error) {
@@ -46,6 +47,7 @@ exports.login = async (req, res) => {
                 dob: collector.dob,
                 wasteTypes: collector.wasteTypes,
                 digitalAddress: collector.digitalAddress,
+                role : 'collector',
                 token: generateToken(collector._id, role = 'collector'),
             });
         } else {
@@ -117,6 +119,7 @@ exports.updateCollectorProfile = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
+            role : 'collector',
             token: generateToken(collector._id, role = 'collector'),
         });
     }

@@ -33,9 +33,9 @@ export default async function middleware(req: NextRequest) {
     if (payload.role === 'admin' && !req.nextUrl.pathname.startsWith('/dashboard')) {
       return NextResponse.redirect(new URL('/dashboard', req.nextUrl.origin));
     } else if (payload.role === 'user' && !req.nextUrl.pathname.startsWith('/users')) {
-      return NextResponse.redirect(new URL('/users', req.nextUrl.origin));
+      return NextResponse.redirect(new URL('/users/request', req.nextUrl.origin));
     } else if (payload.role === 'collector' && !req.nextUrl.pathname.startsWith('/collector')) {
-      return NextResponse.redirect(new URL('/collector', req.nextUrl.origin));
+      return NextResponse.redirect(new URL('/collector/requests', req.nextUrl.origin));
     }
   } catch (error) {
     console.error('Error verifying token:', error);

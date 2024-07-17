@@ -2,8 +2,10 @@
 import Link from "next/link"
 import { Clipboard, Navigation, CircleUserRound } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function CollectorLayoutPage({ children } : { children: React.ReactNode }) {
+  const { handleLogout } = useAuth();
   const pathname = usePathname()
 
   const tabs = [

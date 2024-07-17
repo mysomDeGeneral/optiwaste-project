@@ -1,10 +1,10 @@
 "use client"
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { loginUser, logout, register, getUserProfile } from '@/apis/auth';
+import { loginUser, loginCollector, logout, register, getUserProfile } from '@/apis/auth';
 import axios from 'axios';
 import Cookies from 'js-cookie'
-import { getUserRole } from '@/middleware';
+// import { getUserRole } from '@/middleware';
 // import { getTokenFromCookies } from '@/middleware';
 
 
@@ -12,7 +12,7 @@ interface AuthContextProps {
     user: any;
     loading: boolean;
     token: any;
-    handleLogin: (data: { email: string; password: string }) => Promise<void>;
+    handleLogin: (data: { email: string; password: string; isCollector: boolean }) => Promise<void>;
     handleLogout: () => Promise<void>;
 }
 
@@ -35,9 +35,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const handleLogin = async (data: { email: string; password: string }) => {
+    const handleLogin = async (data: { email: string; password: string; isCollector: boolean }) => {
         try {
-            const response = await loginUser(data);
+            let response;
+            const { isCollector } = data;
+            if (isCollector) {
+                response = await loginCollector(data);
+            } else {
+                response = await loginUser(data);
+            }
+
             if (response && response.data.token) {
                 setToken(response.data.token);
                 setTokenInCookie(response.data.token);
@@ -67,8 +74,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
                 router.refresh();
                 console.log("attempting to redirect to:", returnUrl);
-                window.location.href = returnUrl;
-                // router.replace(returnUrl);
+                // window.location.href = returnUrl;
+                router.replace(returnUrl);
             } else {
                 console.error("Invalid response from the server");
             }

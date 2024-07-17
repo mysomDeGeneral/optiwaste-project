@@ -19,8 +19,10 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { ModeToggle } from "./theme/mode-toggle"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { useAuth } from "@/contexts/auth-context"
 
 export function UserProfile() {
+    const { handleLogout } = useAuth();
     const [isEditing, setIsEditing] = useState(false)
     const [userInfo, setUserInfo] = useState({
       name: "Mysom",
@@ -42,10 +44,7 @@ export function UserProfile() {
       setUserInfo({ ...userInfo, [e.target.name]: e.target.value })
     }
   
-    const handleLogout = () => {
-      // Implement your logout logic here
-      console.log("Logging out...")
-    }
+    
   return (
     <main className="flex-1 overflow-y-auto flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="grid gap-6 p-4 md:p-6 w-full max-w-2xl">
@@ -134,7 +133,7 @@ export function UserProfile() {
         </Card>
         <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive" onClick={handleLogout} className="w-full">Logout</Button>
+                    <Button variant="destructive"  className="w-full">Logout</Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
@@ -145,7 +144,7 @@ export function UserProfile() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>No</AlertDialogCancel>
-                      <AlertDialogAction>Yes</AlertDialogAction>
+                      <AlertDialogAction onClick={handleLogout}>Yes</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
