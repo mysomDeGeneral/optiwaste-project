@@ -119,6 +119,19 @@ export const createRequest = async (data, token) => {
   }
 }
 
+export const getRequest = async (id, token) => {
+  try {
+    const response = await axios.get(`${API_URL}/requests/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
 export const updateRequest = async (id, data, token) => {
   try {
     const response = await axios.put(`${API_URL}/requests/${id}`, data, {

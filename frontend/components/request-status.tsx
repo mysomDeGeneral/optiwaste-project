@@ -23,12 +23,28 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+"use client"
+import { useEffect, useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
+import { useRequest } from "@/contexts/request-context"
 
 export function RequestStatus() {
+  const { request, fetchRequest } = useRequest();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (request) {
+      setLoading(false);
+    } else {
+      setError("Request not found.");
+    }
+  }, [request]);
+
+
   return (
     <div className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20">
       <div className="px-4 md:px-6 lg:px-8">
@@ -49,19 +65,19 @@ export function RequestStatus() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <div className="font-bold">Location</div>
-                  <div>123 Main St, Anytown USA</div>
+                  <div>{request.digitalAddress}</div>
                 </div>
                 <div>
                   <div className="font-bold">Waste Type</div>
-                  <div>General Waste</div>
+                  <div>{request.wasteType}</div>
                 </div>
                 <div>
                   <div className="font-bold">Quantity</div>
-                  <div>3 bags</div>
+                  <div>{request.quantity}</div>
                 </div>
                 <div>
                   <div className="font-bold">Special Instructions</div>
-                  <div>Please leave the bags by the side door.</div>
+                  <div>{request.instructions}</div>
                 </div>
               </div>
             </CardContent>
@@ -84,7 +100,10 @@ export function RequestStatus() {
           </Card>
           <div className="flex justify-end gap-2">
             <Button variant="outline">Cancel Request</Button>
-            <Button>Make Payment</Button>
+            {
+              (request.paymentStatus === 'unpaid') ? <Button>Make Payment</Button> : ''
+            }
+           
           </div>
         </div>
       </div>

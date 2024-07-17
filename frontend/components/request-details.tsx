@@ -9,14 +9,17 @@ import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 import DynamicMap from "./dynamic-map"
 import { getAddress } from "@/apis/api"
+import { useRequest } from "@/contexts/request-context"
 
 export function RequestDetails() {
+  const { createRequest } = useRequest();
   const [location, setLocation] = useState('');
   const [selectedLng, setSelectedLng] = useState<number | null>(null);
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
   const [wasteType, setWasteType] = useState('');
   const [quantity, setQuantity] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [binId, setBinId] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleLocationSelect = (lng: number, lat: number) => {
@@ -44,6 +47,23 @@ export function RequestDetails() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ location, wasteType, quantity, instructions });
+
+    const requestData = {
+      location, //digitalAddress in backend
+      wasteType,
+      quantity,
+      instructions,
+      binId,
+      requestStatus: 'Pending',
+      paymentStatus: 'unpaid'
+    };
+
+    try {
+      const response = createRequest(requestData);
+      console.log("request made:", response);
+    } catch (error) {
+      console.error("Error creating request:", error);
+    }
   };
 
   return (
@@ -112,7 +132,7 @@ export function RequestDetails() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <Label htmlFor="waste-type">Waste Type</Label>
                   <Select onValueChange={setWasteType}>
@@ -137,6 +157,17 @@ export function RequestDetails() {
                     onChange={(e) => setQuantity(e.target.value)}
                     className="mt-1"
                   />
+                </div>
+                <div>
+                  <Label htmlFor="bin-id">Bin ID</Label>
+                  <Input 
+                    id="bin-id"
+                    type="text"
+                    placeholder="Enter bin ID"
+                    value={binId}
+                    onChange={(e) => setBinId(e.target.value)}
+                    className="mt-1"
+                    />
                 </div>
               </div>
               
