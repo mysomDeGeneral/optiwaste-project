@@ -1,5 +1,6 @@
 import React from 'react';
-import CollectorRoute from '@/components/collector-route';
+// import CollectorRoute from '@/components/collector-route';
+import CollectorMap from '@/components/collector-route';
 
 
 const CollectorPage = () => {
@@ -8,7 +9,7 @@ const CollectorPage = () => {
   return (
     <div>
       <h1>Collector Route</h1>
-      <CollectorRoute requestAddress={requestAddress} />
+      <CollectorMap requestAddress={requestAddress} />
     </div>
   );
 };

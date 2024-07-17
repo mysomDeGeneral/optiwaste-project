@@ -15,7 +15,7 @@ interface CollectorFormData {
   password: string;
   address: string;
   mobile: string;
-  terms: boolean;
+//   terms: boolean;
   nationalId: string;
   licenseId: string;
   dob: string;
@@ -28,7 +28,7 @@ interface CollectorFormErrors {
   email?: string;
   password?: string;
   mobile?: string;
-  terms?: string;
+//   terms?: string;
   nationalId?: string;
   licenseId?: string;
   dob?: string;
@@ -44,7 +44,7 @@ export default function CollectorSignUpPage(): JSX.Element {
     password: "",
     address: "",
     mobile: "",
-    terms: false,
+    // terms: false,
     nationalId: "",
     licenseId: "",
     dob: "",
@@ -62,9 +62,9 @@ export default function CollectorSignUpPage(): JSX.Element {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCheckboxChange = (checked: boolean) => {
-    setFormData(prev => ({ ...prev, terms: checked }));
-  };
+//   const handleCheckboxChange = (checked: boolean) => {
+//     setFormData(prev => ({ ...prev, terms: checked }));
+//   };
 
   const validateForm = (): CollectorFormErrors => {
     const newErrors: CollectorFormErrors = {};
@@ -116,7 +116,7 @@ export default function CollectorSignUpPage(): JSX.Element {
               formData={formData}
               errors={errors}
               handleInputChange={handleInputChange}
-              handleCheckboxChange={handleCheckboxChange}
+            //   handleCheckboxChange={handleCheckboxChange}
             />
             {/* Additional Collector-specific fields */}
             <Input 

@@ -10,7 +10,7 @@ interface SharedFormData {
   password: string;
   address: string;
   mobile: string;
-  terms: boolean;
+//   terms: boolean;
 }
 
 interface SharedFormErrors {
@@ -18,21 +18,21 @@ interface SharedFormErrors {
   email?: string;
   password?: string;
   mobile?: string;
-  terms?: string;
+//   terms?: string;
 }
 
 interface SharedSignUpFormProps {
   formData: SharedFormData;
   errors: SharedFormErrors;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleCheckboxChange: (checked: boolean) => void;
+//   handleCheckboxChange: (checked: boolean) => void;
 }
 
 export const SharedSignUpForm: React.FC<SharedSignUpFormProps> = ({
   formData,
   errors,
   handleInputChange,
-  handleCheckboxChange
+//   handleCheckboxChange
 }) => {
   return (
     <>
@@ -94,7 +94,7 @@ export const SharedSignUpForm: React.FC<SharedSignUpFormProps> = ({
         />
         {errors.mobile && <p className="text-red-600 text-sm">{errors.mobile}</p>}
       </div>
-      <div className="flex items-center gap-2">
+      {/* <div className="flex items-center gap-2">
         <Checkbox 
           id="terms" 
           name="terms"
@@ -109,7 +109,7 @@ export const SharedSignUpForm: React.FC<SharedSignUpFormProps> = ({
           </Link>
         </Label>
       </div>
-      {errors.terms && <p className="text-red-600 text-sm">{errors.terms}</p>}
+      {errors.terms && <p className="text-red-600 text-sm">{errors.terms}</p>} */}
     </>
   );
 };
