@@ -17,17 +17,18 @@ import { useAuth } from "@/contexts/auth-context";
 export default function DashboardPage() {
   const { user, handleLogout } = useAuth();
   const router = useRouter();
-  const { allRequests } = useContext(RequestContext);
-  const { allCollectors } = useContext(CollectorContext);
+  const { allRequests, loading: requestsLoading } = useContext(RequestContext);
+  const { allCollectors, loadiing: collectorsLoading } = useContext(CollectorContext);
 
 
-  console.log("allRequests", allRequests);
+  useEffect(() => {
+    const shouldRefresh = localStorage.getItem('shouldRefresh');  
+    if (shouldRefresh === 'true') {
+      localStorage.removeItem('shouldRefresh');
+      router.refresh();
+    }
+  }, [router]);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/login");
-  //   }
-  // }, [user]);
 
   const pendingRequests = allRequests ? allRequests.filter((request) => request.requestStatus === "Pending") : [];
   const numberOfPendingRequests = pendingRequests.length;

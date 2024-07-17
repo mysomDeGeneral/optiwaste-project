@@ -60,10 +60,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 let redirectUrl;
 
                 if(response.data.role === "admin"){
-                    redirectUrl = '/dashboard';
+                    localStorage.setItem('shouldRefresh', 'true');
+                    redirectUrl = '/admin/dashboard';
                 } else if (response.data.role === 'user') {
+                    localStorage.setItem('shouldRefresh', 'true');
                     redirectUrl = '/users/request';
                 } else if (response.data.role === 'collector') {
+                    localStorage.setItem('shouldRefresh', 'true');
                     redirectUrl = '/collector/requests';
                 } else {
                     redirectUrl = '/';

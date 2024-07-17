@@ -49,7 +49,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard"
+                  href="/admin/dashboard"
                   className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground dark:bg-accent-dark dark:text-accent-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -62,7 +62,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard/users"
+                  href="/admin/dashboard/users"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -75,7 +75,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard/collectors"
+                  href="/admin/dashboard/collectors"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -88,7 +88,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard/requests"
+                  href="/admin/dashboard/requests"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -101,7 +101,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard/analytics"
+                  href="/admin/dashboard/analytics"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -114,7 +114,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard/payments"
+                  href="/admin/dashboard/payments"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -127,7 +127,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/dashboard/settings"
+                  href="/admin/dashboard/settings"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
                   prefetch={false}
                 >
@@ -177,7 +177,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   <span className="sr-only">OptiWaste</span>
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="/admin/dashboard"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -185,7 +185,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   Dashboard
                 </Link>
                 <Link
-                  href="/dashboard/users"
+                  href="/admin/dashboard/users"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -193,7 +193,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   Users
                 </Link>
                 <Link
-                  href="/dashboard/collectors"
+                  href="/admin/dashboard/collectors"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -201,7 +201,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   Collectors
                 </Link>
                 <Link
-                  href="/dashboard/requests"
+                  href="/admin/dashboard/requests"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -209,7 +209,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   Requests
                 </Link>
                 <Link
-                  href="/dashboard/analytics"
+                  href="/admin/dashboard/analytics"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -217,7 +217,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   Analytics
                 </Link>
                 <Link
-                  href="/dashboard/payments"
+                  href="/admin/dashboard/payments"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -225,7 +225,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   Payments
                 </Link>
                 <Link
-                  href="/dashboard/settings"
+                  href="/admin/dashboard/settings"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
                   prefetch={false}
                 >
@@ -262,8 +262,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem><Link href="/dashboard/profile">Profile</Link></DropdownMenuItem>
-                <DropdownMenuItem><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
+                <DropdownMenuItem><Link href="/admin/dashboard/profile">Profile</Link></DropdownMenuItem>
+                <DropdownMenuItem><Link href="/admin/dashboard/settings">Settings</Link></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem><button onClick={handleLogout}>Logout</button></DropdownMenuItem>
               </DropdownMenuContent>
