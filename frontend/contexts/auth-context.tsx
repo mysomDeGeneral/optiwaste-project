@@ -2,8 +2,10 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { loginUser, loginCollector, logout, register, getUserProfile } from '@/apis/auth';
+import { getCollectorProfile } from '@/apis/api';
 import axios from 'axios';
 import Cookies from 'js-cookie'
+import { decodeJwt } from 'jose';
 // import { getUserRole } from '@/middleware';
 // import { getTokenFromCookies } from '@/middleware';
 
@@ -52,10 +54,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setUser(response);
 
                 const token = getTokenFromCookie();
-                console.log("token: ", token);
 
                 // await getUserRole(token ?? '');
-                console.log("role(auth-context): ", response.data.role);
 
                 let redirectUrl;
 
@@ -73,10 +73,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 }
 
                 const returnUrl = searchParams.get("returnUrl") ?? redirectUrl;
-                console.log("returnUrl: ", returnUrl);
 
                 router.refresh();
-                console.log("attempting to redirect to:", returnUrl);
                 // window.location.href = returnUrl;
                 router.replace(returnUrl);
             } else {
@@ -111,12 +109,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    const fetchCollectorProfile = async (token: any) => {
+        try {
+            const response = await getCollectorProfile(token);
+            setUser(response)
+        } catch (error) {
+            console.log("Failed to get collector profile:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        console.log("Current pathname:", window.location.pathname);
         const token = getTokenFromCookie();
         if (token) {
             setToken(token);
-            fetchUserProfile(token);
+            if(decodeJwt(token).role === 'collector'){
+                fetchCollectorProfile(token);
+            } else {
+                fetchUserProfile(token);
+            }
         } else {
             setLoading(false);
         }

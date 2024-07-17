@@ -22,6 +22,7 @@ exports.register = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
+            available: collector.available,
             role: 'collector',
             token: generateToken(collector._id, role = 'collector'),
         });
@@ -47,6 +48,7 @@ exports.login = async (req, res) => {
                 dob: collector.dob,
                 wasteTypes: collector.wasteTypes,
                 digitalAddress: collector.digitalAddress,
+                available: collector.available,
                 role : 'collector',
                 token: generateToken(collector._id, role = 'collector'),
             });
@@ -81,6 +83,7 @@ exports.getCollectorProfile = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
+            available: collector.available,
             });
             }  
     else {
@@ -92,18 +95,19 @@ exports.getCollectorProfile = async (req, res) => {
 } 
 
 exports.updateCollectorProfile = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress, available } = req.body;
 
     const collector = await Collector.findById(req.collector._id);
 
     if (collector) {
-        collector.name = name || collector.name;
-        collector.email = email || collector.email;
-        collector.nationalId = nationalId || collector.nationalId;
-        collector.licenseId = licenseId || collector.licenseId;
-        collector.dob = dob || collector.dob;
-        collector.wasteTypes = wasteTypes || collector.wasteTypes;
-        collector.digitalAddress = digitalAddress || collector.digitalAddress;
+        if (name !== undefined) collector.name = name;
+        if (email !== undefined) collector.email = email;
+        if (nationalId !== undefined) collector.nationalId = nationalId;
+        if (licenseId !== undefined) collector.licenseId = licenseId;
+        if (dob !== undefined) collector.dob = dob ;
+        if (wasteTypes !== undefined) collector.wasteTypes = wasteTypes;
+        if (digitalAddress !== undefined) collector.digitalAddress = digitalAddress;
+        if (available !== undefined) collector.available = available;
 
         if(password) {
             collector.password = password;
@@ -119,6 +123,7 @@ exports.updateCollectorProfile = async (req, res) => {
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
             digitalAddress: collector.digitalAddress,
+            available: collector.available,
             role : 'collector',
             token: generateToken(collector._id, role = 'collector'),
         });

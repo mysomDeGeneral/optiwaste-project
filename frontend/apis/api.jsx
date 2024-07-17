@@ -52,6 +52,20 @@ export const getUserProfile = async (token) => {
   
 }
 
+export const updateUserProfile = async (token, data) => {
+  try {
+      const response = await axios.put(`${API_URL}/users/profile`, data, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      });
+      console.log("update",response);
+      return response.data;
+  } catch (error) {
+      return error.response;
+  }
+}
+
 export const registerCollector = async (data) => {
   try {
     const response = await axios.post(`${API_URL}/collectors/register`, data);
@@ -86,6 +100,21 @@ export const getCollectorProfile = async (token) => {
                 Authorization: `Bearer ${token}`
             }
         });
+        console.log('collector response:' , response)
+        return response.data;
+    } catch (error) {
+        return error.response;
+    }
+}
+
+export const updateCollectorProfile = async (token, data) => {
+    try {
+        const response = await axios.put(`${API_URL}/collectors/profile`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        console.log("update",response);
         return response.data;
     } catch (error) {
         return error.response;
@@ -94,7 +123,6 @@ export const getCollectorProfile = async (token) => {
 
 export const getRequests = async (token) => {
     try {
-      console.log("token: ", token);
         const response = await axios.get(`${API_URL}/requests`, {
             headers: {
                 Authorization: `Bearer ${token}`

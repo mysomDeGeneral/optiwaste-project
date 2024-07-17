@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -21,33 +21,62 @@ import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/contexts/auth-context"
+import { useCollector } from "@/contexts/collector-context"
+
 
 export function CollectorProfile() {
-  const { handleLogout } = useAuth();
+  const { updateProfile } = useCollector()
+  const { user, handleLogout } = useAuth();
   const [isEditing, setIsEditing] = useState(false)
   const [userInfo, setUserInfo] = useState({
-    name: "John Collector",
-    email: "john@collector.com",
-    phone: "555-1234567",
-    address: "123 Main St, Anytown USA"
+    name: "",
+    email: "",
+    licenseID: "",
+    address: "",
   })
-  const [availabilityStatus, setAvailabilityStatus] = useState("available")
+
+  useEffect(() => {
+    if(user) {
+      setUserInfo({
+        name: user?.name || "",
+        email: user?.email || "",
+        licenseID: user?.licenseId || "",
+        address: user?.digitalAddress || "",
+      })
+
+      setAvailabilityStatus(user?.available || false)
+    }
+    }, [user])
+
+  const [availabilityStatus, setAvailabilityStatus] = useState(user?.available || false)
 
   const handleEdit = () => {
     setIsEditing(!isEditing)
   }
 
-  const handleSave = () => {
-    // Here you would typically send the updated info to your backend
-    setIsEditing(false)
+  const handleSave = async () => {
+    try {
+          setIsEditing(false);
+          const updatedProfile = await updateProfile({...userInfo, available: availabilityStatus});
+          setAvailabilityStatus(updatedProfile.available);
+    } catch (error) {
+      console.error("Error updating profile", error);
+    }
   }
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value })
   }
 
-  const handleAvailabilityChange = (checked: any) => {
-    setAvailabilityStatus(checked ? "available" : "unavailable")
+  const handleAvailabilityChange =  async (checked: boolean) => {
+    setAvailabilityStatus(checked)
+    try {
+      const updatedProfile = await updateProfile({ ...userInfo, available: checked });
+      setAvailabilityStatus(updatedProfile.available);
+    } catch (error) {
+      console.error("Error updating status", error);
+      setAvailabilityStatus(!checked)
+    }
   }
 
 
@@ -59,11 +88,11 @@ export function CollectorProfile() {
           <CardContent className="p-6">
             <div className="flex flex-col items-center justify-center">
               <Avatar className="h-24 w-24 mb-4 ring-2 ring-primary ring-offset-2">
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>JC</AvatarFallback>
+                <AvatarImage src={user?.avatar || "/placeholder-user.jpg"} />
+                <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
               </Avatar>
-              <h2 className="text-2xl font-bold mb-1">{userInfo.name}</h2>
-              <p className="text-muted-foreground mb-6">{userInfo.email}</p>
+              <h2 className="text-2xl font-bold mb-1">{user?.name}</h2>
+              <p className="text-muted-foreground mb-6">{user?.email}</p>
             </div>
           </CardContent>
         </Card>
@@ -113,11 +142,11 @@ export function CollectorProfile() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="availability"
-                    checked={availabilityStatus === "available"}
+                    checked={availabilityStatus}
                     onCheckedChange={handleAvailabilityChange}
                   />
-                  <span className={availabilityStatus === "available" ? "text-green-500" : "text-red-500"}>
-                    {availabilityStatus === "available" ? "Available" : "Unavailable"}
+                  <span className={availabilityStatus ? "text-green-500" : "text-red-500"}>
+                    {availabilityStatus ? "Available" : "Unavailable"}
                   </span>
                 </div>
               </div>

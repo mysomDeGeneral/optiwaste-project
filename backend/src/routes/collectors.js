@@ -7,7 +7,7 @@ const { protect } = require('../middlewares/auth');
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logout);
-router.get('/profile', getCollectorProfile);
+router.get('/profile', protect, getCollectorProfile);
 router.get('/', getCollectors);
 router.put('/profile', protect, updateCollectorProfile);
 router.delete('/profile', protect, deleteCollectorProfile);

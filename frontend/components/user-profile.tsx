@@ -11,7 +11,7 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
@@ -20,24 +20,45 @@ import { ModeToggle } from "./theme/mode-toggle"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { useAuth } from "@/contexts/auth-context"
+import { useUser } from "@/contexts/user-context"
 
 export function UserProfile() {
-    const { handleLogout } = useAuth();
+    const { updateProfile } = useUser();
+    const { user, handleLogout } = useAuth();
     const [isEditing, setIsEditing] = useState(false)
     const [userInfo, setUserInfo] = useState({
-      name: "Mysom",
-      email: "mysom@example.com",
-      phone: "555-1234567",
-      address: "Ayeduase, Kumasi, Ghana"
+      name: "",
+      email:  "",
+      phone:  "",
+      address: ""
     })
+
+    useEffect(() => {
+      if (user) {
+        setUserInfo({
+          name: user?.name ||"",
+          email: user?.email || "",
+          phone: user?.mobile || "",
+          address: user?.address || ""
+        })
+        
+        }
+      }, [user])
+
   
     const handleEdit = () => {
       setIsEditing(!isEditing)
     }
   
-    const handleSave = () => {
-      // Here you would typically send the updated info to your backend
-      setIsEditing(false)
+    const handleSave = async () => {
+      try {
+        setIsEditing(false)
+        const updatedProfile = await updateProfile(userInfo);
+        
+      } catch (error) {
+        console.error("Failed to update user profile", error)
+      }
+      
     }
   
     const handleChange = (e: { target: { name: any; value: any } }) => {
@@ -52,11 +73,11 @@ export function UserProfile() {
           <CardContent className="p-6">
             <div className="flex flex-col items-center justify-center">
               <Avatar className="h-24 w-24 mb-4 ring-2 ring-primary ring-offset-2">
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarImage src={user?.avatar || "/placeholder-user.jpg"} />
+                <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
               </Avatar>
-              <h2 className="text-2xl font-bold mb-1">{userInfo.name}</h2>
-              <p className="text-muted-foreground mb-6">{userInfo.email}</p>
+              <h2 className="text-2xl font-bold mb-1">{user?.name}</h2>
+              <p className="text-muted-foreground mb-6">{user?.email}</p>
             </div>
           </CardContent>
         </Card>
