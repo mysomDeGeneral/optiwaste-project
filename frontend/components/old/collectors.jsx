@@ -19,96 +19,158 @@ To read more about using these font, please visit the Next.js documentation:
 **/
 // import Link from "next/link"
 "use client"
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Select } from "@/components/ui/select"
-import React, { useContext } from "react"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import React, { useContext, useState } from "react"
 import { CollectorContext } from "@/contexts/collector-context";
 
 
 export function CollectorsPage() {
-const { allCollectors } = useContext(CollectorContext);
+  const { allCollectors, addCollector } = useContext(CollectorContext);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [collectorsPerPage] = useState(5);
+  const [newCollector, setNewCollector] = useState({ name: '', email: '', phone: '', status: 'active' });
+
+  const indexOfLastCollector = currentPage * collectorsPerPage;
+  const indexOfFirstCollector = indexOfLastCollector - collectorsPerPage;
+  const currentCollectors = allCollectors.slice(indexOfFirstCollector, indexOfLastCollector);
+  const totalPages = Math.ceil(allCollectors.length / collectorsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setNewCollector(prevCollector => ({ ...prevCollector, [id]: value }));
+  };
+
+  const handleSelectChange = (value, id) => {
+    setNewCollector(prevCollector => ({ ...prevCollector, [id]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addCollector(newCollector);
+    setNewCollector({ name: '', email: '', phone: '', status: 'active' });
+  };
 
   return (
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Registered Collectors</CardTitle>
-                <CardDescription>View and manage all registered collectors.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {allCollectors.map((collector) => (
-                    <TableRow key={collector._id}>
-                      <TableCell>{collector.name}</TableCell>
-                      <TableCell>{collector.email}</TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">Active</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="outline" size="sm">
-                          View
-                        </Button>
-                        <Button variant="outline" size="sm" className="ml-2">
-                          Edit
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Register New Collector</CardTitle>
-                <CardDescription>Add a new collector to the system.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form>
-                  <div className="grid gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" type="text" placeholder="Enter collector name" />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="Enter collector email" />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" type="tel" placeholder="Enter collector phone number" />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="status">Status</Label>
-                      <Select id="status">
-                        <option value="active">Active</option>
-                        <option value="pending">Pending</option>
-                      </Select>
-                    </div>
-                    <Button type="submit" className="justify-self-end">
-                      Register Collector
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Registered Collectors</CardTitle>
+            <CardDescription>View and manage all registered collectors.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {currentCollectors.map((collector) => (
+                  <TableRow key={collector._id}>
+                    <TableCell>{collector.name}</TableCell>
+                    <TableCell>{collector.email}</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">Active</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="outline" size="sm">
+                        View
+                      </Button>
+                      <Button variant="outline" size="sm" className="ml-2">
+                        Edit
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <div className="flex justify-center mt-4">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  variant={currentPage === page ? "default" : "outline"}
+                  className="mx-1"
+                >
+                  {page}
+                </Button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Register New Collector</CardTitle>
+            <CardDescription>Add a new collector to the system.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Enter user name"
+                    value={newCollector.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter user email"
+                    value={newCollector.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Phone</Label>
+                  <Input
+                    id="phone"
+                    type="text"
+                    placeholder="Enter phone number"
+                    value={newCollector.phone}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="status">Status</Label>
+                  <Select onValueChange={(value) => handleSelectChange(value, 'status')} value={newCollector.status}>
+                    <SelectTrigger id="status">
+                      <SelectValue placeholder="Select a status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button type="submit" className="justify-self-end">
+                  Register Collector
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </main>
   );
 }

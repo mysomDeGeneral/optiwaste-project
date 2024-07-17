@@ -53,9 +53,14 @@ export function SignIn() {
           </Button>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Link href="#" className="text-sm text-blue-600 hover:underline">
+          {
+            isCollector ? (<Link href="/signup/collector" className="text-sm text-blue-600 hover:underline">
             Don't have an account? Get started
-          </Link>
+          </Link>) : (<Link href="/signup/user" className="text-sm text-blue-600 hover:underline">
+            Don't have an account? Get started
+          </Link>)
+          }
+          
         </CardFooter>
       </Card>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

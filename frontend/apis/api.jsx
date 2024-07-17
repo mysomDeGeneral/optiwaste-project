@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 export const registerUser = async (data) => {
   try {
     const response = await axios.post(`${API_URL}/users/register`, data);
-    return response.data;
+    return response;
   } catch (error) {
     return error.response;
   }

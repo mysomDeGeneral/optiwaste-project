@@ -87,6 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+
     const handleLogout = async () => {
         try {
             setToken(null);
