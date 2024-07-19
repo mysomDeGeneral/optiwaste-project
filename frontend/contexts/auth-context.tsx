@@ -91,8 +91,9 @@ const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children 
                     redirectUrl = '/';
                 }
 
-                const returnUrl = "" ?? redirectUrl;
+                const returnUrl = redirectUrl ?? "/";
 
+                console.log("returnUrl", returnUrl);
                 router.refresh();
                 // window.location.href = returnUrl;
                 router.replace(returnUrl);
