@@ -31,12 +31,14 @@ import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
 import { useRequest } from "@/contexts/request-context"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
+import PaymentComponent from "./payment"
 
 
 export function RequestStatus() {
   const { request, fetchRequest } = useRequest();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
 
   useEffect(() => {
     if (request) {
@@ -46,7 +48,7 @@ export function RequestStatus() {
     }
   }, [request]);
 
-
+ 
   return (
     <div className="w-full max-w-4xl mx-auto py-12 md:py-16 lg:py-20">
       <div className="px-4 md:px-6 lg:px-8">
@@ -103,8 +105,31 @@ export function RequestStatus() {
           <div className="flex justify-end gap-2">
             <Button variant="outline">Cancel Request</Button>
             {
-              (request.paymentStatus === 'unpaid') ? <Button>Make Payment</Button> : ''
-            }
+              (request.paymentStatus === 'unpaid') && (
+              
+              <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button>Make Payment</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Confirm Payment</DialogTitle>
+                    <DialogDescription>
+                      You are about to make a payment of {request.amount} to confirm your request.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <PaymentComponent
+                    initialEmail={request.email}
+                    initialAmount={request.amount.toString()}
+                    />
+                  <DialogFooter>
+                    <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              )}
            
           </div>
         </div>

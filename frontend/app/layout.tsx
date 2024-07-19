@@ -6,6 +6,7 @@ import { RequestProvider } from "@/contexts/request-context";
 import { UserProvider } from "@/contexts/user-context"; 
 import { CollectorProvider } from "@/contexts/collector-context";
 import { AuthProvider } from "@/contexts/auth-context";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,7 +36,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <RequestProvider>
             <UserProvider>
               <CollectorProvider>
+              <Suspense fallback={<div>Loading...</div>}>
               {children}
+              </Suspense>
               </CollectorProvider>
             </UserProvider>
           </RequestProvider>

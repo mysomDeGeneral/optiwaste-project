@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { getLocation } from '@/apis/api';
@@ -25,52 +25,9 @@ const CollectorRoute: React.FC<CollectorRouteProps> = ({ requestAddress }) => {
   const [collectorLocation, setCollectorLocation] = useState<Coordinates>({ lng: -1.4766, lat: 6.6355 }); // Kumasi, Ghana
   const [zoom, setZoom] = useState<number>(12);
 
-  useEffect(() => {
-    if (map.current) return;
+  const center = useMemo(() => [collectorLocation.lng, collectorLocation.lat], [collectorLocation]);
 
-    const initializeMap = async () => {
-      if (mapContainer.current) {
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/streets-v11',
-          center: [collectorLocation.lng, collectorLocation.lat],
-          zoom: zoom,
-          bearing: 0,
-          pitch: 60,
-        });
-
-        directions.current = new MapboxDirections({
-          accessToken: mapboxgl.accessToken,
-          unit: 'metric',
-          profile: 'mapbox/driving-traffic',
-          alternatives: false,
-          controls: {
-            inputs: false,
-            instructions: true,
-            profileSwitcher: false,
-          },
-          interactive: false,
-        });
-
-        map.current.addControl(directions.current, 'top-left');
-        map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-        map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
-
-        map.current.on('load', () => {
-          console.log('Map loaded successfully');
-          getRoute();
-        });
-
-        map.current.on('error', (e) => {
-          console.error('Map error:', e);
-        });
-      }
-    };
-
-    initializeMap();
-  }, []);
-
-  const getRoute = async () => {
+  const getRoute = useCallback(async () => {
     if (!directions.current || !requestAddress) return;
 
     try {
@@ -85,7 +42,55 @@ const CollectorRoute: React.FC<CollectorRouteProps> = ({ requestAddress }) => {
     } catch (error) {
       console.error('Error getting route:', error);
     }
-  };
+  }, [collectorLocation, requestAddress]);
+
+
+  useEffect(() => {
+    if (map.current) return;
+
+    const initializeMap = async () => {
+      if (mapContainer.current) {
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/streets-v11',
+          center: [collectorLocation.lng, collectorLocation.lat],
+          zoom: zoom,
+          bearing: 0,
+          pitch: 60,
+          interactive: false,
+        });
+
+        directions.current = new MapboxDirections({
+          accessToken: mapboxgl.accessToken,
+          unit: 'metric',
+          profile: 'mapbox/driving-traffic',
+          alternatives: false,
+          controls: {
+            inputs: false,
+            instructions: true,
+            profileSwitcher: false,
+          },
+        });
+
+        map.current.addControl(directions.current, 'top-left');
+        map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+        //map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
+
+        map.current.on('load', () => {
+          console.log('Map loaded successfully');
+          getRoute();
+        });
+
+        map.current.on('error', (e) => {
+          console.error('Map error:', e);
+        });
+      }
+    };
+
+    initializeMap();
+  }, [center, zoom, getRoute, collectorLocation]);
+
+
 
   return (
     <div>

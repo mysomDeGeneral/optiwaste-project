@@ -6,15 +6,22 @@ import { getCollectorProfile } from '@/apis/api';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import { decodeJwt } from 'jose';
+import { UseSearchParamsWrapper } from '@/components/useSearchParamsWrapper';
 // import { getUserRole } from '@/middleware';
 // import { getTokenFromCookies } from '@/middleware';
 
 
+interface LoginData {
+    email: string;
+    password: string;
+    isCollector: boolean;
+}
+
 interface AuthContextProps {
     user: any;
     loading: boolean;
-    token: any;
-    handleLogin: (data: { email: string; password: string; isCollector: boolean }) => Promise<void>;
+    token: string | null;
+    handleLogin: (data: LoginData) =>Promise<void>;
     handleLogout: () => Promise<void>;
 }
 
@@ -30,14 +37,17 @@ export function getTokenFromCookie(): string | undefined {
 }
 
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<any>(null);
     const [token, setToken] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const handleLogin = async (data: { email: string; password: string; isCollector: boolean }) => {
+    const handleLogin = async (data: LoginData) => {
+        console.log("loginData auth-context", data);
+
         try {
             let response;
             const { isCollector } = data;
@@ -47,9 +57,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 response = await loginUser(data);
             }
 
+            console.log("response auth-context", response);
+
             if (response && response.data.token) {
                 setToken(response.data.token);
                 setTokenInCookie(response.data.token);
+                localStorage.setItem('shouldRefresh', 'true');
                 axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
                 setUser(response);
 
@@ -135,7 +148,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, handleLogin, handleLogout, token }}>
+        <AuthContext.Provider value={{
+             user, 
+             loading, 
+             handleLogin,
+             handleLogout, token }}>
             {children}
         </AuthContext.Provider>
     );

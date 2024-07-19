@@ -6,6 +6,7 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink } from "@/co
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 // import NavigationLink from "./navigation-link";
+import Image from "next/image";
 
 const Layout = ({ children, currentPath }) => {
     const activeClassName = "bg-accent text-accent-foreground";
@@ -250,10 +251,10 @@ const Layout = ({ children, currentPath }) => {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-                                    <img
+                                    <Image
                                         src="/placeholder-user.jpg"
-                                        width="36"
-                                        height="36"
+                                        width={36}
+                                        height={36}
                                         className="rounded-full"
                                         alt="Avatar" />
                                     <span className="sr-only">Toggle user menu</span>

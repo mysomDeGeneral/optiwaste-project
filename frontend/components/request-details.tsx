@@ -10,9 +10,10 @@ import { useState } from "react"
 import DynamicMap from "./dynamic-map"
 import { getAddress } from "@/apis/api"
 import { useRequest } from "@/contexts/request-context"
+import { useRouter } from "next/navigation"
 
 export function RequestDetails() {
-  const { createRequest } = useRequest();
+  const { createNewRequest } = useRequest();
   const [location, setLocation] = useState('');
   const [selectedLng, setSelectedLng] = useState<number | null>(null);
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
@@ -21,6 +22,7 @@ export function RequestDetails() {
   const [instructions, setInstructions] = useState('');
   const [binId, setBinId] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const router = useRouter();
 
   const handleLocationSelect = (lng: number, lat: number) => {
     setSelectedLng(lng);
@@ -44,7 +46,7 @@ export function RequestDetails() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ location, wasteType, quantity, instructions });
 
@@ -59,8 +61,11 @@ export function RequestDetails() {
     };
 
     try {
-      const response = createRequest(requestData);
+      const response = await createNewRequest(requestData);
       console.log("request made:", response);
+      if (response.status === 201) {
+        router.push('/users/requests/status');
+      }
     } catch (error) {
       console.error("Error creating request:", error);
     }

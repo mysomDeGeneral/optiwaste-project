@@ -141,7 +141,7 @@ export const createRequest = async (data, token) => {
         Authorization: `Bearer ${token}`
       }
     });
-    return response.data;
+    return response;
   } catch (error) {
     return error.response;
   }

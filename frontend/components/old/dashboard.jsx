@@ -12,6 +12,8 @@ import { RequestContext } from "@/contexts/request-context";
 import { CollectorContext } from "@/contexts/collector-context";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
+import { PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
 
 
 export default function DashboardPage() {
@@ -36,7 +38,7 @@ export default function DashboardPage() {
 
   return (
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader>
               <CardTitle>Total Waste Collected</CardTitle>
@@ -74,27 +76,27 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-          <Card>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 ">
+          <Card className="col-span-1 md:col-span-1">
             <CardHeader>
               <CardTitle>Waste Collection by Type</CardTitle>
               <CardDescription>A breakdown of the types of waste collected.</CardDescription>
             </CardHeader>
             <CardContent>
-              <PieChart className="w-full aspect-[4/3]" />
+              <DrawPieChart className="w-full aspect-[4/3]" />
             </CardContent>
           </Card>
-          <Card>
+          <Card className="col-span-1 md:col-span-1">
             <CardHeader>
               <CardTitle>Collector Performance</CardTitle>
               <CardDescription>A chart showing the performance of collectors over time.</CardDescription>
             </CardHeader>
             <CardContent>
-              <LineChart className="w-full aspect-[4/3]" />
+              <DrawLineChart className="w-full aspect-[4/3]" />
             </CardContent>
           </Card>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Payments Received</CardTitle>
@@ -167,121 +169,167 @@ export default function DashboardPage() {
   );
 }
 
-function LineChart(props) {
+// function LineChart(props) {
+//   return (
+//     <div {...props}>
+//       <ResponsiveLine
+//         data={[
+//           {
+//             id: "Desktop",
+//             data: [
+//               { x: "Jan", y: 43 },
+//               { x: "Feb", y: 137 },
+//               { x: "Mar", y: 61 },
+//               { x: "Apr", y: 145 },
+//               { x: "May", y: 26 },
+//               { x: "Jun", y: 154 },
+//             ],
+//           },
+//           {
+//             id: "Mobile",
+//             data: [
+//               { x: "Jan", y: 60 },
+//               { x: "Feb", y: 48 },
+//               { x: "Mar", y: 177 },
+//               { x: "Apr", y: 78 },
+//               { x: "May", y: 96 },
+//               { x: "Jun", y: 204 },
+//             ],
+//           },
+//         ]}
+//         margin={{ top: 10, right: 10, bottom: 40, left: 40 }}
+//         xScale={{
+//           type: "point",
+//         }}
+//         yScale={{
+//           type: "linear",
+//         }}
+//         axisTop={null}
+//         axisRight={null}
+//         axisBottom={{
+//           tickSize: 0,
+//           tickPadding: 16,
+//         }}
+//         axisLeft={{
+//           tickSize: 0,
+//           tickValues: 5,
+//           tickPadding: 16,
+//         }}
+//         colors={["#2563eb", "#e11d48"]}
+//         pointSize={6}
+//         useMesh={true}
+//         gridYValues={6}
+//         theme={{
+//           tooltip: {
+//             chip: {
+//               borderRadius: "9999px",
+//             },
+//             container: {
+//               fontSize: "12px",
+//               textTransform: "capitalize",
+//               borderRadius: "6px",
+//             },
+//           },
+//           grid: {
+//             line: {
+//               stroke: "#f3f4f6",
+//             },
+//           },
+//         }}
+//         role="application"
+//       />
+//     </div>
+//   );
+// }
+
+// function PieChart(props) {
+//   return (
+//     <div {...props}>
+//       <ResponsivePie
+//         data={[
+//           { id: "Jan", value: 111 },
+//           { id: "Feb", value: 157 },
+//           { id: "Mar", value: 129 },
+//           { id: "Apr", value: 150 },
+//           { id: "May", value: 119 },
+//           { id: "Jun", value: 72 },
+//         ]}
+//         sortByValue
+//         margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+//         cornerRadius={0}
+//         padAngle={0}
+//         borderWidth={1}
+//         borderColor={"#ffffff"}
+//         enableArcLinkLabels={false}
+//         arcLabel={(d) => `${d.id}`}
+//         arcLabelsTextColor={"#ffffff"}
+//         arcLabelsRadiusOffset={0.65}
+//         colors={["#2563eb"]}
+//         theme={{
+//           labels: {
+//             text: {
+//               fontSize: "18px",
+//             },
+//           },
+//           tooltip: {
+//             chip: {
+//               borderRadius: "9999px",
+//             },
+//             container: {
+//               fontSize: "12px",
+//               textTransform: "capitalize",
+//               borderRadius: "6px",
+//             },
+//           },
+//         }}
+//         role="application"
+//       />
+//     </div>
+//   );
+// }
+
+function DrawPieChart(props) {
+  const data = [
+    { name: 'Jan', value: 111 },
+    { name: 'Feb', value: 157 },
+    { name: 'Mar', value: 129 },
+    { name: 'Apr', value: 150 },
+    { name: 'May', value: 119 },
+    { name: 'Jun', value: 72 },
+  ];
+
   return (
-    <div {...props}>
-      <ResponsiveLine
-        data={[
-          {
-            id: "Desktop",
-            data: [
-              { x: "Jan", y: 43 },
-              { x: "Feb", y: 137 },
-              { x: "Mar", y: 61 },
-              { x: "Apr", y: 145 },
-              { x: "May", y: 26 },
-              { x: "Jun", y: 154 },
-            ],
-          },
-          {
-            id: "Mobile",
-            data: [
-              { x: "Jan", y: 60 },
-              { x: "Feb", y: 48 },
-              { x: "Mar", y: 177 },
-              { x: "Apr", y: 78 },
-              { x: "May", y: 96 },
-              { x: "Jun", y: 204 },
-            ],
-          },
-        ]}
-        margin={{ top: 10, right: 10, bottom: 40, left: 40 }}
-        xScale={{
-          type: "point",
-        }}
-        yScale={{
-          type: "linear",
-        }}
-        axisTop={null}
-        axisRight={null}
-        axisBottom={{
-          tickSize: 0,
-          tickPadding: 16,
-        }}
-        axisLeft={{
-          tickSize: 0,
-          tickValues: 5,
-          tickPadding: 16,
-        }}
-        colors={["#2563eb", "#e11d48"]}
-        pointSize={6}
-        useMesh={true}
-        gridYValues={6}
-        theme={{
-          tooltip: {
-            chip: {
-              borderRadius: "9999px",
-            },
-            container: {
-              fontSize: "12px",
-              textTransform: "capitalize",
-              borderRadius: "6px",
-            },
-          },
-          grid: {
-            line: {
-              stroke: "#f3f4f6",
-            },
-          },
-        }}
-        role="application"
-      />
-    </div>
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie dataKey="value" data={data} fill="#8884d8" label />
+        <Tooltip />
+      </PieChart>
+    </ResponsiveContainer>
   );
 }
 
-function PieChart(props) {
+function DrawLineChart(props) {
+  const data = [
+    { name: 'Jan', Desktop: 43, Mobile: 60 },
+    { name: 'Feb', Desktop: 137, Mobile: 48 },
+    { name: 'Mar', Desktop: 61, Mobile: 177 },
+    { name: 'Apr', Desktop: 145, Mobile: 78 },
+    { name: 'May', Desktop: 26, Mobile: 96 },
+    { name: 'Jun', Desktop: 154, Mobile: 204 },
+  ];
+
   return (
-    <div {...props}>
-      <ResponsivePie
-        data={[
-          { id: "Jan", value: 111 },
-          { id: "Feb", value: 157 },
-          { id: "Mar", value: 129 },
-          { id: "Apr", value: 150 },
-          { id: "May", value: 119 },
-          { id: "Jun", value: 72 },
-        ]}
-        sortByValue
-        margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-        cornerRadius={0}
-        padAngle={0}
-        borderWidth={1}
-        borderColor={"#ffffff"}
-        enableArcLinkLabels={false}
-        arcLabel={(d) => `${d.id}`}
-        arcLabelsTextColor={"#ffffff"}
-        arcLabelsRadiusOffset={0.65}
-        colors={["#2563eb"]}
-        theme={{
-          labels: {
-            text: {
-              fontSize: "18px",
-            },
-          },
-          tooltip: {
-            chip: {
-              borderRadius: "9999px",
-            },
-            container: {
-              fontSize: "12px",
-              textTransform: "capitalize",
-              borderRadius: "6px",
-            },
-          },
-        }}
-        role="application"
-      />
-    </div>
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="Desktop" stroke="#2563eb" />
+        <Line type="monotone" dataKey="Mobile" stroke="#e11d48" />
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
+

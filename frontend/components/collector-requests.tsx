@@ -27,14 +27,15 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "@/components/ui/pagination"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
+import { useRequest } from "@/contexts/request-context"
 
 // Mock data for requests
 const mockRequests = [
-  { id: 1, address: "AOK6806973", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
-  { id: 2, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
-  { id: 3, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
-  { id: 4, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
-  { id: 5, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
+  { id: 1, address: "AOK6806973", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
+  { id: 2, address: "AE08423132", status: "Accepted", pickupTime: "2024-07-16 2:30 PM" },
+  { id: 3, address: "AT03613653", status: "Rejected", pickupTime: "2024-07-17 9:00 AM" },
+  { id: 4, address: "AC08832667", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
+  { id: 5, address: "AH05597737, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
   { id: 6, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
   { id: 7, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
   { id: 8, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
@@ -47,6 +48,9 @@ export function Requests() {
   const [selectedRequest, setSelectedRequest] = useState<{ id: number; address: string; status: string; pickupTime: string; } | null>(null)
   const [requestsPerPage, setRequestsPerPage] = useState(4)
   const router = useRouter()
+  const { allRequests } = useRequest();
+
+  console.log("requests:", allRequests);
 
   useEffect(() => {
     const handleResize = () => {

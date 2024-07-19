@@ -17,7 +17,7 @@ interface FormData {
   password: string;
   address: string;
   mobile: string;
-  terms: boolean;
+  // terms: boolean;
 }
 
 interface FormErrors {
@@ -25,7 +25,7 @@ interface FormErrors {
   email?: string;
   password?: string;
   mobile?: string;
-  terms?: string;
+  // terms?: string;
   form?: string;
 }
 
@@ -36,7 +36,7 @@ export default function RegistrationPage(): JSX.Element {
     password: "",
     address: "",
     mobile: "",
-    terms: false,
+    // terms: false,
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -60,7 +60,7 @@ export default function RegistrationPage(): JSX.Element {
     if (!formData.password) newErrors.password = "Password is required";
     else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
     if (!formData.mobile) newErrors.mobile = "Mobile number is required";
-    if (!formData.terms) newErrors.terms = "You must agree to the terms and conditions";
+    // if (!formData.terms) newErrors.terms = "You must agree to the terms and conditions";
     return newErrors;
   };
 
@@ -168,7 +168,7 @@ export default function RegistrationPage(): JSX.Element {
               />
               {errors.mobile && <p className="text-red-600 text-sm">{errors.mobile}</p>}
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <Checkbox 
                 id="terms" 
                 name="terms"
@@ -183,7 +183,7 @@ export default function RegistrationPage(): JSX.Element {
                 </Link>
               </Label>
             </div>
-            {errors.terms && <p className="text-red-600 text-sm">{errors.terms}</p>}
+            {errors.terms && <p className="text-red-600 text-sm">{errors.terms}</p>} */}
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>

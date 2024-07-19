@@ -15,7 +15,8 @@ export default async function middleware(req: NextRequest) {
   const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route.replace('*', '')));
 
   if (isProtectedRoute) {
-    const token = getTokenFromCookies(req);
+    // const token = getTokenFromCookies(req);
+    const token = req.cookies.get('token')?.value;
     console.log("token:", token);
     if (!token) {
       console.log('No token found redirecting to login');

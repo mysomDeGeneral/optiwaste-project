@@ -56,7 +56,7 @@ const Map: React.FC<MapProps> = ({ onSelectLocation }) => {
         });
       });
     }
-  }, [onSelectLocation]);
+  }, [lat, lng, zoom, onSelectLocation]);
 
 const handleRemoveCoords = (index: number) => {
     setCoords(prev => prev.filter((_, i) => i !== index));

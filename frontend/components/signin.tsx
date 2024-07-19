@@ -1,5 +1,5 @@
 "use client"
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,7 +11,7 @@ import Link from "next/link";
 
 
 export function SignIn() {
-  const { handleLogin }: { handleLogin: (credentials: { email: string, password: string, isCollector: boolean }) => Promise<void> } = useAuth();
+  const { handleLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isCollector, setIsCollector] = useState(false);
@@ -23,8 +23,7 @@ export function SignIn() {
     e.preventDefault();
     try {
       setLoading(true);
-      await handleLogin({ email, password, isCollector });
-      console.log("Login successful");
+      const response: any = await handleLogin({ email, password, isCollector });
       setIsDialogOpen(false);
     } catch (error) {
       console.error("Login error:", error);
@@ -64,6 +63,7 @@ export function SignIn() {
         </CardFooter>
       </Card>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTitle className="hidden">Sign In</DialogTitle>
         <DialogContent className="sm:max-w-[450px]">
           <div className="relative flex flex-col items-center gap-6 rounded-lg bg-background p-8 shadow-lg">
             <div className="flex items-center justify-center">
