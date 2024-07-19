@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { loginUser, loginCollector, logout, register, getUserProfile } from '@/apis/auth';
 import { getCollectorProfile } from '@/apis/api';
@@ -27,6 +27,10 @@ interface AuthContextProps {
     fetchCollectorProfile: (token: any) => Promise<void>;
 }
 
+interface AuthProviderComponentProps {
+    children: React.ReactNode;
+}
+
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
 export function setTokenInCookie(token: string): void{
@@ -40,7 +44,7 @@ export function getTokenFromCookie(): string | undefined {
 
 
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children }) => {
     const [user, setUser] = useState<any>(null);
     const [token, setToken] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -162,6 +166,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         </AuthContext.Provider>
     );
 };
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <AuthProviderComponent>{children}</AuthProviderComponent>
+    </Suspense>
+);
 
 export function useAuth() {
     const context = useContext(AuthContext);

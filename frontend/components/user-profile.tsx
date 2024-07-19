@@ -35,7 +35,7 @@ export function UserProfile() {
 
     useEffect(() => {
       fetchUserProfile(token);
-    }, [fetchUserProfile]);
+    }, [fetchUserProfile, token]);
 
     useEffect(() => {
       if (user) {
