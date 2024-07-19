@@ -35,6 +35,7 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await user.matchPassword(password))) {
+            console.log("user logged in successfully!");
             res.json({
                 _id: user._id,
                 name: user.name,

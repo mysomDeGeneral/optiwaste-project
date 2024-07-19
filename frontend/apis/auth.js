@@ -23,7 +23,7 @@ export const logout = async () => {
 
 export const register = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/users/register`, data);
+    const response = await api.post('/users/register', data);
     return response.data;
   } catch (error) {
     console.log("registration failed:", error);
@@ -45,7 +45,7 @@ export const getUserProfile = async (token) => {
 
 export const updateUserProfile = async (token, data) => {
   try {
-    const response = await axios.put(`${API_URL}/users/profile`, data, {
+    const response = await api.put('/users/profile', data, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -58,7 +58,7 @@ export const updateUserProfile = async (token, data) => {
 
 export const deleteUserProfile = async (token) => {
   try {
-    const response = await axios.delete(`${API_URL}/users/profile`, {
+    const response = await api.delete('/users/profile', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -71,7 +71,7 @@ export const deleteUserProfile = async (token) => {
 
 export const verifyUser = async (token) => {
   try {
-    const response = await axios.post(`${API_URL}/verify-user`, {
+    const response = await api.post('/verify-user', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -85,7 +85,7 @@ export const verifyUser = async (token) => {
 export const loginCollector = async (credentials) => {
   try {
     console.log("loginCollector:", credentials);
-    const response = await axios.post(`${API_URL}/collectors/login`, credentials);
+    const response = await api.post('/collectors/login', credentials);
     console.log("loginCollector response:", response);
     return response;
   } catch (error) {

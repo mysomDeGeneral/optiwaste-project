@@ -42,7 +42,7 @@ export const getUsers = async () => {
 
 export const getUserProfile = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}/users/profile`, {
+    const response = await api.get('/users/profile', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -56,7 +56,7 @@ export const getUserProfile = async (token) => {
 
 export const updateUserProfile = async (token, data) => {
   try {
-      const response = await axios.put(`${API_URL}/users/profile`, data, {
+      const response = await api.put('/users/profile', data, {
           headers: {
               Authorization: `Bearer ${token}`
           }
@@ -70,7 +70,7 @@ export const updateUserProfile = async (token, data) => {
 
 export const registerCollector = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/collectors/register`, data);
+    const response = await axios.post('/collectors/register', data);
     return response.data;
   } catch (error) {
     return error.response;
@@ -88,7 +88,7 @@ export const loginCollector = async (credentials) => {
 
 export const getCollectors = async () => {
     try {
-        const response = await axios.get(`${API_URL}/collectors`);
+        const response = await api.get('/collectors');
         return response.data;
     } catch (error) {
         return error.response;
@@ -97,7 +97,7 @@ export const getCollectors = async () => {
 
 export const getCollectorProfile = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/collectors/profile`, {
+        const response = await api.get('/collectors/profile', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -111,7 +111,7 @@ export const getCollectorProfile = async (token) => {
 
 export const updateCollectorProfile = async (token, data) => {
     try {
-        const response = await axios.put(`${API_URL}/collectors/profile`, data, {
+        const response = await api.put('/collectors/profile', data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -125,7 +125,7 @@ export const updateCollectorProfile = async (token, data) => {
 
 export const getRequests = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/requests`, {
+        const response = await api.get('/requests', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -138,7 +138,7 @@ export const getRequests = async (token) => {
 
 export const createRequest = async (data, token) => {
   try {
-    const response = await axios.post(`${API_URL}/requests`, data, {
+    const response = await axios.post('/requests', data, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -151,7 +151,7 @@ export const createRequest = async (data, token) => {
 
 export const getRequest = async (id, token) => {
   try {
-    const response = await axios.get(`${API_URL}/requests/${id}`, {
+    const response = await api.get(`/requests/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -164,7 +164,7 @@ export const getRequest = async (id, token) => {
 
 export const updateRequest = async (id, data, token) => {
   try {
-    const response = await axios.put(`${API_URL}/requests/${id}`, data, {
+    const response = await api.put(`/requests/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -177,7 +177,7 @@ export const updateRequest = async (id, data, token) => {
 
 export const deleteRequest = async (id, token) => {
   try {
-    const response = await axios.delete(`${API_URL}/requests/${id}`, {
+    const response = await api.delete(`/requests/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -190,7 +190,7 @@ export const deleteRequest = async (id, token) => {
 
 export const acceptRequest = async (id, token) => {
   try {
-    const response = await axios.post(`${API_URL}/requests/${id}/accept`, {}, {
+    const response = await api.post(`/requests/${id}/accept`, {}, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -203,7 +203,7 @@ export const acceptRequest = async (id, token) => {
 
 export const rejectRequest = async (id, token) => {
   try {
-    const response = await axios.post(`${API_URL}/requests/${id}/reject`, {}, {
+    const response = await api.post(`/requests/${id}/reject`, {}, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -217,7 +217,7 @@ export const rejectRequest = async (id, token) => {
 
 export const getLocation = async (address) => {
     try {
-      const response = await axios.post(`${API_URL}/location/get-location`, {address});
+      const response = await api.post('/location/get-location', {address});
       return response.data;
     } catch (error) {
       return error.response;
@@ -227,9 +227,8 @@ export const getLocation = async (address) => {
 export const getAddress = async (longitude, latitude) => {
     try {
       console.log(longitude, latitude);
-      const response = await axios.post(`${API_URL}/location/get-address`, {longitude,latitude});
+      const response = await api.post('/location/get-address', {longitude,latitude});
       return response.data;
-      console.log("api",response);
     } catch (error) {
       return error.response;
     }
