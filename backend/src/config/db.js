@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const { MongoClient, ServerApiVersion} = require('mongodb');
+require('dotenv').config();
 
 const uri = process.env.MONGO_URI_ONLINE;
 
 exports.connectDB = async () => {
     try {
-        const connection = await mongoose.connect(process.env.MONGO_URI, {
+        const connection = await mongoose.connect(uri, {
         });
     
         console.log(`MongoDB Connected: ${connection.connection.host}`);
@@ -25,7 +26,7 @@ if (!uri) {
 
 exports.connectOnlineDB = async () => {
   try {
-      const connection = await mongoose.connect(process.env.MONGO_URI_ONLINE, {
+      const connection = await mongoose.connect(uri, {
       });
   
       console.log(`MongoDB Connected: ${connection.connection.host}`);

@@ -14,8 +14,8 @@ const verifyToken = require('./utils/jwt')
 const cors = require('cors');
 
 
-connectDB();
-// connectOnlineDB();
+// connectDB();
+connectOnlineDB();
 
 app.use(cors({
     origin: [process.env.FRONTEND_URL],
