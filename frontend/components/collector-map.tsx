@@ -70,7 +70,6 @@ const CollectorRoute: React.FC<CollectorRouteProps> = ({ requestAddress }) => {
             instructions: true,
             profileSwitcher: false,
           },
-          interactive: false, // Prevent user from clicking on the map to change coordinates
         });
 
         map.current.addControl(directions.current, 'top-left');
