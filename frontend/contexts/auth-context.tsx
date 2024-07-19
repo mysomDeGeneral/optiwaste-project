@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useState, useEffect, useContext, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { loginUser, loginCollector, logout, register, getUserProfile } from '@/apis/auth';
 import { getCollectorProfile } from '@/apis/api';
 import axios from 'axios';
@@ -49,7 +49,7 @@ const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children 
     const [token, setToken] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
-    const searchParams = useSearchParams();
+    
 
     const handleLogin = async (data: LoginData) => {
         console.log("loginData auth-context", data);
@@ -91,7 +91,7 @@ const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children 
                     redirectUrl = '/';
                 }
 
-                const returnUrl = searchParams.get("returnUrl") ?? redirectUrl;
+                const returnUrl = "" ?? redirectUrl;
 
                 router.refresh();
                 // window.location.href = returnUrl;
@@ -162,7 +162,9 @@ const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children 
              fetchCollectorProfile,
              fetchUserProfile, 
              token }}>
-            {children}
+            <UseSearchParamsWrapper>
+                {(searchParams) => React.cloneElement(children as React.ReactElement, { searchParams })}
+            </UseSearchParamsWrapper>
         </AuthContext.Provider>
     );
 };

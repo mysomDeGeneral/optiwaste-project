@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { RequestProvider } from "@/contexts/request-context";
-import { UserProvider } from "@/contexts/user-context"; 
+import { UserProvider } from "@/contexts/user-context";
 import { CollectorProvider } from "@/contexts/collector-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Suspense } from "react";
@@ -31,20 +31,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        > 
-        <Suspense fallback={<div>Loading...</div>}>
-        <AuthProvider>
-          <RequestProvider>
-            <UserProvider>
-              <CollectorProvider>
-             
-              {children}
-             
-              </CollectorProvider>
-            </UserProvider>
-          </RequestProvider>
-        </AuthProvider>
-         </Suspense>
+        >
+          <Suspense fallback={<div>Loading...</div>}>
+            <AuthProvider>
+              <RequestProvider>
+                <UserProvider>
+                  <CollectorProvider>
+
+                    {children}
+
+                  </CollectorProvider>
+                </UserProvider>
+              </RequestProvider>
+            </AuthProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>
