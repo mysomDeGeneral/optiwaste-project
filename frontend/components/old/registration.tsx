@@ -189,8 +189,8 @@ export default function RegistrationPage(): JSX.Element {
             </Button>
           </form>
           <div className="w-full text-center mt-4">
-            Already have an account?{" "}
-            <Link href="/login" className="text-primary hover:underline"> Log in</Link>
+            
+            <Link href="/login" className="text-primary hover:underline">Already have an account?{" "} Log in</Link>
           </div>
         </div>
         <div className="text-xs text-muted-foreground">&copy; 2024 OptiWaste. All rights reserved.</div>

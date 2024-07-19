@@ -27,7 +27,6 @@ interface CollectorFormErrors {
   name?: string;
   email?: string;
   password?: string;
-  mobile?: string;
 //   terms?: string;
   nationalId?: string;
   licenseId?: string;
@@ -161,9 +160,9 @@ export default function CollectorSignUpPage(): JSX.Element {
             </Button>
           </form>
           <div className="w-full text-center mt-4">
-            Already have an account?{" "}
+            
             <Link href="/login" className="text-primary hover:underline">
-              Log in
+             Already have an account?{" "} Log in
             </Link>
           </div>
         </div>
