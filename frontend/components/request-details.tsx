@@ -36,7 +36,7 @@ export function RequestDetails() {
         console.log(response);
         if (response && response.address) {
           setLocation(response.address);
-          setIsDrawerOpen(false);
+          // setIsDrawerOpen(false);
         } else {
           console.error('Invalid address format received');
         }
