@@ -18,7 +18,7 @@ connectDB();
 // connectOnlineDB();
 
 app.use(cors({
-    origin: [process.env.FRONTEND_URL, 'http://192.168.43.122:3000'],
+    origin: [process.env.FRONTEND_URL],
     // origin: '0.0.0.0',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
@@ -34,7 +34,7 @@ app.get('/api/verify-user', verifyToken);
 app.use('/api/payments', paymentRoutes);
 
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
