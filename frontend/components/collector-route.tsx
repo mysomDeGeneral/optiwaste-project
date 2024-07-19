@@ -179,6 +179,7 @@
 // };
 
 // export default CollectorRoute;
+"use client"
 import React from 'react';
 import CollectorRoute from "./collector-map";
 
