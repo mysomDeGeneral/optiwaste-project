@@ -1,6 +1,6 @@
 "use client"
 import React, { createContext, useState, useEffect, useContext, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { loginUser, loginCollector, logout, register, getUserProfile } from '@/apis/auth';
 import { getCollectorProfile } from '@/apis/api';
 import axios from 'axios';
@@ -33,6 +33,67 @@ interface AuthProviderComponentProps {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
+// const ClientSideAuth = ({ children }: { children: React.ReactNode }) => {
+//     const [user, setUser] = useState<any>(null);
+//     const [token, setToken] = useState<string | null>(null);
+//     const searchParams = useSearchParams();
+//     const router = useRouter();
+
+//     const handleLogin = async (data: LoginData) => {
+//         console.log("loginData auth-context", data);
+
+//         try {
+//             let response;
+//             const { isCollector } = data;
+//             if (isCollector) {
+//                 response = await loginCollector(data);
+//             } else {
+//                 response = await loginUser(data);
+//             }
+
+//             console.log("response auth-context", response);
+
+//             if (response && response.data.token) {
+//                 setToken(response.data.token);
+//                 setTokenInCookie(response.data.token);
+//                 localStorage.setItem('shouldRefresh', 'true');
+//                 axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+//                 setUser(response);
+
+//                 const token = getTokenFromCookie();
+
+//                 // await getUserRole(token ?? '');
+
+//                 let redirectUrl;
+
+//                 if(response.data.role === "admin"){
+//                     localStorage.setItem('shouldRefresh', 'true');
+//                     redirectUrl = '/admin/dashboard';
+//                 } else if (response.data.role === 'user') {
+//                     localStorage.setItem('shouldRefresh', 'true');
+//                     redirectUrl = '/users/request';
+//                 } else if (response.data.role === 'collector') {
+//                     localStorage.setItem('shouldRefresh', 'true');
+//                     redirectUrl = '/collector/requests';
+//                 } else {
+//                     redirectUrl = '/';
+//                 }
+
+//                 const returnUrl = redirectUrl ?? "/";
+
+//                 console.log("returnUrl", returnUrl);
+//                 router.refresh();
+//                 // window.location.href = returnUrl;
+//                 router.replace(returnUrl);
+//             } else {
+//                 console.error("Invalid response from the server");
+//             }
+//         } catch (error: any) {
+//             console.error("Login failed: " + error.message);
+//         }
+//     };
+// }
+
 export function setTokenInCookie(token: string): void{
     Cookies.set('token', token, { expires: 1, path: '/'});
 }
@@ -44,11 +105,12 @@ export function getTokenFromCookie(): string | undefined {
 
 
 
-const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children }) => {
+const ClientSideAuth: React.FC<AuthProviderComponentProps> = ({ children }) => {
     const [user, setUser] = useState<any>(null);
     const [token, setToken] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
+    const searchParams = useSearchParams();
     
 
     const handleLogin = async (data: LoginData) => {
@@ -91,7 +153,7 @@ const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children 
                     redirectUrl = '/';
                 }
 
-                const returnUrl = redirectUrl ?? "/";
+                const returnUrl = searchParams.get("returnUrl") ?? redirectUrl;
 
                 console.log("returnUrl", returnUrl);
                 router.refresh();
@@ -163,11 +225,12 @@ const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children 
              fetchCollectorProfile,
              fetchUserProfile, 
              token }}>
-            <UseSearchParamsWrapper>
-                {(searchParams) => React.cloneElement(children as React.ReactElement, { searchParams })}
-            </UseSearchParamsWrapper>
+            {children}
         </AuthContext.Provider>
     );
+};
+const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children }) => {
+    return <ClientSideAuth>{children}</ClientSideAuth>;
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
