@@ -19,7 +19,7 @@ To read more about using these font, please visit the Next.js documentation:
 **/
 "use client"
 
-import { ReactNode } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -29,13 +29,32 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 import { House, ChartLine, Clipboard, Users, Truck, Money, Gear, SignOut, List, Trash } from "@phosphor-icons/react"
 import { ModeToggle } from "./theme/mode-toggle"
 import { useAuth } from "@/contexts/auth-context"
+import { usePathname } from "next/navigation"
 
+
+const navItems = [
+  { href: "/admin/dashboard", icon: House, label: "Dashboard" },
+  { href: "/admin/dashboard/users", icon: Users, label: "Users" },
+  { href: "/admin/dashboard/collectors", icon: Truck, label: "Collectors" },
+  { href: "/admin/dashboard/requests", icon: Clipboard, label: "Requests" },
+  { href: "/admin/dashboard/analytics", icon: ChartLine, label: "Analytics" },
+  { href: "/admin/dashboard/payments", icon: Money, label: "Payments" },
+  { href: "/admin/dashboard/settings", icon: Gear, label: "Settings" },
+]
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const { handleLogout }: { handleLogout: () => Promise<void> } = useAuth();
+  const pathname = usePathname();
+  const [activeTab, setActiveTab] = useState("");
+
+  useEffect(() => {
+    const currentTab = navItems.find(item => pathname.startsWith(item.href));
+    setActiveTab(currentTab ? currentTab.label : "Dashboard")
+  }, [pathname])
+  
   return (
     <div className="flex min-h-screen w-full flex-col" >
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background dark:bg-background-dark sm:flex">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-16 flex-col border-r bg-background dark:bg-background-dark sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <TooltipProvider>
             <Link
@@ -46,97 +65,25 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               <Trash className="h-4 w-4 transition-all group-hover:scale-110" />
               <span className="sr-only">OptiWaste</span>
             </Link>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground dark:bg-accent-dark dark:text-accent-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <House className="h-5 w-5" />
-                  <span className="sr-only">Dashboard</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Dashboard</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard/users"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <Users className="h-5 w-5" />
-                  <span className="sr-only">Users</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Users</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard/collectors"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <Truck className="h-5 w-5" />
-                  <span className="sr-only">Collectors</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Collectors</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard/requests"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <Clipboard className="h-5 w-5" />
-                  <span className="sr-only">Requests</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Requests</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard/analytics"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <ChartLine className="h-5 w-5" />
-                  <span className="sr-only">Analytics</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Analytics</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard/payments"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <Money className="h-5 w-5" />
-                  <span className="sr-only">Payments</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Payments</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/admin/dashboard/settings"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground dark:text-muted-foreground-dark transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 md:w-8"
-                  prefetch={false}
-                >
-                  <Gear className="h-5 w-5" />
-                  <span className="sr-only">Settings</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Settings</TooltipContent>
-            </Tooltip>
+            {navItems.map((item) => (
+              <Tooltip key={item.href}>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={item.href}
+                    className={`flex h-9 w-full items-center gap-2 rounded-lg px-3 transition-colors hover:text-foreground dark:hover:text-foreground-dark md:h-8 ${
+                      activeTab === item.label
+                        ? "bg-accent text-accent-foreground dark:bg-accent-dark dark:text-accent-foreground-dark"
+                        : "text-muted-foreground dark:text-muted-foreground-dark"
+                    }`}
+                    prefetch={false}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {/* <span>{item.label}</span> */}
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">{item.label}</TooltipContent>
+              </Tooltip>
+            ))}
           </TooltipProvider>
         </nav>
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -176,74 +123,33 @@ export function AdminLayout({ children }: { children: ReactNode }) {
                   <Trash className="h-5 w-5 transition-all group-hover:scale-110" />
                   <span className="sr-only">OptiWaste</span>
                 </Link>
-                <Link
-                  href="/admin/dashboard"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <House className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  href="/admin/dashboard/users"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <Users className="h-5 w-5" />
-                  Users
-                </Link>
-                <Link
-                  href="/admin/dashboard/collectors"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <Truck className="h-5 w-5" />
-                  Collectors
-                </Link>
-                <Link
-                  href="/admin/dashboard/requests"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <Clipboard className="h-5 w-5" />
-                  Requests
-                </Link>
-                <Link
-                  href="/admin/dashboard/analytics"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <ChartLine className="h-5 w-5" />
-                  Analytics
-                </Link>
-                <Link
-                  href="/admin/dashboard/payments"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <Money className="h-5 w-5" />
-                  Payments
-                </Link>
-                <Link
-                  href="/admin/dashboard/settings"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
-                  prefetch={false}
-                >
-                  <Gear className="h-5 w-5" />
-                  Settings
-                </Link>
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-4 px-2.5 ${
+                      activeTab === item.label
+                        ? "text-foreground dark:text-foreground-dark"
+                        : "text-muted-foreground dark:text-muted-foreground-dark hover:text-foreground dark:hover:text-foreground-dark"
+                    }`}
+                    prefetch={false}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                ))}
               </nav>
             </SheetContent>
           </Sheet>
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#" prefetch={false}>
-                    Dashboard
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="#" prefetch={false}>
+                      {activeTab}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
           <div className="ml-auto flex items-center gap-4">

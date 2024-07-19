@@ -33,9 +33,10 @@ export default function DashboardPage() {
   }, [router]);
 
 
-  const pendingRequests = Array.isArray(allRequests) ? allRequests.filter((request) => request.requestStatus === "Pending") : [''];
-  const numberOfPendingRequests = pendingRequests.length;
+  const pendingRequests = Array.isArray(allRequests) ? allRequests.data?.filter((request) => request.requestStatus === "Pending") : [''];
+  const numberOfPendingRequests = pendingRequests?.length ?? 0;
   const numberOfCollectors = Array.isArray(allCollectors) ? allCollectors.length : 0;
+
 
   return (
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -170,124 +171,7 @@ export default function DashboardPage() {
   );
 }
 
-// function LineChart(props) {
-//   return (
-//     <div {...props}>
-//       <ResponsiveLine
-//         data={[
-//           {
-//             id: "Desktop",
-//             data: [
-//               { x: "Jan", y: 43 },
-//               { x: "Feb", y: 137 },
-//               { x: "Mar", y: 61 },
-//               { x: "Apr", y: 145 },
-//               { x: "May", y: 26 },
-//               { x: "Jun", y: 154 },
-//             ],
-//           },
-//           {
-//             id: "Mobile",
-//             data: [
-//               { x: "Jan", y: 60 },
-//               { x: "Feb", y: 48 },
-//               { x: "Mar", y: 177 },
-//               { x: "Apr", y: 78 },
-//               { x: "May", y: 96 },
-//               { x: "Jun", y: 204 },
-//             ],
-//           },
-//         ]}
-//         margin={{ top: 10, right: 10, bottom: 40, left: 40 }}
-//         xScale={{
-//           type: "point",
-//         }}
-//         yScale={{
-//           type: "linear",
-//         }}
-//         axisTop={null}
-//         axisRight={null}
-//         axisBottom={{
-//           tickSize: 0,
-//           tickPadding: 16,
-//         }}
-//         axisLeft={{
-//           tickSize: 0,
-//           tickValues: 5,
-//           tickPadding: 16,
-//         }}
-//         colors={["#2563eb", "#e11d48"]}
-//         pointSize={6}
-//         useMesh={true}
-//         gridYValues={6}
-//         theme={{
-//           tooltip: {
-//             chip: {
-//               borderRadius: "9999px",
-//             },
-//             container: {
-//               fontSize: "12px",
-//               textTransform: "capitalize",
-//               borderRadius: "6px",
-//             },
-//           },
-//           grid: {
-//             line: {
-//               stroke: "#f3f4f6",
-//             },
-//           },
-//         }}
-//         role="application"
-//       />
-//     </div>
-//   );
-// }
 
-// function PieChart(props) {
-//   return (
-//     <div {...props}>
-//       <ResponsivePie
-//         data={[
-//           { id: "Jan", value: 111 },
-//           { id: "Feb", value: 157 },
-//           { id: "Mar", value: 129 },
-//           { id: "Apr", value: 150 },
-//           { id: "May", value: 119 },
-//           { id: "Jun", value: 72 },
-//         ]}
-//         sortByValue
-//         margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-//         cornerRadius={0}
-//         padAngle={0}
-//         borderWidth={1}
-//         borderColor={"#ffffff"}
-//         enableArcLinkLabels={false}
-//         arcLabel={(d) => `${d.id}`}
-//         arcLabelsTextColor={"#ffffff"}
-//         arcLabelsRadiusOffset={0.65}
-//         colors={["#2563eb"]}
-//         theme={{
-//           labels: {
-//             text: {
-//               fontSize: "18px",
-//             },
-//           },
-//           tooltip: {
-//             chip: {
-//               borderRadius: "9999px",
-//             },
-//             container: {
-//               fontSize: "12px",
-//               textTransform: "capitalize",
-//               borderRadius: "6px",
-//             },
-//           },
-//         }}
-//         role="application"
-//       />
-//     </div>
-//   );
-// }
 
 function DrawPieChart(props) {
   const data = [
