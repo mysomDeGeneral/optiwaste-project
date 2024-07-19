@@ -26,7 +26,7 @@ import { useCollector } from "@/contexts/collector-context"
 
 export function CollectorProfile() {
   const { updateProfile } = useCollector()
-  const { user, handleLogout } = useAuth();
+  const { user, handleLogout, fetchCollectorProfile, token } = useAuth();
   const [isEditing, setIsEditing] = useState(false)
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -34,6 +34,10 @@ export function CollectorProfile() {
     licenseID: "",
     address: "",
   })
+
+  useEffect(() => {
+    fetchCollectorProfile(token);
+  }, [fetchCollectorProfile]);
 
   useEffect(() => {
     if(user) {

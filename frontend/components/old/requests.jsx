@@ -28,7 +28,7 @@ import { useRequest } from "@/contexts/request-context"
 
 export function RequestsPage() {
   const { allRequests } = useRequest();
-  const requests = allRequests;
+  const requests = Array.isArray(allRequests) ? allRequests : [];
 
   console.log(requests);
 
@@ -37,16 +37,17 @@ export function RequestsPage() {
 
   const handleTypeFilter = (type) => {
     setSelectedType(type)
+    if(!Array.isArray(requests)) return;
     if (type === "all") {
       setFilteredRequests(requests)
     } else {
       setFilteredRequests(requests.filter((request) => request.wasteType === type))
     }
   }
-  const totalRequests = requests?.length
-  const plasticRequests = requests?.filter((request) => request.wasteType === "plastic").length
-  const domesticRequests = requests?.filter((request) => request.wasteType === "domestic").length
-  const metalRequests = requests?.filter((request) => request.wasteType === "metal").length
+  const totalRequests = requests.length
+  const plasticRequests = requests.filter((request) => request.wasteType === "plastic").length
+  const domesticRequests = requests.filter((request) => request.wasteType === "domestic").length
+  const metalRequests = requests.filter((request) => request.wasteType === "metal").length
   return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

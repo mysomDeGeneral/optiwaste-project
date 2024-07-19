@@ -32,9 +32,9 @@ export default function DashboardPage() {
   }, [router]);
 
 
-  const pendingRequests = allRequests ? allRequests.filter((request) => request.requestStatus === "Pending") : [];
+  const pendingRequests = Array.isArray(allRequests) ? allRequests.filter((request) => request.requestStatus === "Pending") : [''];
   const numberOfPendingRequests = pendingRequests.length;
-  const numberOfCollectors = allCollectors ? allCollectors.length : 0;
+  const numberOfCollectors = Array.isArray(allCollectors) ? allCollectors.length : 0;
 
   return (
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">

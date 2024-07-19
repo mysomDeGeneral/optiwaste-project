@@ -24,7 +24,7 @@ import { useUser } from "@/contexts/user-context"
 
 export function UserProfile() {
     const { updateProfile } = useUser();
-    const { user, handleLogout } = useAuth();
+    const { user, handleLogout, token, fetchUserProfile } = useAuth();
     const [isEditing, setIsEditing] = useState(false)
     const [userInfo, setUserInfo] = useState({
       name: "",
@@ -32,6 +32,10 @@ export function UserProfile() {
       phone:  "",
       address: ""
     })
+
+    useEffect(() => {
+      fetchUserProfile(token);
+    }, [fetchUserProfile]);
 
     useEffect(() => {
       if (user) {

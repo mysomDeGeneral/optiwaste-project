@@ -23,6 +23,8 @@ interface AuthContextProps {
     token: string | null;
     handleLogin: (data: LoginData) =>Promise<void>;
     handleLogout: () => Promise<void>;
+    fetchUserProfile: (token: any) => Promise<void>;
+    fetchCollectorProfile: (token: any) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -152,7 +154,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
              user, 
              loading, 
              handleLogin,
-             handleLogout, token }}>
+             handleLogout,
+             fetchCollectorProfile,
+             fetchUserProfile, 
+             token }}>
             {children}
         </AuthContext.Provider>
     );

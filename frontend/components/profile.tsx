@@ -1,16 +1,22 @@
 // pages/profile.js or pages/profile.tsx
 "use client"
-import Link from "next/link";
+// import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 //import ProtectRoute from "../components/protectRoute"; 
-import React from "react";
+import React, {useEffect} from "react";
 import { useAuth } from "@/contexts/auth-context";
 
 
 const ProfilePage = () => {
-  const { user } = useAuth();
+  const { user, fetchUserProfile, token } = useAuth();
+
+  useEffect(() => {
+     fetchUserProfile(token);
+  }, [fetchUserProfile]);
+
+
 
   function getMonthNameAndYear(isoDate: string): string {
     const date = new Date(isoDate);
