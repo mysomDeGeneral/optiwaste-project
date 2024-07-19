@@ -1,10 +1,13 @@
 import axios from "axios";
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
+});
 
 export const loginUser = async (credentials) => {
   try {
     console.log("login:", credentials);
-    const response = await axios.post(`${API_URL}/users/login`, credentials);
+    const response = await api.post('/users/login', credentials);
     console.log("login response:", response);
     return response;
   } catch (error) {
@@ -13,7 +16,7 @@ export const loginUser = async (credentials) => {
 };
 
 export const logout = async () => {
-  const response = await axios.post(`${API_URL}/users/logout`);
+  const response = await api.post('/users/logout');
   return response.data;
 }
 
@@ -29,7 +32,7 @@ export const register = async (data) => {
 
 export const getUserProfile = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}/users/profile`, {
+    const response = await api.get('/users/profile', {
       headers: {
         Authorization: `Bearer ${token}`
       }

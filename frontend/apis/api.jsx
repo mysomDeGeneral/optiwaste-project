@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
+});
 
 export const registerUser = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/users/register`, data);
+    const response = await api.post('/users/register', data);
     return response;
   } catch (error) {
     return error.response;
@@ -13,7 +15,7 @@ export const registerUser = async (data) => {
 
 export const loginUser = async (credentials) => {
   try {
-    const response = await axios.post(`${API_URL}/users/login`, credentials);
+    const response = await api.post('/users/login', credentials);
     return response;
   } catch (error) {
     return error.response;
@@ -22,7 +24,7 @@ export const loginUser = async (credentials) => {
 
 export const logoutUser = async () => {
   try {
-    const response = await axios.post(`${API_URL}/users/logout`);
+    const response = await api.post('users/logout');
     return response.data;
   } catch (error) {
     return error.response;
@@ -31,7 +33,7 @@ export const logoutUser = async () => {
 
 export const getUsers = async () => {
   try {
-    const response = await axios.get(`${API_URL}/users`);
+    const response = await api.get('/users');
     return response.data;
   } catch (error) {
     return error.response;
@@ -77,7 +79,7 @@ export const registerCollector = async (data) => {
 
 export const loginCollector = async (credentials) => {
     try {
-        const response = await axios.post(`${API_URL}/collectors/login`, credentials);
+        const response = await api.post('/collectors/login', credentials);
         return response;
     } catch (error) {
         return error.response;
