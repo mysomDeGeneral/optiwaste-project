@@ -17,8 +17,8 @@ export function UsersPage() {
   // Pagination logic
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = allUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.ceil(allUsers.length / usersPerPage);
+  const currentUsers = allUsers?.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(allUsers?.length / usersPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -57,7 +57,7 @@ export function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentUsers.map((user) => (
+                {currentUsers?.map((user) => (
                   <TableRow key={user._id}>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>

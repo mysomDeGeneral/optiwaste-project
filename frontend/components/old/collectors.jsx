@@ -38,8 +38,8 @@ export function CollectorsPage() {
 
   const indexOfLastCollector = currentPage * collectorsPerPage;
   const indexOfFirstCollector = indexOfLastCollector - collectorsPerPage;
-  const currentCollectors = allCollectors.slice(indexOfFirstCollector, indexOfLastCollector);
-  const totalPages = Math.ceil(allCollectors.length / collectorsPerPage);
+  const currentCollectors = allCollectors?.slice(indexOfFirstCollector, indexOfLastCollector);
+  const totalPages = Math.ceil(allCollectors?.length / collectorsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -77,7 +77,7 @@ export function CollectorsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentCollectors.map((collector) => (
+                {currentCollectors?.map((collector) => (
                   <TableRow key={collector._id}>
                     <TableCell>{collector.name}</TableCell>
                     <TableCell>{collector.email}</TableCell>

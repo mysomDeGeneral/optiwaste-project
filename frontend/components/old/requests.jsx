@@ -29,9 +29,12 @@ import { useRequest } from "@/contexts/request-context"
 export function RequestsPage() {
   const { allRequests } = useRequest();
   const requests = allRequests;
+
   console.log(requests);
+
   const [filteredRequests, setFilteredRequests] = useState(requests)
   const [selectedType, setSelectedType] = useState("all")
+
   const handleTypeFilter = (type) => {
     setSelectedType(type)
     if (type === "all") {
@@ -40,10 +43,10 @@ export function RequestsPage() {
       setFilteredRequests(requests.filter((request) => request.wasteType === type))
     }
   }
-  const totalRequests = requests.length
-  const plasticRequests = requests.filter((request) => request.wasteType === "plastic").length
-  const domesticRequests = requests.filter((request) => request.wasteType === "domestic").length
-  const metalRequests = requests.filter((request) => request.wasteType === "metal").length
+  const totalRequests = requests?.length
+  const plasticRequests = requests?.filter((request) => request.wasteType === "plastic").length
+  const domesticRequests = requests?.filter((request) => request.wasteType === "domestic").length
+  const metalRequests = requests?.filter((request) => request.wasteType === "metal").length
   return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -120,7 +123,7 @@ export function RequestsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredRequests.map((request) => (
+                  {filteredRequests?.map((request) => (
                     <TableRow key={request._id}>
                       <TableCell>{request._id}</TableCell>
                       <TableCell>{request.wasteType}</TableCell>

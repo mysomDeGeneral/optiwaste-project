@@ -18,7 +18,7 @@ const cors = require('cors');
 connectOnlineDB();
 
 app.use(cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: '*',
     // origin: '0.0.0.0',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,

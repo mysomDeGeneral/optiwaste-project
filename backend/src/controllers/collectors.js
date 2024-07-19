@@ -36,6 +36,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        console.log("email, password", email, password);
         const collector = await Collector.findOne({ email });
         
         if(collector && (await collector.matchPassword(password))) {
