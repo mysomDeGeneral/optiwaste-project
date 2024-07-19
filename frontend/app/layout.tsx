@@ -31,18 +31,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        > 
+        <Suspense fallback={<div>Loading...</div>}>
         <AuthProvider>
           <RequestProvider>
             <UserProvider>
               <CollectorProvider>
-              <Suspense fallback={<div>Loading...</div>}>
+             
               {children}
-              </Suspense>
+             
               </CollectorProvider>
             </UserProvider>
           </RequestProvider>
         </AuthProvider>
+         </Suspense>
         </ThemeProvider>
       </body>
     </html>

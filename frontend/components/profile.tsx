@@ -14,7 +14,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
      fetchUserProfile(token);
-  }, [fetchUserProfile, token]);
+  }, [token, fetchUserProfile]);
 
 
 

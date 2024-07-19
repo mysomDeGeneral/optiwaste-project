@@ -37,7 +37,7 @@ export function CollectorProfile() {
 
   useEffect(() => {
     fetchCollectorProfile(token);
-  }, [fetchCollectorProfile, token]);
+  }, [token, fetchCollectorProfile]);
 
   useEffect(() => {
     if(user) {
