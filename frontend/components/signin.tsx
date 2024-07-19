@@ -36,7 +36,7 @@ export function SignIn() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="border-b border-gray-200 dark:border-gray-700">
-          <CardTitle className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">OptiWaste</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">OptiWaste Login</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 p-6">
           <Button
