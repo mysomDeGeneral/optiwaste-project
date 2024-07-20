@@ -1,4 +1,12 @@
 import SignUp from "@/components/signup";
 
-export default SignUp;
+export default function MyPage() {
 
+    return (
+      <div>
+        {/* Other content */}
+        <SignUp  />
+      </div>
+    );
+  }
+  
