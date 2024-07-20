@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:android": "NEXT_PUBLIC_API_URL=http://192.168.43.122:5000 next build",
+    "build:android": "NEXT_PUBLIC_BACKEND_API_URL=https://optiwaste-project.onrender.com next build",
     "start": "next start",
     "lint": "next lint",
     "static": "next build && next export"

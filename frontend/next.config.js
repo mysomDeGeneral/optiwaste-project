@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // output: 'export',
+    output: 'export',
     async rewrites() {
         return [
             {
                 source: '/api/:path*',
-                destination: 'http://192.168.43.122:5000/api/:path*',
+                destination: 'https://optiwaste-project.onrender.com/api/:path*',
             },
         ];
     },
