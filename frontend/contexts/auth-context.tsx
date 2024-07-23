@@ -128,7 +128,7 @@ const ClientSideAuth: React.FC<AuthProviderComponentProps> = ({ children }) => {
             console.log("response auth-context", response);
         
 
-            if (response && response.status===201 && response.data.token) {
+            if (response && response.status===200 && response.data.token) {
                 setToken(response.data.token);
                 setTokenInCookie(response.data.token);
                 localStorage.setItem('shouldRefresh', 'true');
