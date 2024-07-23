@@ -13,7 +13,6 @@ export function RequestHistory() {
 
   const requests = Array.isArray(allRequests) ? allRequests : [];
 
-  console.log('request length:', requests.length);
 
   // const requests = [
   //   { id: "1", date: "June 15, 2023", status: "Scheduled", icon: Check, color: "text-green-500", location:"", type: "", instructions: "", quantity: "" },
@@ -51,7 +50,7 @@ export function RequestHistory() {
                     {/* <request.icon className="w-4 h-4 mr-1" /> */}
                     {request.requestStatus}
                   </div>
-                  <Drawer open={openDrawer === request._id} onOpenChange={(open) => setOpenDrawer(open ? request.id : null)}>
+                  <Drawer open={openDrawer === request._id} onOpenChange={(open) => setOpenDrawer(open ? request._id : null)}>
                     <DrawerTrigger asChild>
                       <Button variant="link" className="mt-4 text-sm underline p-0">
                         View Details
@@ -60,7 +59,7 @@ export function RequestHistory() {
                     <DrawerContent>
                       <div className="mx-auto w-full max-w-sm">
                         <DrawerHeader>
-                          <DrawerTitle className="text-xl">Request #{request._id} Details</DrawerTitle>
+                          <DrawerTitle className="text-xl">Request #{request.id} Details</DrawerTitle>
                         </DrawerHeader>
                         <div className="px-4 py-6 space-y-4">
                           <div>
@@ -81,7 +80,7 @@ export function RequestHistory() {
                           <div className="flex items-center justify-between">
                             <div className="font-medium">Status</div>
                             <div className="text-green-500 font-medium">
-                              <request.icon className="w-4 h-4 inline-block mr-1" />
+                              {/* <request.icon className="w-4 h-4 inline-block mr-1" /> */}
                               {request.requestStatus}
                             </div>
                           </div>

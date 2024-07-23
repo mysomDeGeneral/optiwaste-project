@@ -126,8 +126,9 @@ const ClientSideAuth: React.FC<AuthProviderComponentProps> = ({ children }) => {
             }
 
             console.log("response auth-context", response);
+        
 
-            if (response && response.data.token) {
+            if (response && response.status===201 && response.data.token) {
                 setToken(response.data.token);
                 setTokenInCookie(response.data.token);
                 localStorage.setItem('shouldRefresh', 'true');
@@ -160,10 +161,12 @@ const ClientSideAuth: React.FC<AuthProviderComponentProps> = ({ children }) => {
                 // window.location.href = returnUrl;
                 router.replace(returnUrl);
             } else {
-                console.error("Invalid response from the server");
+                console.error("Login failed: " + response.data.message);
+                return response.data.message;
             }
         } catch (error: any) {
             console.error("Login failed: " + error.message);
+            return error.message;
         }
     };
 

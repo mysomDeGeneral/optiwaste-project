@@ -18,17 +18,26 @@ export function SignIn() {
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response: any = await handleLogin({ email, password, isCollector });
-      setIsDialogOpen(false);
+      const errorMessage = await handleLogin({ email, password, isCollector });
+      if (errorMessage !== null) {
+        setError(errorMessage!);
+      } else {
+        setError(null);
+        setIsDialogOpen(false);
+      }
+      
     } catch (error) {
+      setError("An error occurred. Please try again.");
       console.error("Login error:", error);
     } finally {
       setLoading(false);
+
     }
   };
 
@@ -53,10 +62,11 @@ export function SignIn() {
           </Button>
         </CardContent>
         <CardFooter className="flex justify-center pt-2 pb-6">
-          
-            <Link href="/register" className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-300">
+
+          <div> <Link href="/register" className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-300">
               Don't have an account? Get started
-            </Link>
+            </Link></div>
+           
           
         </CardFooter>
       </Card>
@@ -89,6 +99,9 @@ export function SignIn() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+              
+              {error && <div className="flex items-center justify-between"><span className="text-red-500 text-sm">{error}</span></div>}
+              
               <Button
                 variant="outline"
                 type="submit"

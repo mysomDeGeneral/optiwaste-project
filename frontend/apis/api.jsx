@@ -81,6 +81,7 @@ export const registerCollector = async (data) => {
 export const loginCollector = async (credentials) => {
     try {
         const response = await api.post('/collectors/login', credentials);
+        console.log(response.message);
         return response;
     } catch (error) {
         return error.response;
