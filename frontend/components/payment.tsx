@@ -1,50 +1,74 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from 'axios';
+import { useRouter } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5000/api';
 
-const PaymentComponent = ({ initialEmail= '', initialAmount = ''}) => {
+interface PaymentComponentProps {
+    initialEmail?: string;
+    initialAmount?: string;
+    requestId?: string;
+}
+
+const PaymentComponent: React.FC<PaymentComponentProps> = ({ initialEmail = '', initialAmount = '', requestId }) => {
     const [email, setEmail] = useState(initialEmail);
     const [amount, setAmount] = useState(initialAmount);
+    const router = useRouter();
 
-    const handlePayment = async (e: any) => {
+    const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${API_URL}/payments/initialize`, {
+            const response = await axios.post(`${API_URL}/payment/initialize-payment`, {
                 amount: parseFloat(amount),
                 email,
-                callbackUrl: 'http://localhost:3000/users/requests/status'
-            } );
-
-            window.location.href = response.data.authorization_url;
+                reference: requestId,
+                callbackUrl: `http://localhost:3000/users/request/${requestId}` || `https://optiwaste.vercel.app/users/request/${requestId}`,
+            });
+            console.log('url:', response);
+            router.push(response.data.data.authorization_url);
         } catch (error) {
             console.error('Payment initialization failed:', error);
         }
     };
 
     return (
-        <form onSubmit={handlePayment} className="space-y-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-                <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Amount</label>
-                <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Amount"
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-                <button type="submit">Pay Now</button>
-        </form>
+        <div className="max-w-md mx-auto mt-10 bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="px-6 py-4 bg-green-500">
+                <h2 className="text-2xl font-bold text-white text-center">Payment Details</h2>
+            </div>
+            <form onSubmit={handlePayment} className="px-6 py-8 space-y-6">
+                <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        required
+                        className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-100 focus:border-green-300"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                    <input
+                        id="amount"
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder="Enter amount"
+                        required
+                        className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-green-100 focus:border-green-300"
+                    />
+                </div>
+                <button 
+                    type="submit" 
+                    className="w-full px-3 py-4 text-white bg-green-500 rounded-md focus:bg-green-600 focus:outline-none hover:bg-green-600 transition-colors duration-300"
+                >
+                    Pay Now
+                </button>
+            </form>
+        </div>
     );
 };
 

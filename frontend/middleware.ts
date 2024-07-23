@@ -15,9 +15,9 @@ export default async function middleware(req: NextRequest) {
 
   console.log("Middleware called for path:", req.nextUrl.pathname);
 
-  if (publicPaths.some(publicPath => path.startsWith(publicPath))) {
-    return NextResponse.next();
-  }
+  // if (publicPaths.some(publicPath => path.startsWith(publicPath))) {
+  //   return NextResponse.next();
+  // }
 
   const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route.replace('*', '')));
 

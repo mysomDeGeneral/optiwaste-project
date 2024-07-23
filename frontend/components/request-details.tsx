@@ -13,12 +13,12 @@ import { useRequest } from "@/contexts/request-context"
 import { useRouter } from "next/navigation"
 
 export function RequestDetails() {
-  const { createNewRequest } = useRequest();
-  const [location, setLocation] = useState('');
+  const { createNewRequest, request } = useRequest();
+  const [digitalAddress, setLocation] = useState('');
   const [selectedLng, setSelectedLng] = useState<number | null>(null);
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
   const [wasteType, setWasteType] = useState('');
-  const [quantity, setQuantity] = useState('');
+  // const [quantity, setQuantity] = useState('');
   const [instructions, setInstructions] = useState('');
   const [binId, setBinId] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -46,25 +46,25 @@ export function RequestDetails() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log({ location, wasteType, quantity, instructions });
+    console.log({ digitalAddress, wasteType, instructions });
 
     const requestData = {
-      location, //digitalAddress in backend
+      digitalAddress, //digitalAddress in backend
       wasteType,
-      quantity,
+      // quantity,
       instructions,
-      binId,
-      requestStatus: 'Pending',
-      paymentStatus: 'unpaid'
+      binId
     };
 
     try {
       const response = await createNewRequest(requestData);
       console.log("request made:", response);
       if (response.status === 201) {
-        router.push('/users/requests/status');
+        const requestId = response.data._id;
+        console.log('Request ID:', requestId);
+        router.push(`/users/request/${requestId}`);
       }
     } catch (error) {
       console.error("Error creating request:", error);
@@ -72,7 +72,7 @@ export function RequestDetails() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-8">
+    <main className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900 min-h-screen py-8">
       <div className="grid gap-6 p-4 md:p-6 w-full max-w-4xl">
         <Card className="shadow-lg">
           <CardContent className="p-6">
@@ -96,11 +96,11 @@ export function RequestDetails() {
                       id="location"
                       type="text"
                       placeholder="Enter your digital address (eg. AOK6806973)"
-                      value={location}
+                      value={digitalAddress}
                       onChange={(e) => setLocation(e.target.value)}
                       className="pr-24"
                     />
-                    {location && (
+                    {digitalAddress && (
                       <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
                         Selected
                       </div>
@@ -121,10 +121,10 @@ export function RequestDetails() {
                         <div className="h-[calc(100%-120px)]">
                           <DynamicMap onSelectLocation={handleLocationSelect} />
                         </div>
-                        {location && (
+                        {digitalAddress && (
                           <div className="mt-4 p-3 bg-gray-100 rounded-md shadow-sm">
                             <h4 className="text-sm font-semibold text-gray-700 mb-1">Selected Location</h4>
-                            <p className="text-sm text-gray-600">{location}</p>
+                            <p className="text-sm text-gray-600">{digitalAddress}</p>
                           </div>
                         )}
                       </div>
@@ -137,7 +137,7 @@ export function RequestDetails() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="waste-type">Waste Type</Label>
                   <Select onValueChange={setWasteType}>
@@ -145,14 +145,14 @@ export function RequestDetails() {
                       <SelectValue placeholder="Select waste type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="general">General Waste</SelectItem>
-                      <SelectItem value="recycling">Recycling</SelectItem>
-                      <SelectItem value="organic">Organic Waste</SelectItem>
-                      <SelectItem value="hazardous">Hazardous Waste</SelectItem>
+                      <SelectItem value="domestic">Domestic</SelectItem>
+                      <SelectItem value="metal">Metal</SelectItem>
+                      <SelectItem value="plastic">Plastic</SelectItem>
+                      <SelectItem value="hazardous">Hazardous</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
+                {/* <div>
                   <Label htmlFor="quantity">Quantity</Label>
                   <Input
                     id="quantity"
@@ -162,7 +162,7 @@ export function RequestDetails() {
                     onChange={(e) => setQuantity(e.target.value)}
                     className="mt-1"
                   />
-                </div>
+                </div> */}
                 <div>
                   <Label htmlFor="bin-id">Bin ID</Label>
                   <Input 

@@ -31,7 +31,7 @@ app.use('/api/collectors', collectorRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/location', locationRoutes);
 app.get('/api/verify-user', verifyToken);
-app.use('/api/payments', paymentRoutes);
+app.use('/api/payment', paymentRoutes);
 
 
 app.listen(PORT, () => {

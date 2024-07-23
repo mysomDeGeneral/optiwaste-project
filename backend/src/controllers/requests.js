@@ -5,20 +5,21 @@ const { assignCollectorToRequest } = require('../services/assignment');
 
 exports.createRequest = async (req, res) => {
     try {
-        const { binId, wasteType, digitalAddress } = req.body;
+        const { binId, wasteType, digitalAddress, instructions } = req.body;
 
         const request = new Request({
             user: req.user._id,
             binId,
             wasteType,
             digitalAddress,
+            instructions
         });
 
         await request.save();
 
-        const assignedRequest = await assignCollectorToRequest(request._id);
+        // const assignedRequest = await assignCollectorToRequest(request._id);
 
-        res.status(201).json(assignedRequest);
+        res.status(201).json(request);
     } catch (error) {
         res.status(500).json({ message: 'Error creating request', error: error.message});
     }
@@ -82,6 +83,20 @@ exports.updateRequest = async (req, res) => {
         res.status(500).json({ message: 'Error updating request', error: error.message});
     }
 }
+
+exports.updatePaymentStatus = async (id, status) => {
+    try {
+        const request = await Request.findById(id);
+
+        if (request) {
+            request.paymentStatus = status;
+            await request.save();
+        }
+    } catch (error) {
+        console.error('Error updating payment status:', error);
+    }
+}
+
 
 exports.deleteRequest = async (req, res) => {
     try {

@@ -5,10 +5,10 @@ const requestSchema = new mongoose.Schema({
     collector: { type: mongoose.Schema.Types.ObjectId, ref: 'Collector'},
     binId: { type: String, required: true },
     wasteType: { type: String, required: true },
-    quantity: { type: Number, required: true },
+    // quantity: { type: Number, required: true },
     instructions: { type: String },
     digitalAddress: { type: String, required: true }, //location in frontend
-    requestStatus: { type: String, enum: ['Unassigned', 'Pending', 'Accepted', 'Rejected'], default: 'Pending' },
+    requestStatus: { type: String, enum: ['Unassigned', 'Assigned', 'Pending', 'Accepted', 'Rejected'], default: 'Pending' },
     paymentStatus: { type: String, required: true, default: 'unpaid' },
 }, {
     timestamps: true,

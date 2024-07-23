@@ -1,43 +1,81 @@
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
+const axios = require('axios');
+const crypto = require('crypto');
 const PayStack = require('../apis/paystackConfig');
 const Paystack = require('paystack-api');
+const { assignCollectorToRequest } = require('../services/assignment');
+const { updatePaymentStatus } = require('../controllers/requests');
 
 
 
-router.post('/initialize', async (req, res) => {
+router.post('/initialize-payment', async (req, res) => {
     try {
-        const { amount, email, callbackUrl } = req.body;
-
-        const response = await PayStack.transaction.initialize({
-            amount: amount * 100,
+        const { amount, email, reference , callbackUrl} = req.body;
+    
+        const response = await axios.post(
+          'https://api.paystack.co/transaction/initialize',
+          {
+            amount: amount * 100, 
             email,
-            callbackUrl
-        });
-
+            reference,
+            callback_url: callbackUrl,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        console.log('payment-response',response.data);
         res.json(response.data);
-    } catch (error) {
-        console.error("Payment initialization error:", error);
-        res.status(500).json({error: "Payment initialization failed"});
-    }
+      } catch (error) {
+        console.error('Error initializing payment:', error);
+        res.status(500).json({ error: 'Failed to initialize payment' });
+      }  
 });
 
-router.get('/verify/:reference', async (req, res) => {
+router.post('/paystack-webhook', async (req, res) => {
     try {
-        const { reference } = req.params;
-
-        const response = await Paystack.transaction.verify(reference);
-
-        if (response.data.status === 'success') {
-            // update request status
-            res.json({ status: 'success', data: response.data });
-        } else {
-            res.json({status: 'failed', message: 'Payment verification failed'});
+    const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+      .update(JSON.stringify(req.body))
+      .digest('hex');
+  
+    if (hash === req.headers['x-paystack-signature']) {
+      const event = req.body;
+  
+      if (event.event === 'charge.success') {
+        const { reference } = event.data;
+        
+        // Verify the transaction
+        const verifyResponse = await axios.get(
+          `https://api.paystack.co/transaction/verify/${reference}`,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+            },
+          }
+        );
+  
+        if (verifyResponse.data.status) {
+          // Payment successful, update your database
+          await updatePaymentStatus(reference, 'paid');
+          
+          // Assign the request to a collector
+          await assignCollectorToRequest(reference);
         }
-    } catch (error) {
-        console.error("Payment verification error:", error);
-        res.status(500).json({error: "Payment verificafication failed"});
+      }
+  
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(400);
     }
-});
+    } catch (error) {
+    console.error('Error processing Paystack webhook:', error);
+    res.sendStatus(500);
+    }
+  });
 
 module.exports = router;

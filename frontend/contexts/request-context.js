@@ -19,14 +19,15 @@ export const RequestProvider = ({ children }) => {
         setAllRequests(response);
     }
 
-    const createNewRequest = async (request) => {
+    const createNewRequest = async (requestData) => {
         // const token = getTokenFromCookie();
-        const response = await createRequest(token, request);
-        setRequest(response);
+        const response = await createRequest(requestData, token);
+        setRequest(response.data);
+        return response;
     }
 
     const fetchRequest = async (id) => {
-      const response = await getRequest(token, id);
+      const response = await getRequest(id, token);
       setRequest(response);
     }
 

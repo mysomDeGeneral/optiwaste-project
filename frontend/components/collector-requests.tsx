@@ -29,19 +29,19 @@ import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, Pagi
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { useRequest } from "@/contexts/request-context"
 
-// Mock data for requests
-const mockRequests = [
-  { id: 1, address: "AOK6806973", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
-  { id: 2, address: "AE08423132", status: "Accepted", pickupTime: "2024-07-16 2:30 PM" },
-  { id: 3, address: "AT03613653", status: "Rejected", pickupTime: "2024-07-17 9:00 AM" },
-  { id: 4, address: "AC08832667", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
-  { id: 5, address: "AH05597737, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
-  { id: 6, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
-  { id: 7, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
-  { id: 8, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
-  { id: 9, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
-  // ... add more mock requests here
-]
+// // Mock data for requests
+// const mockRequests = [
+//   { id: 1, address: "AOK6806973", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
+//   { id: 2, address: "AE08423132", status: "Accepted", pickupTime: "2024-07-16 2:30 PM" },
+//   { id: 3, address: "AT03613653", status: "Rejected", pickupTime: "2024-07-17 9:00 AM" },
+//   { id: 4, address: "AC08832667", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
+//   { id: 5, address: "AH05597737, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
+//   { id: 6, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
+//   { id: 7, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
+//   { id: 8, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
+//   { id: 9, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
+//   // ... add more mock requests here
+// ]
 
 export function Requests() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -71,13 +71,13 @@ export function Requests() {
 
   const indexOfLastRequest = currentPage * requestsPerPage
   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage
-  const currentRequests = mockRequests.slice(indexOfFirstRequest, indexOfLastRequest)
+  const currentRequests = allRequests.slice(indexOfFirstRequest, indexOfLastRequest)
 
   const paginate = (pageNumber: SetStateAction<number>) => setCurrentPage(pageNumber)
 
   const getBadgeVariant = (status: string) => {
     switch (status) {
-      case "Pending":
+      case "Assigned":
         return "outline"
       case "Accepted":
         return "secondary"
@@ -89,7 +89,7 @@ export function Requests() {
   }
 
   const handleNavigation = (address: string) => {
-    router.push(`route?destination=${address}`)
+    router.push(`route/${address}`)
   }
 
   return (
@@ -102,15 +102,15 @@ export function Requests() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                {currentRequests.map((request) => (
-                  <Dialog key={request.id}>
+                {currentRequests.map((request : any) => (
+                  <Dialog key={request._id}>
                     <DialogTrigger asChild>
                       <div className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer" onClick={() => setSelectedRequest(request)}>
                         <div className="flex items-center justify-between">
-                          <div className="font-medium">{request.address}</div>
-                          <Badge variant={getBadgeVariant(request.status)}>{request.status}</Badge>
+                          <div className="font-medium">{request.digitalAddress}</div>
+                          <Badge variant={getBadgeVariant(request.status)}>{request.requestStatus}</Badge>
                         </div>
-                        <div className="text-sm text-muted-foreground">Pickup Time: {request.pickupTime}</div>
+                        <div className="text-sm text-muted-foreground">Pickup Time: {request.pickupTime || "2024-07-15 10:00 AM"}</div>
                       </div>
                     </DialogTrigger>
                     <DialogContent>
@@ -120,23 +120,23 @@ export function Requests() {
                       <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Address:</span>
-                          <span className="col-span-3">{request.address}</span>
+                          <span className="col-span-3">{request.digitalAddress}</span>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Status:</span>
                           <span className="col-span-3">
-                            <Badge variant={getBadgeVariant(request.status)}>{request.status}</Badge>
+                            <Badge variant={getBadgeVariant(request.status)}>{request.requestStatus}</Badge>
                           </span>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Pickup Time:</span>
-                          <span className="col-span-3">{request.pickupTime}</span>
+                          <span className="col-span-3">{request.pickupTime || "2024-07-15 10:00 AM"}</span>
                         </div>
                       </div>
                       <DialogFooter>
-                        <Button variant="outline" onClick={() => console.log("Accept request", request.id)}>Accept</Button>
-                        <Button variant="destructive" onClick={() => console.log("Reject request", request.id)}>Reject</Button>
-                        <Button variant="secondary" onClick={() => handleNavigation(request.address)}>Navigate</Button>
+                        <Button variant="outline" onClick={() => console.log("Accept request", request._id)}>Accept</Button>
+                        <Button variant="destructive" onClick={() => console.log("Reject request", request._id)}>Reject</Button>
+                        <Button variant="secondary" onClick={() => handleNavigation(request.digitalAddress)}>Navigate</Button>
                         <DialogClose asChild>
                           <Button variant="secondary">Close</Button>
                         </DialogClose>
@@ -151,7 +151,7 @@ export function Requests() {
                     <PaginationItem>
                       <PaginationPrevious onClick={() => paginate(currentPage - 1)} />
                     </PaginationItem>
-                    {[...Array(Math.ceil(mockRequests.length / requestsPerPage))].map((_, index) => (
+                    {[...Array(Math.ceil(allRequests.length / requestsPerPage))].map((_, index) => (
                       <PaginationItem key={index}>
                         <PaginationLink onClick={() => paginate(index + 1)} isActive={currentPage === index + 1}>
                           {index + 1}

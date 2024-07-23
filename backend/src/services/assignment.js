@@ -24,7 +24,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
             request.requestStatus = 'Unassigned';
         } else {
             request.collector = suitableCollectors[0]._id;
-            request.requestStatus = 'Pending';
+            request.requestStatus = 'Assigned';
         }
 
         await request.save();

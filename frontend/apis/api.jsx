@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Router } from "lucide-react";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
@@ -70,7 +71,7 @@ export const updateUserProfile = async (token, data) => {
 
 export const registerCollector = async (data) => {
   try {
-    const response = await axios.post('/collectors/register', data);
+    const response = await api.post('/collectors/register', data);
     return response.data;
   } catch (error) {
     return error.response;
@@ -138,11 +139,14 @@ export const getRequests = async (token) => {
 
 export const createRequest = async (data, token) => {
   try {
-    const response = await axios.post('/requests', data, {
+    // console.log('data:', data);
+    console.log('token:', token);
+    const response = await api.post('/requests', data, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
+    console.log('response:', response);
     return response;
   } catch (error) {
     return error.response;
@@ -228,6 +232,20 @@ export const getAddress = async (longitude, latitude) => {
     try {
       console.log(longitude, latitude);
       const response = await api.post('/location/get-address', {longitude,latitude});
+      return response.data;
+    } catch (error) {
+      return error.response;
+    }
+}
+
+export const initializePayment = async (data) => {
+    try {
+      const response = await api.post('/payment/initialize-payment', data);
+
+      if (!response.ok) {
+        throw new Error('Failed to initialize payment');
+      }
+
       return response.data;
     } catch (error) {
       return error.response;

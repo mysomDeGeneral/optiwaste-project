@@ -1,10 +1,14 @@
+"use client"
 import React from 'react';
 // import CollectorRoute from '@/components/collector-route';
 import CollectorMap from '@/components/collector-route';
+import { useParams } from 'next/navigation';
 
 
 const CollectorPage = () => {
-  const requestAddress = "AOK6806973"; // Replace with actual address
+  const params = useParams();
+  const requestAddress = params.requestAddress as string;
+  // const requestAddress = "AOK6806973"; // Replace with actual address
 
   return (
     <div>

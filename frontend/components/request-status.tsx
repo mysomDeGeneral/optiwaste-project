@@ -32,21 +32,31 @@ import { Check } from "lucide-react"
 import { useRequest } from "@/contexts/request-context"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import PaymentComponent from "./payment"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 
+interface RequestStatusProps {
+  params: {
+    id: string;
+  };
+}
 
-export function RequestStatus() {
+export function RequestStatus({ params }: RequestStatusProps) {
+  const { user } = useAuth();
   const { request, fetchRequest } = useRequest();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const router = useRouter();
+  const { id } = params;
+  const [ amount ] = useState<number>(10);
+
 
   useEffect(() => {
-    if (request) {
-      setLoading(false);
-    } else {
-      setError("Request not found.");
+    if (id) {
+     fetchRequest(id);
     }
-  }, [request]);
+  }, [id]);
 
  
   return (
@@ -76,12 +86,12 @@ export function RequestStatus() {
                   <div>{request.wasteType}</div>
                 </div>
                 <div>
-                  <div className="font-bold">Quantity</div>
-                  <div>{request.quantity}</div>
-                </div>
-                <div>
                   <div className="font-bold">Special Instructions</div>
                   <div>{request.instructions}</div>
+                </div>
+                <div>
+                  <div className="font-bold">Payment Status</div>
+                  <div>{request.paymentStatus}</div>
                 </div>
               </div>
             </CardContent>
@@ -93,7 +103,7 @@ export function RequestStatus() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="font-bold">Status</div>
-                <div className="text-green-500 font-medium">Scheduled</div>
+                <div className="text-green-500 font-medium">{request.requestStatus}</div>
               </div>
               <Separator className="my-4" />
               <div className="flex items-center justify-between">
@@ -115,12 +125,13 @@ export function RequestStatus() {
                   <DialogHeader>
                     <DialogTitle>Confirm Payment</DialogTitle>
                     <DialogDescription>
-                      You are about to make a payment of {request.amount} to confirm your request.
+                      You are about to make a payment to confirm your request.
                     </DialogDescription>
                   </DialogHeader>
                   <PaymentComponent
-                    initialEmail={request.email}
-                    initialAmount={request.amount.toString()}
+                    initialEmail={user?.email}
+                    initialAmount={amount.toString()}
+                    requestId={id}
                     />
                   <DialogFooter>
                     <DialogClose asChild>
