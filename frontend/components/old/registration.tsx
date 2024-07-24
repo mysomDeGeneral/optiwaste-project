@@ -72,6 +72,7 @@ export default function RegistrationPage(): JSX.Element {
       return;
     }
     setIsSubmitting(true);
+    setErrors({});
     try {
       // Include role in the registration data
       const registrationData = {
@@ -86,7 +87,7 @@ export default function RegistrationPage(): JSX.Element {
           router.push("/login");
         }, 3000);
       } else {
-        setErrors({ form: "Registration failed. Please try again." });
+        setErrors({ form: "Registration failed." + response.data.message });
       }
     } catch (error) {
       setErrors({ form: (error as Error).message || "Registration failed. Please try again." });

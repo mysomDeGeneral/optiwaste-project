@@ -20,8 +20,9 @@ const collectorSchema = new mongoose.Schema({
         validator: function(value){
             return calculateAge(value) >= MINIMUN_AGE;
         },
-        message: 'Collector must be at least ${MINIMUN_AGE} years old.',
+        message: `Collector must be at least ${MINIMUN_AGE} years old.`,
     },},
+    mobile: { type: String},
     available: { type: Boolean, required: true, default: true },
     wasteTypes: [{ type: String, required: true }],
     address: { type: String, required: true },

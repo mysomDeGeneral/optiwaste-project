@@ -13,12 +13,11 @@ interface CollectorFormData {
   name: string;
   email: string;
   password: string;
-  address: string;
   mobile: string;
   nationalId: string;
   licenseId: string;
   dob: string;
-  digitalAddress: string;
+  address: string;
   wasteTypes: string[];
 }
 
@@ -29,7 +28,7 @@ interface CollectorFormErrors {
   nationalId?: string;
   licenseId?: string;
   dob?: string;
-  digitalAddress?: string;
+  address?: string;
   wasteTypes?: string;
   form?: string;
 }
@@ -55,12 +54,11 @@ export default function CollectorSignUpPage(): JSX.Element {
     name: "",
     email: "",
     password: "",
-    address: "",
     mobile: "",
     nationalId: "",
     licenseId: "",
     dob: "",
-    digitalAddress: "",
+    address: "",
     wasteTypes: [],
   });
   const [errors, setErrors] = useState<CollectorFormErrors>({});
@@ -104,15 +102,17 @@ const handleWasteTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       return;
     }
     setIsSubmitting(true);
+    setErrors({});
     try {
       const response = await registerCollector(formData);
+      console.log('response', response);
       if (response.status === 201) {
         setSuccessMessage("Account created successfully. Redirecting to login page...");
         setTimeout(() => {
           router.push("/login");
         }, 3000);
       } else {
-        setErrors({ form: "Registration failed. Please try again." });
+        setErrors({ form: "Registration failed." + response.data.message });
       }
     } catch (error) {
       setErrors({ form: (error as Error).message || "Registration failed. Please try again." });

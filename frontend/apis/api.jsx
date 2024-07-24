@@ -72,7 +72,7 @@ export const updateUserProfile = async (token, data) => {
 export const registerCollector = async (data) => {
   try {
     const response = await api.post('/collectors/register', data);
-    return response.data;
+    return response;
   } catch (error) {
     return error.response;
   }

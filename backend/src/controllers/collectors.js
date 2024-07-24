@@ -2,7 +2,7 @@ const Collector = require('../models/collector');
 const generateToken = require('../utils/jwt');
 
 exports.register = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, address } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, address, mobile } = req.body;
 
     try {
         const collectorExists = await Collector.findOne({ email});
@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'Collector already exists'});
         }
 
-        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, address });
+        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, address, mobile });
         await collector.save();
         res.status(201).json({
             _id: collector._id,
@@ -23,6 +23,7 @@ exports.register = async (req, res) => {
             wasteTypes: collector.wasteTypes,
             address: collector.address,
             available: collector.available,
+            mobile: collector.mobile,
             role: 'collector',
             token: generateToken(collector._id, role = 'collector'),
         });
@@ -50,6 +51,7 @@ exports.login = async (req, res) => {
                 wasteTypes: collector.wasteTypes,
                 address: collector.address,
                 available: collector.available,
+                mobile: collector.mobile,
                 role : 'collector',
                 token: generateToken(collector._id, role = 'collector'),
             });
@@ -85,6 +87,7 @@ exports.getCollectorProfile = async (req, res) => {
             wasteTypes: collector.wasteTypes,
             address: collector.address,
             available: collector.available,
+            mobile: collector.mobile,
             });
             }  
     else {
@@ -96,7 +99,7 @@ exports.getCollectorProfile = async (req, res) => {
 } 
 
 exports.updateCollectorProfile = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, address, available } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, address, available, mobile } = req.body;
 
     const collector = await Collector.findById(req.collector._id);
 
@@ -109,6 +112,7 @@ exports.updateCollectorProfile = async (req, res) => {
         if (wasteTypes !== undefined) collector.wasteTypes = wasteTypes;
         if (address !== undefined) collector.address = address;
         if (available !== undefined) collector.available = available;
+        if (mobile !== undefined) collector.mobile = mobile;
 
         if(password) {
             collector.password = password;
@@ -125,6 +129,7 @@ exports.updateCollectorProfile = async (req, res) => {
             wasteTypes: collector.wasteTypes,
             address: collector.address,
             available: collector.available,
+            mobile: collector.mobile,
             role : 'collector',
             token: generateToken(collector._id, role = 'collector'),
         });
