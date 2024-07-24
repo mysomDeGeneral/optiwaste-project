@@ -45,7 +45,7 @@ export function RequestHistory() {
               requests.map((request: any) => (
                 <div key={request._id} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
                   <div className="font-medium">Request #{request.id}</div>
-                  <div className="text-muted-foreground">{request.digitalAddress}</div>
+                  <div className="text-muted-foreground">{request.address}</div>
                   <div className="font-medium mt-2 flex items-center">
                     {/* <request.icon className="w-4 h-4 mr-1" /> */}
                     {request.requestStatus}
@@ -64,7 +64,7 @@ export function RequestHistory() {
                         <div className="px-4 py-6 space-y-4">
                           <div>
                             <div className="font-medium">Location</div>
-                            <div>{request.digitalAddress}</div>
+                            <div>{request.address}</div>
                           </div>
                           <Separator className="my-4" />
                           <div>
@@ -87,7 +87,7 @@ export function RequestHistory() {
                           <Separator className="my-4" />
                           <div className="flex items-center justify-between">
                             <div className="font-medium">Scheduled Pickup</div>
-                            <div>"2024-07-15 10:00 AM"</div>
+                            <div>2024-07-15 10:00 AM</div>
                           </div>
                         </div>
                         <DrawerFooter>

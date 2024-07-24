@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/auth-context";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5000/api';
 
@@ -10,10 +11,11 @@ interface PaymentComponentProps {
     requestId?: string;
 }
 
-const PaymentComponent: React.FC<PaymentComponentProps> = ({ initialEmail = '', initialAmount = '', requestId }) => {
+const PaymentComponent: React.FC<PaymentComponentProps> = ({ initialEmail, initialAmount, requestId }) => {
     const [email, setEmail] = useState(initialEmail);
-    const [amount, setAmount] = useState(initialAmount);
+    const [amount, setAmount] = useState(initialAmount || "");
     const router = useRouter();
+    const { user } = useAuth();
 
     const handlePayment = async (e: React.FormEvent) => {
         e.preventDefault();

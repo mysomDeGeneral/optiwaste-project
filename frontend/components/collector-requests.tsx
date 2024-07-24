@@ -50,7 +50,10 @@ export function Requests() {
   const router = useRouter()
   const { allRequests } = useRequest();
 
-  console.log("requests:", allRequests);
+  const requests = Array.isArray(allRequests) ? allRequests : [];
+
+
+  console.log("requests:", requests);
 
   useEffect(() => {
     const handleResize = () => {
@@ -69,9 +72,11 @@ export function Requests() {
 
   }, [])
 
+
+
   const indexOfLastRequest = currentPage * requestsPerPage
   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage
-  const currentRequests = allRequests.slice(indexOfFirstRequest, indexOfLastRequest)
+  const currentRequests = requests.slice(indexOfFirstRequest, indexOfLastRequest)
 
   const paginate = (pageNumber: SetStateAction<number>) => setCurrentPage(pageNumber)
 
@@ -110,7 +115,7 @@ export function Requests() {
                     <DialogTrigger asChild>
                       <div className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer" onClick={() => setSelectedRequest(request)}>
                         <div className="flex items-center justify-between">
-                          <div className="font-medium">{request.digitalAddress}</div>
+                          <div className="font-medium">{request.address}</div>
                           <Badge variant={getBadgeVariant(request.status)}>{request.requestStatus}</Badge>
                         </div>
                         <div className="text-sm text-muted-foreground">Pickup Time: {request.pickupTime || "2024-07-15 10:00 AM"}</div>
@@ -123,7 +128,7 @@ export function Requests() {
                       <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Address:</span>
-                          <span className="col-span-3">{request.digitalAddress}</span>
+                          <span className="col-span-3">{request.address}</span>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Status:</span>
@@ -139,7 +144,7 @@ export function Requests() {
                       <DialogFooter>
                         <Button variant="outline" onClick={() => console.log("Accept request", request._id)}>Accept</Button>
                         <Button variant="destructive" onClick={() => console.log("Reject request", request._id)}>Reject</Button>
-                        <Button variant="secondary" onClick={() => handleNavigation(request.digitalAddress)}>Navigate</Button>
+                        <Button variant="secondary" onClick={() => handleNavigation(request.address)}>Navigate</Button>
                         <DialogClose asChild>
                           <Button variant="secondary">Close</Button>
                         </DialogClose>
@@ -155,7 +160,7 @@ export function Requests() {
                     <PaginationItem>
                       <PaginationPrevious onClick={() => paginate(currentPage - 1)} />
                     </PaginationItem>
-                    {[...Array(Math.ceil(allRequests.length / requestsPerPage))].map((_, index) => (
+                    {[...Array(Math.ceil(requests.length / requestsPerPage))].map((_, index) => (
                       <PaginationItem key={index}>
                         <PaginationLink onClick={() => paginate(index + 1)} isActive={currentPage === index + 1}>
                           {index + 1}

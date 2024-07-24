@@ -45,7 +45,7 @@ export function CollectorProfile() {
         name: user?.name || "",
         email: user?.email || "",
         licenseID: user?.licenseId || "",
-        address: user?.digitalAddress || "",
+        address: user?.address || "",
       })
 
       setAvailabilityStatus(user?.available || false)

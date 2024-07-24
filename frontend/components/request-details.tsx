@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation"
 
 export function RequestDetails() {
   const { createNewRequest, request } = useRequest();
-  const [digitalAddress, setLocation] = useState('');
+  const [address, setLocation] = useState('');
   const [selectedLng, setSelectedLng] = useState<number | null>(null);
   const [selectedLat, setSelectedLat] = useState<number | null>(null);
   const [wasteType, setWasteType] = useState('');
@@ -48,10 +48,10 @@ export function RequestDetails() {
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log({ digitalAddress, wasteType, instructions });
+    console.log({ address, wasteType, instructions });
 
     const requestData = {
-      digitalAddress, //digitalAddress in backend
+      address, 
       wasteType,
       // quantity,
       instructions,
@@ -96,11 +96,11 @@ export function RequestDetails() {
                       id="location"
                       type="text"
                       placeholder="Enter your digital address (eg. AOK6806973)"
-                      value={digitalAddress}
+                      value={address}
                       onChange={(e) => setLocation(e.target.value)}
                       className="pr-24"
                     />
-                    {digitalAddress && (
+                    {address && (
                       <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
                         Selected
                       </div>
@@ -121,10 +121,10 @@ export function RequestDetails() {
                         <div className="h-[calc(100%-120px)]">
                           <DynamicMap onSelectLocation={handleLocationSelect} />
                         </div>
-                        {digitalAddress && (
+                        {address && (
                           <div className="mt-4 p-3 bg-gray-100 rounded-md shadow-sm">
                             <h4 className="text-sm font-semibold text-gray-700 mb-1">Selected Location</h4>
-                            <p className="text-sm text-gray-600">{digitalAddress}</p>
+                            <p className="text-sm text-gray-600">{address}</p>
                           </div>
                         )}
                       </div>
@@ -149,6 +149,10 @@ export function RequestDetails() {
                       <SelectItem value="metal">Metal</SelectItem>
                       <SelectItem value="plastic">Plastic</SelectItem>
                       <SelectItem value="hazardous">Hazardous</SelectItem>
+                      <SelectItem value="glass">Glass</SelectItem>
+                      <SelectItem value="e-waste">E-Waste</SelectItem>
+                      <SelectItem value="paper">Paper</SelectItem>
+                      <SelectItem value="construction">Construction</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
