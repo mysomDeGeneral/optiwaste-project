@@ -41,7 +41,7 @@ export default function RegistrationPage(): JSX.Element {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
-  
+
   const router = useRouter();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +98,7 @@ export default function RegistrationPage(): JSX.Element {
   return (
     <div className="flex min-h-[100dvh]">
       <div className="hidden lg:block lg:w-1/2 bg-[url('/waste-truck.svg')] bg-cover bg-center" />
-      <div className="flex flex-col justify-between w-full lg:w-1/2 p-6 md:p-10 lg:p-12 xl:p-16">
+      <div className="flex flex-col justify-between w-full lg:w-1/2 p-6 md:p-10 lg:p-12 xl:p-16 mx-auto max-w-md">
         <div className="flex flex-col items-center">
           <Image src={logo} alt="logo" height={150} width={150} className="mb-6" />
           <div className="text-center space-y-2 mb-8">
@@ -110,86 +110,17 @@ export default function RegistrationPage(): JSX.Element {
           {successMessage && <div className="text-green-600">{successMessage}</div>}
           {errors.form && <div className="text-red-600">{errors.form}</div>}
           <form className="w-full space-y-4" onSubmit={handleSubmit}>
-            <div className="grid gap-2">
-              <Input 
-                id="name" 
-                name="name"
-                type="text" 
-                placeholder="John Doe" 
-                value={formData.name}
-                onChange={handleInputChange}
-                required 
-              />
-              {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
-            </div>
-            <div className="grid gap-2">
-              <Input 
-                id="email" 
-                name="email"
-                type="email" 
-                placeholder="m@example.com" 
-                value={formData.email}
-                onChange={handleInputChange}
-                required 
-              />
-              {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
-            </div>
-            <div className="grid gap-2">
-              <Input 
-                id="password" 
-                name="password"
-                type="password" 
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
-              {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
-            </div>
-            <div className="grid gap-2">
-              <Input 
-                id="address" 
-                name="address"
-                type="text" 
-                placeholder="Address"
-                value={formData.address}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Input 
-                id="mobile" 
-                name="mobile"
-                type="tel" 
-                placeholder="Mobile number"
-                value={formData.mobile}
-                onChange={handleInputChange}
-                required
-              />
-              {errors.mobile && <p className="text-red-600 text-sm">{errors.mobile}</p>}
-            </div>
-            {/* <div className="flex items-center gap-2">
-              <Checkbox 
-                id="terms" 
-                name="terms"
-                checked={formData.terms}
-                onCheckedChange={(checked: boolean) => setFormData(prev => ({ ...prev, terms: checked }))}
-                required 
-              />
-              <Label htmlFor="terms" className="text-sm text-muted-foreground">
-                I agree to the{" "}
-                <Link href="#" className="underline underline-offset-2" prefetch={false}>
-                  terms and conditions
-                </Link>
-              </Label>
-            </div>
-            {errors.terms && <p className="text-red-600 text-sm">{errors.terms}</p>} */}
+            <SharedSignUpForm
+              formData={formData}
+              errors={errors}
+              handleInputChange={handleInputChange}
+            />
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
           <div className="w-full text-center mt-4">
-            
+
             <Link href="/login" className="text-primary hover:underline">Already have an account?{" "} Log in</Link>
           </div>
         </div>

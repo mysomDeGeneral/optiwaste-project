@@ -7,7 +7,7 @@ const requestSchema = new mongoose.Schema({
     wasteType: { type: String, required: true },
     // quantity: { type: Number, required: true },
     instructions: { type: String },
-    digitalAddress: { type: String, required: true }, //location in frontend
+    address: { type: String, required: true }, //location in frontend
     requestStatus: { type: String, enum: ['Unassigned', 'Assigned', 'Pending', 'Accepted', 'Rejected'], default: 'Pending' },
     paymentStatus: { type: String, required: true, default: 'unpaid' },
 }, {

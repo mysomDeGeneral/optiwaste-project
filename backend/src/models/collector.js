@@ -24,7 +24,7 @@ const collectorSchema = new mongoose.Schema({
     },},
     available: { type: Boolean, required: true, default: true },
     wasteTypes: [{ type: String, required: true }],
-    digitalAddress: { type: String, required: true },
+    address: { type: String, required: true },
 }, {
     timestamps: true,
 });

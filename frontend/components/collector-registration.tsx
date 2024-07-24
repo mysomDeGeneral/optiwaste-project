@@ -15,7 +15,6 @@ interface CollectorFormData {
   password: string;
   address: string;
   mobile: string;
-//   terms: boolean;
   nationalId: string;
   licenseId: string;
   dob: string;
@@ -27,7 +26,6 @@ interface CollectorFormErrors {
   name?: string;
   email?: string;
   password?: string;
-//   terms?: string;
   nationalId?: string;
   licenseId?: string;
   dob?: string;
@@ -36,6 +34,22 @@ interface CollectorFormErrors {
   form?: string;
 }
 
+interface wasteTypeOption {
+  value: string;
+  label: string;
+}
+
+const wasteTypeOptions: wasteTypeOption[] = [
+  { value: "plastic", label: "Plastic" },
+  { value: "paper", label: "Paper" },
+  { value: "glass", label: "Glass" },
+  { value: "metal", label: "Metal" },
+  { value: "domestic", label: "Domestic" },
+  { value: "e-waste", label: "E-Waste" },
+  { value: "hazardous", label: "Hazardous" },
+  { value: "construction", label: "Construction" },
+];
+
 export default function CollectorSignUpPage(): JSX.Element {
   const [formData, setFormData] = useState<CollectorFormData>({
     name: "",
@@ -43,7 +57,6 @@ export default function CollectorSignUpPage(): JSX.Element {
     password: "",
     address: "",
     mobile: "",
-    // terms: false,
     nationalId: "",
     licenseId: "",
     dob: "",
@@ -65,9 +78,21 @@ export default function CollectorSignUpPage(): JSX.Element {
 //     setFormData(prev => ({ ...prev, terms: checked }));
 //   };
 
+const handleWasteTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { value, checked } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    wasteTypes: checked
+      ? [...prev.wasteTypes, value]
+      : prev.wasteTypes.filter((type) => type !== value),
+  }));
+};
+
   const validateForm = (): CollectorFormErrors => {
     const newErrors: CollectorFormErrors = {};
-    // ... (add validation for collector-specific fields)
+    if(formData.wasteTypes.length === 0) {
+      newErrors.wasteTypes = "Please select at least one waste type.";
+    }
     return newErrors;
   };
 
@@ -99,7 +124,7 @@ export default function CollectorSignUpPage(): JSX.Element {
   return (
     <div className="flex min-h-[100dvh]">
       <div className="hidden lg:block lg:w-1/2 bg-[url('/waste-truck.svg')] bg-cover bg-center" />
-      <div className="flex flex-col justify-between w-full lg:w-1/2 p-6 md:p-10 lg:p-12 xl:p-16">
+      <div className="flex flex-col justify-between w-full lg:w-1/2 p-6 md:p-10 lg:p-12 xl:p-16 mx-auto max-w-md">
         <div className="flex flex-col items-center">
           <Image src={logo} alt="logo" width={150} height={150} className="mb-6" />
           <div className="text-center space-y-2 mb-8">
@@ -140,21 +165,41 @@ export default function CollectorSignUpPage(): JSX.Element {
               id="dob" 
               name="dob"
               type="date" 
-              placeholder="Date of Birth"
+              placeholder="Date of Birth(mmddyyyy)"
               value={formData.dob}
               onChange={handleInputChange}
               required
             />
-            <Input 
-              id="digitalAddress" 
-              name="digitalAddress"
-              type="text" 
-              placeholder="Digital Address"
-              value={formData.digitalAddress}
-              onChange={handleInputChange}
-              required
+        
+             <div>
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        Waste Types (Select all that apply)
+      </label>
+      <div className="grid grid-cols-2 gap-2">
+        {wasteTypeOptions.map((type) => (
+          <div key={type.value} className="flex items-center">
+            <input
+              type="checkbox"
+              id={`wasteType-${type.value}`}
+              name="wasteTypes"
+              value={type.value}
+              checked={formData.wasteTypes.includes(type.value)}
+              onChange={handleWasteTypeChange}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
-            {/* You might want to add a multi-select or checkbox group for wasteTypes */}
+            <label
+              htmlFor={`wasteType-${type.value}`}
+              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              {type.label}
+            </label>
+          </div>
+        ))}
+      </div>
+    </div>
+    {errors.wasteTypes && (
+              <p className="text-red-500 text-xs italic">{errors.wasteTypes}</p>
+            )}
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating Collector Account..." : "Create Collector Account"}
             </Button>

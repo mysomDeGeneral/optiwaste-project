@@ -5,13 +5,13 @@ const { assignCollectorToRequest } = require('../services/assignment');
 
 exports.createRequest = async (req, res) => {
     try {
-        const { binId, wasteType, digitalAddress, instructions } = req.body;
+        const { binId, wasteType, address, instructions } = req.body;
 
         const request = new Request({
             user: req.user._id,
             binId,
             wasteType,
-            digitalAddress,
+            address,
             instructions
         });
 
@@ -66,14 +66,14 @@ exports.getRequest = async (req, res) => {
 }
 
 exports.updateRequest = async (req, res) => {
-    const { requestStatus, digitalAddress } = req.body;
+    const { requestStatus, address } = req.body;
 
     try {
         const request = await Request.findById(req.params.id);
 
         if (request) {
             request.requestStatus = requestStatus || request.requestStatus;
-            request.digitalAddress = digitalAddress || request.digitalAddress;
+            request.address = address || request.address;
             await request.save();
             res.json(request);
         } else {

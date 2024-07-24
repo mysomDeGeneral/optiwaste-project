@@ -2,7 +2,7 @@ const Collector = require('../models/collector');
 const generateToken = require('../utils/jwt');
 
 exports.register = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, address } = req.body;
 
     try {
         const collectorExists = await Collector.findOne({ email});
@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'Collector already exists'});
         }
 
-        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress });
+        const collector = new Collector({ name, email, password, nationalId, licenseId, dob, wasteTypes, address });
         await collector.save();
         res.status(201).json({
             _id: collector._id,
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
             licenseId: collector.licenseId,
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
-            digitalAddress: collector.digitalAddress,
+            address: collector.address,
             available: collector.available,
             role: 'collector',
             token: generateToken(collector._id, role = 'collector'),
@@ -40,7 +40,6 @@ exports.login = async (req, res) => {
         const collector = await Collector.findOne({ email });
         
         if(collector && (await collector.matchPassword(password))) {
-            console.log("collector logged in succesfully!");
             res.json({
                 _id: collector._id,
                 name: collector.name,
@@ -49,7 +48,7 @@ exports.login = async (req, res) => {
                 licenseId: collector.licenseId,
                 dob: collector.dob,
                 wasteTypes: collector.wasteTypes,
-                digitalAddress: collector.digitalAddress,
+                address: collector.address,
                 available: collector.available,
                 role : 'collector',
                 token: generateToken(collector._id, role = 'collector'),
@@ -84,7 +83,7 @@ exports.getCollectorProfile = async (req, res) => {
             licenseId: collector.licenseId,
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
-            digitalAddress: collector.digitalAddress,
+            address: collector.address,
             available: collector.available,
             });
             }  
@@ -97,7 +96,7 @@ exports.getCollectorProfile = async (req, res) => {
 } 
 
 exports.updateCollectorProfile = async (req, res) => {
-    const { name, email, password, nationalId, licenseId, dob, wasteTypes, digitalAddress, available } = req.body;
+    const { name, email, password, nationalId, licenseId, dob, wasteTypes, address, available } = req.body;
 
     const collector = await Collector.findById(req.collector._id);
 
@@ -108,7 +107,7 @@ exports.updateCollectorProfile = async (req, res) => {
         if (licenseId !== undefined) collector.licenseId = licenseId;
         if (dob !== undefined) collector.dob = dob ;
         if (wasteTypes !== undefined) collector.wasteTypes = wasteTypes;
-        if (digitalAddress !== undefined) collector.digitalAddress = digitalAddress;
+        if (address !== undefined) collector.address = address;
         if (available !== undefined) collector.available = available;
 
         if(password) {
@@ -124,7 +123,7 @@ exports.updateCollectorProfile = async (req, res) => {
             licenseId: collector.licenseId,
             dob: collector.dob,
             wasteTypes: collector.wasteTypes,
-            digitalAddress: collector.digitalAddress,
+            address: collector.address,
             available: collector.available,
             role : 'collector',
             token: generateToken(collector._id, role = 'collector'),
@@ -141,7 +140,7 @@ exports.deleteCollectorProfile = async (req, res) => {
 
         if (collector) {
             await collector.deleteOne();
-            res.json({ message: 'Collector removed' });
+            res.json({ message: 'Account deleted!' });
         } else {
             res.status(404).json({ message: 'Collector not found' });
         }

@@ -77,7 +77,7 @@ export const SharedSignUpForm: React.FC<SharedSignUpFormProps> = ({
           id="address" 
           name="address"
           type="text" 
-          placeholder="Address"
+          placeholder="Digital Address"
           value={formData.address}
           onChange={handleInputChange}
         />
