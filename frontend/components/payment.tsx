@@ -24,7 +24,8 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({ initialEmail, initi
                 amount: parseFloat(amount),
                 email,
                 reference: requestId,
-                callbackUrl: `http://localhost:3000/users/request/${requestId}` || `https://optiwaste.vercel.app/users/request/${requestId}`,
+                callbackUrl: `https://optiwaste.vercel.app/users/request/${requestId}`,
+                // `http://localhost:3000/users/request/${requestId}` ||
             });
             console.log('url:', response);
             router.push(response.data.data.authorization_url);
