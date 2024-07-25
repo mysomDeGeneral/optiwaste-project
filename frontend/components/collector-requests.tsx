@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "@/components/ui/pagination"
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { useRequest } from "@/contexts/request-context"
+import { useAuth } from "@/contexts/auth-context"
 
 // // Mock data for requests
 // const mockRequests = [
@@ -48,7 +49,8 @@ export function Requests() {
   const [selectedRequest, setSelectedRequest] = useState<{ id: number; address: string; status: string; pickupTime: string; } | null>(null)
   const [requestsPerPage, setRequestsPerPage] = useState(4)
   const router = useRouter()
-  const { allRequests } = useRequest();
+  const { allRequests, fetchRequests } = useRequest();
+  const { token } = useAuth();
 
   const requests = Array.isArray(allRequests) ? allRequests : [];
 
@@ -56,6 +58,7 @@ export function Requests() {
   console.log("requests:", requests);
 
   useEffect(() => {
+    fetchRequests(token);
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setRequestsPerPage(6)
@@ -70,7 +73,7 @@ export function Requests() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
 
-  }, [])
+  }, [token, fetchRequests])
 
 
 

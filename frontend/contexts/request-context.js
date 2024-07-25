@@ -37,7 +37,7 @@ export const RequestProvider = ({ children }) => {
     }, []);
 
   return (
-    <RequestContext.Provider value={{ allRequests, createNewRequest, request, fetchRequest }}>
+    <RequestContext.Provider value={{ allRequests, createNewRequest, request, fetchRequest, fetchRequests }}>
       {children}
     </RequestContext.Provider>
   );
