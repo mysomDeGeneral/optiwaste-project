@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:5000/api';
+const CALLBACK_URL = process.env.NEXT_PUBLIC_CALLBACK_URL
 
 interface PaymentComponentProps {
     initialEmail?: string;
@@ -24,8 +25,7 @@ const PaymentComponent: React.FC<PaymentComponentProps> = ({ initialEmail, initi
                 amount: parseFloat(amount),
                 email,
                 reference: requestId,
-                // callbackUrl: `https://optiwaste.vercel.app/users/request/${requestId}`,
-                callbackUrl: `http://localhost:3000/users/request/${requestId}`,
+                callbackUrl: `${CALLBACK_URL}/${requestId}`,
             });
             console.log('url:', response);
             router.push(response.data.data.authorization_url);

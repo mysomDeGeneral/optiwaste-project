@@ -129,6 +129,7 @@ export function Requests() {
                   open={openRequestId === request._id}
                   onOpenChange={(open) => {
                     if (!open) setOpenRequestId('');
+                    else setOpenRequestId(request._id);
                   }}
                   >
                     <DialogTrigger asChild>
