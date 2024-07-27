@@ -79,7 +79,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <div className="font-bold">Location</div>
-                  <div>{request.digitalAddress}</div>
+                  <div>{request.address}</div>
                 </div>
                 <div>
                   <div className="font-bold">Waste Type</div>

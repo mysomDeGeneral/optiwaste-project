@@ -91,6 +91,7 @@ exports.updatePaymentStatus = async (id, status) => {
         if (request) {
             request.paymentStatus = status;
             await request.save();
+            console.log('status',request.paymentStatus);
         }
     } catch (error) {
         console.error('Error updating payment status:', error);

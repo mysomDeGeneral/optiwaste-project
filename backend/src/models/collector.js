@@ -1,3 +1,4 @@
+//collector.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -26,6 +27,13 @@ const collectorSchema = new mongoose.Schema({
     available: { type: Boolean, required: true, default: true },
     wasteTypes: [{ type: String, required: true }],
     address: { type: String, required: true },
+    pushSubscription: {
+        endpoint: { type: String },
+        keys: {
+            p256dh: { type: String },
+            auth: { type: String }
+        }
+    }
 }, {
     timestamps: true,
 });

@@ -12,6 +12,7 @@ const locationRoutes = require('./routes/location');
 const paymentRoutes = require('./routes/payment');
 const verifyToken = require('./utils/jwt')
 const cors = require('cors');
+const subscriptionRouter = require('./routes/subscription');
 
 
 // connectDB();
@@ -32,6 +33,7 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/location', locationRoutes);
 app.get('/api/verify-user', verifyToken);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/subscribe', subscriptionRouter);
 
 
 app.listen(PORT, () => {

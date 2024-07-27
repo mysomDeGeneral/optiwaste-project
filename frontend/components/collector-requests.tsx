@@ -29,6 +29,8 @@ import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, Pagi
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { useRequest } from "@/contexts/request-context"
 import { useAuth } from "@/contexts/auth-context"
+import PushNotification from "@/components/pushNotification";
+
 
 // // Mock data for requests
 // const mockRequests = [
@@ -50,15 +52,21 @@ export function Requests() {
   const [requestsPerPage, setRequestsPerPage] = useState(4)
   const router = useRouter()
   const { allRequests, fetchRequests } = useRequest();
-  const { token } = useAuth();
+  const { token } = useAuth(); 
+  const [openRequestId, setOpenRequestId] = useState('');
 
   const requests = Array.isArray(allRequests) ? allRequests : [];
 
 
-  console.log("requests:", requests);
-
   useEffect(() => {
     fetchRequests(token);
+
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data.type === 'OPEN_REQUEST_DIALOG') {
+        setOpenRequestId(event.data.requestId);
+      }
+    });
+
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setRequestsPerPage(6)
@@ -72,6 +80,8 @@ export function Requests() {
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
+
+    
 
   }, [token, fetchRequests])
 
@@ -102,6 +112,7 @@ export function Requests() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
+      <PushNotification onRequestOpen={(requestId: string) => setOpenRequestId(requestId)}/>
       <main className="flex-1 overflow-y-auto flex items-center justify-center">
         <div className="grid gap-4 p-4 md:p-6">
           <Card>
@@ -114,7 +125,12 @@ export function Requests() {
                 ( <div className="flex items-center justify-center h-64 text-lg font-medium text-muted-foreground">No requests available</div> ) :
                 
                 (currentRequests.map((request : any) => (
-                  <Dialog key={request._id}>
+                  <Dialog key={request._id}
+                  open={openRequestId === request._id}
+                  onOpenChange={(open) => {
+                    if (!open) setOpenRequestId('');
+                  }}
+                  >
                     <DialogTrigger asChild>
                       <div className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer" onClick={() => setSelectedRequest(request)}>
                         <div className="flex items-center justify-between">
