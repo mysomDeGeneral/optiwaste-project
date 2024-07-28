@@ -34,7 +34,12 @@ export const RequestProvider = ({ children }) => {
 
     useEffect(() => {
         fetchRequests();
-    }, []);
+        const interval = setInterval(() => {
+          fetchRequests();
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [token]);
 
   return (
     <RequestContext.Provider value={{ allRequests, createNewRequest, request, fetchRequest, fetchRequests }}>

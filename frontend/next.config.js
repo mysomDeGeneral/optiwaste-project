@@ -1,16 +1,17 @@
 const withPWA = require("@ducanh2912/next-pwa").default({
-    customWorkerSrc: "service-worker",
-    customWorkerDest: "somewhere-else",
-    customWorkerPrefix: "not/a-worker",
     dest: 'public',
-    cacheOnFrontEndNav : true,
-    aggresiveFrontEndNavCaching : true,
-    reloadOnOnline : true,
-    swcMinify : true,
-    disable : false,
-    workboxOptions: {
-      disableDevLogs: true,
-    },
+    // disable: process.env.NODE_ENV === 'development',
+    disable: false,
+    register: true,
+    skipWaiting: true,
+    sw: '/sw.js',
+    // cacheOnFrontEndNav : true,
+    // aggresiveFrontEndNavCaching : true,
+    // reloadOnOnline : true,
+    // swcMinify : true,
+    // workboxOptions: {
+    //   disableDevLogs: true,
+    // },
   });
   
 /** @type {import('next').NextConfig} */

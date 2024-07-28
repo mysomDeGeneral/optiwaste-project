@@ -7,7 +7,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 import { decodeJwt } from 'jose';
 import { UseSearchParamsWrapper } from '@/components/useSearchParamsWrapper';
-import { registerServiceWorker } from "@/lib/registerServiceWorker";
+// import { registerServiceWorker } from "@/lib/registerServiceWorker";
 
 // import { getUserRole } from '@/middleware';
 // import { getTokenFromCookies } from '@/middleware';
@@ -236,7 +236,7 @@ const ClientSideAuth: React.FC<AuthProviderComponentProps> = ({ children }) => {
 };
 const AuthProviderComponent: React.FC<AuthProviderComponentProps> = ({ children }) => {
     useEffect(() => {
-        registerServiceWorker();
+        // registerServiceWorker();
       }, []);
     return <ClientSideAuth>{children}</ClientSideAuth>;
 };
