@@ -88,6 +88,7 @@ exports.getCollectorProfile = async (req, res) => {
             address: collector.address,
             available: collector.available,
             mobile: collector.mobile,
+            pushSubscription: collector.pushSubscription,
             });
             }  
     else {

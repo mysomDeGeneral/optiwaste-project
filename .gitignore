@@ -169,3 +169,8 @@ next-env.d.ts
 #capacitor
 android
 capacitor.config.ts
+
+# service worker
+sw.*
+workbox-*
+swe-worker-*

@@ -56,7 +56,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
     if (id) {
      fetchRequest(id);
     }
-  }, [id]);
+  }, [id, fetchRequest]);
 
  
   return (

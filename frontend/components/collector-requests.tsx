@@ -52,15 +52,30 @@ export function Requests() {
   const [requestsPerPage, setRequestsPerPage] = useState(4)
   const router = useRouter()
   const { allRequests, fetchRequests } = useRequest();
-  const { token } = useAuth(); 
+  const { token, user } = useAuth(); 
   const [openRequestId, setOpenRequestId] = useState('');
+  const [hasRefreshed, setHasRefreshed] = useState(false)
+
+
 
   const requests = Array.isArray(allRequests) ? allRequests : [];
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !hasRefreshed) {
+      const storedHasRefreshed = localStorage.getItem('hasRefreshed')
+      if (!storedHasRefreshed) {
+        localStorage.setItem('hasRefreshed', 'true')
+        setHasRefreshed(true)
+        window.location.reload()
+      }
+    }
+  }, [hasRefreshed])
+  
 
   useEffect(() => {
-    fetchRequests(token);
+     fetchRequests(token);
 
+      
     navigator.serviceWorker.addEventListener('message', event => {
       if (event.data.type === 'OPEN_REQUEST_DIALOG') {
         setOpenRequestId(event.data.requestId);
@@ -85,11 +100,11 @@ export function Requests() {
 
   }, [token, fetchRequests])
 
-
+  const sortedRequests = requests.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const indexOfLastRequest = currentPage * requestsPerPage
   const indexOfFirstRequest = indexOfLastRequest - requestsPerPage
-  const currentRequests = requests.slice(indexOfFirstRequest, indexOfLastRequest)
+  const currentRequests = sortedRequests.slice(indexOfFirstRequest, indexOfLastRequest)
 
   const paginate = (pageNumber: SetStateAction<number>) => setCurrentPage(pageNumber)
 

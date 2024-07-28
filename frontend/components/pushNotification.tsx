@@ -17,7 +17,7 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
   const collectorId = user?._id;
 
   useEffect(() => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
+    if ('PushManager' in window) {
       initializePushNotifications().catch(error => {
         console.error('Failed to initialize push notifications:', error);
         setError(error.message);
@@ -29,9 +29,8 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
 
   const initializePushNotifications = async () => {
     try {
-      console.log('Registering service worker...');
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service Worker registered with scope:', registration.scope);
+      console.log('Initialzing push notifications...');
+      const registration = await navigator.serviceWorker.ready;
 
       navigator.serviceWorker.addEventListener('message', event => {
         if (event.data.type === 'NOTIFICATION_CLICKED') {

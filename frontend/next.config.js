@@ -1,6 +1,21 @@
+const withPWA = require("@ducanh2912/next-pwa").default({
+    customWorkerSrc: "service-worker",
+    customWorkerDest: "somewhere-else",
+    customWorkerPrefix: "not/a-worker",
+    dest: 'public',
+    cacheOnFrontEndNav : true,
+    aggresiveFrontEndNavCaching : true,
+    reloadOnOnline : true,
+    swcMinify : true,
+    disable : false,
+    workboxOptions: {
+      disableDevLogs: true,
+    },
+  });
+  
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // output: 'export',
+
     // async rewrites() {
     //     return [
     //         {
@@ -17,7 +32,11 @@ const nextConfig = {
 
     experimental: {
         missingSuspenseWithCSRBailout: false,
+        fontLoaders: [
+            { loader: '@next/font/google', options: { subsets: ['latin'] } },
+          ],
     },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);
+

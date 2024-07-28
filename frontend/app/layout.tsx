@@ -6,13 +6,16 @@ import { RequestProvider } from "@/contexts/request-context";
 import { UserProvider } from "@/contexts/user-context";
 import { CollectorProvider } from "@/contexts/collector-context";
 import { AuthProvider } from "@/contexts/auth-context";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "OptiWaste",
-  description: "OptiWaste App",
+  description: "A web application developed to facilitate waste collection requests",
+  generator: "Next.js",
+  manifest: "/manifest.json",
+  keywords: ["optiwaste", "waste-collection", "waste-request"],
 
   icons: [
     {
@@ -24,6 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
