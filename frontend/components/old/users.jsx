@@ -11,7 +11,7 @@ import { UserContext } from "@/contexts/user-context"
 export function UsersPage() {
   const { allUsers, addUser } = useContext(UserContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage] = useState(3);
+  const [usersPerPage] = useState(5);
   const [newUser, setNewUser] = useState({ name: '', email: '', role: 'user', status: 'active' });
 
   // Pagination logic

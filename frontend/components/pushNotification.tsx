@@ -3,11 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/contexts/auth-context';
-import Cookies from 'js-cookie';
 import { decodeJwt } from 'jose';
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-
 
 interface PushNotificationProps {
     onRequestOpen: (requestId: string ) => void;
@@ -17,24 +15,11 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
   const { user, token } = useAuth();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [collectorId, setCollectorId] = useState<string | null>(null);
+  // const collectorId = user?._id;
 
-
- useEffect(() => {
-  const token = Cookies.get('token');
-  if (token) {
-    try {
-      const decodedToken = decodeJwt(token);
-      setCollectorId(decodedToken.id as string);
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      setError('Error decoding token');
-    }
-  } else {
-    setError('No token found in cookies');
-  }
-
- }, []);
+  const payload = decodeJwt(token!);
+  const collectorId = payload.id as string;
+  console.log('collectorId:', collectorId);
 
   useEffect(() => {
     if ('PushManager' in window) {
@@ -67,7 +52,6 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
       console.log('Notification permission granted');
 
       const subscription = await subscribeUserToPush(registration);
-      await getCollectorId();
       await sendSubscriptionToBackend(subscription, collectorId);
       setIsSubscribed(true);
       console.log('Push notification setup complete');
@@ -124,21 +108,6 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
         throw error;
     }
   };
-
-  const getCollectorId = async () => {
-    const token = Cookies.get('token');
-    if (token) {
-      try {
-        const decodedToken = decodeJwt(token);
-        setCollectorId(decodedToken.id as string);
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        setError('Error decoding token');
-      }
-    } else {
-      setError('No token found in cookies');
-    }
-  }
 
   const urlBase64ToUint8Array = (base64String: string): Uint8Array => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);

@@ -29,8 +29,17 @@ import { useRequest } from "@/contexts/request-context"
 export function RequestsPage() {
   const { allRequests } = useRequest();
   const requests = Array.isArray(allRequests) ? allRequests : [];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [requestsPerPage] = useState(5);
 
-  console.log(requests);
+
+  const indexOfLastRequest = currentPage * requestsPerPage;
+  const indexOfFirstRequest = indexOfLastRequest - requestsPerPage;
+  const currentRequests = requests.slice(indexOfFirstRequest, indexOfLastRequest);
+  const totalPages = Math.ceil(requests.length / requestsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
 
   const [filteredRequests, setFilteredRequests] = useState(requests)
   const [selectedType, setSelectedType] = useState("all")
@@ -44,7 +53,7 @@ export function RequestsPage() {
       setFilteredRequests(requests.filter((request) => request.wasteType === type))
     }
   }
-  const totalRequests = requests.length
+  const totalRequests = currentRequests.length
   const plasticRequests = requests.filter((request) => request.wasteType === "plastic").length
   const domesticRequests = requests.filter((request) => request.wasteType === "domestic").length
   const metalRequests = requests.filter((request) => request.wasteType === "metal").length
@@ -129,7 +138,7 @@ export function RequestsPage() {
                       <TableCell>{request._id}</TableCell>
                       <TableCell>{request.wasteType}</TableCell>
                       <TableCell>
-                        <Badge variant={request.status === "Pending" ? "secondary" : "outline"}>{request.status}</Badge>
+                        <Badge variant={request.requestStatus === "Pending" ? "secondary" : "outline"}>{request.status}</Badge>
                       </TableCell>
                       <TableCell>
                         <Button variant="outline" size="sm">
@@ -140,6 +149,18 @@ export function RequestsPage() {
                   ))}
                 </TableBody>
               </Table>
+              <div className="flex justify-center mt-4">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button 
+                  key={page} 
+                  onClick={() => handlePageChange(page)}
+                  variant={currentPage === page ? "default" : "outline"}
+                  className="mx-1"
+                >
+                  {page}
+                </Button>
+              ))}
+            </div>
             </CardContent>
           </Card>
         </main>
