@@ -5,6 +5,9 @@ const withPWA = require("@ducanh2912/next-pwa").default({
     register: true,
     skipWaiting: true,
     sw: '/sw.js',
+    customWorkerSrc: "service-worker",
+    customWorkerDest: "somewhere-else", // defaults to `dest`
+    customWorkerPrefix: "not/a-worker",
     // cacheOnFrontEndNav : true,
     // aggresiveFrontEndNavCaching : true,
     // reloadOnOnline : true,
@@ -16,7 +19,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
+    // exports: 'output',
     // async rewrites() {
     //     return [
     //         {

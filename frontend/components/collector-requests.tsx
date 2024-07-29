@@ -73,7 +73,16 @@ export function Requests() {
   
 
   useEffect(() => {
-     fetchRequests(token);
+    fetchRequests(token);
+    const interval = setInterval(() => {
+      fetchRequests(token);
+    }, 5000);
+
+    return () => clearInterval(interval);
+}, [token]);
+
+  useEffect(() => {
+    // fetchRequests(token);
 
       
     navigator.serviceWorker.addEventListener('message', event => {
@@ -98,7 +107,7 @@ export function Requests() {
 
     
 
-  }, [token, fetchRequests])
+  }, [])
 
   const sortedRequests = requests.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
@@ -144,6 +153,7 @@ export function Requests() {
                   open={openRequestId === request._id}
                   onOpenChange={(open) => {
                     if (!open) setOpenRequestId('');
+                    else setOpenRequestId(request._id);
                   }}
                   >
                     <DialogTrigger asChild>

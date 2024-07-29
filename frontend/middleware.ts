@@ -81,6 +81,6 @@ export function getTokenFromCookies(req: NextRequest): string | null {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|manifest|icon|favicon.ico).*)',
   ],
 };

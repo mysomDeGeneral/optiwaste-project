@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/contexts/auth-context';
 import { decodeJwt } from 'jose';
+import Cookies from 'js-cookie';
 
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
@@ -15,22 +16,29 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
   const { user, token } = useAuth();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // const [collectorId, setCollectorId] = useState<string | null>(null);
   // const collectorId = user?._id;
 
-  const payload = decodeJwt(token!);
-  const collectorId = payload.id as string;
-  console.log('collectorId:', collectorId);
+  // const payload = decodeJwt(token!);
+  // const collectorId = payload.id as string;
+  // console.log('collectorId:', collectorId);
+
 
   useEffect(() => {
-    if ('PushManager' in window) {
-      initializePushNotifications().catch(error => {
-        console.error('Failed to initialize push notifications:', error);
-        setError(error.message);
-      });
-    } else {
-      setError('Push notifications are not supported in this browser');
-    }
-  }, [collectorId]);
+    const fetchData = async () => {
+      if ('PushManager' in window) {
+        initializePushNotifications().catch(error => {
+          console.error('Failed to initialize push notifications:', error);
+          setError(error.message);
+        });
+      } else {
+        setError('Push notifications are not supported in this browser');
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   const initializePushNotifications = async () => {
     try {
@@ -52,6 +60,7 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
       console.log('Notification permission granted');
 
       const subscription = await subscribeUserToPush(registration);
+      const collectorId = await getCollectorId();
       await sendSubscriptionToBackend(subscription, collectorId);
       setIsSubscribed(true);
       console.log('Push notification setup complete');
@@ -123,6 +132,17 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
     }
     return outputArray;
   };
+
+  const getCollectorId = async () => {
+    const token = Cookies.get('token');
+    if (!token) {
+      return null;
+    }
+    const payload = decodeJwt(token);
+    // setCollectorId(payload.id as string);
+    return payload.id as string;
+
+  }
 
   return (
     <div>

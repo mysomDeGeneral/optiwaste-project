@@ -35,66 +35,7 @@ interface AuthProviderComponentProps {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
-// const ClientSideAuth = ({ children }: { children: React.ReactNode }) => {
-//     const [user, setUser] = useState<any>(null);
-//     const [token, setToken] = useState<string | null>(null);
-//     const searchParams = useSearchParams();
-//     const router = useRouter();
 
-//     const handleLogin = async (data: LoginData) => {
-//         console.log("loginData auth-context", data);
-
-//         try {
-//             let response;
-//             const { isCollector } = data;
-//             if (isCollector) {
-//                 response = await loginCollector(data);
-//             } else {
-//                 response = await loginUser(data);
-//             }
-
-//             console.log("response auth-context", response);
-
-//             if (response && response.data.token) {
-//                 setToken(response.data.token);
-//                 setTokenInCookie(response.data.token);
-//                 localStorage.setItem('shouldRefresh', 'true');
-//                 axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-//                 setUser(response);
-
-//                 const token = getTokenFromCookie();
-
-//                 // await getUserRole(token ?? '');
-
-//                 let redirectUrl;
-
-//                 if(response.data.role === "admin"){
-//                     localStorage.setItem('shouldRefresh', 'true');
-//                     redirectUrl = '/admin/dashboard';
-//                 } else if (response.data.role === 'user') {
-//                     localStorage.setItem('shouldRefresh', 'true');
-//                     redirectUrl = '/users/request';
-//                 } else if (response.data.role === 'collector') {
-//                     localStorage.setItem('shouldRefresh', 'true');
-//                     redirectUrl = '/collector/requests';
-//                 } else {
-//                     redirectUrl = '/';
-//                 }
-
-//                 const returnUrl = redirectUrl ?? "/";
-
-//                 console.log("returnUrl", returnUrl);
-//                 router.refresh();
-//                 // window.location.href = returnUrl;
-//                 router.replace(returnUrl);
-//             } else {
-//                 console.error("Invalid response from the server");
-//             }
-//         } catch (error: any) {
-//             console.error("Login failed: " + error.message);
-//         }
-//     };
-// }
 
 export function setTokenInCookie(token: string): void{
     Cookies.set('token', token, { expires: 1, path: '/'});

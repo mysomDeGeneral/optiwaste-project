@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Clipboard, Navigation, CircleUserRound } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { registerServiceWorker } from "@/lib/registerServiceWorker"
+import { useEffect } from "react"
 
 export default function CollectorLayoutPage({ children } : { children: React.ReactNode }) {
   const { handleLogout } = useAuth();
@@ -14,6 +16,9 @@ export default function CollectorLayoutPage({ children } : { children: React.Rea
     { href: "/collector/profile", icon: CircleUserRound, label: "Profile" },
   ]
 
+  // useEffect(() => {
+  //   registerServiceWorker()
+  // }, [])
   return (
     <div className="flex flex-col h-screen">
       <main className="flex-1 overflow-auto relative">

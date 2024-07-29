@@ -15,6 +15,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
     try {
         const request = await Request.findById(requestId);
         if (!request) {
+            console.log('Request not found');
             throw new Error('Request not found');
         }
 
@@ -46,6 +47,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
         });
 
         if (assignedCollector && assignedCollector.pushSubscription) {
+            console.log('Sending push notification');
             try{
                 await webPush.sendNotification(assignedCollector.pushSubscription, payload);
                 console.log('Push notification sent successfully');
