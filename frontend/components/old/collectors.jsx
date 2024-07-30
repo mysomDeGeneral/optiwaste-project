@@ -20,7 +20,7 @@ To read more about using these font, please visit the Next.js documentation:
 // import Link from "next/link"
 "use client"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent , CardFooter} from "@/components/ui/card"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
@@ -35,6 +35,8 @@ export function CollectorsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [collectorsPerPage] = useState(5);
   const [newCollector, setNewCollector] = useState({ name: '', email: '', phone: '', status: 'active' });
+  const [viewCollector, setViewCollector] = useState(null);
+  const [editCollector, setEditCollector] = useState(null);
 
   const indexOfLastCollector = currentPage * collectorsPerPage;
   const indexOfFirstCollector = indexOfLastCollector - collectorsPerPage;
@@ -42,6 +44,8 @@ export function CollectorsPage() {
   const totalPages = Math.ceil(allCollectors?.length / collectorsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -58,8 +62,17 @@ export function CollectorsPage() {
     setNewCollector({ name: '', email: '', phone: '', status: 'active' });
   };
 
+  const updateCollector = (updatedCollector) => {
+    setAllCollectors(prevCollectors => 
+      prevCollectors.map(collector => 
+        collector._id === updatedCollector._id ? updatedCollector : collector
+      )
+    );
+  };
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+       <h1 className="text-4xl font-bold mb-4">Collectors</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <Card>
           <CardHeader>
@@ -85,12 +98,96 @@ export function CollectorsPage() {
                       <Badge variant="secondary">Active</Badge>
                     </TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm">
-                        View
-                      </Button>
-                      <Button variant="outline" size="sm" className="ml-2">
-                        Edit
-                      </Button>
+                    <Button variant="outline" size="sm" onClick={() => setViewCollector(collector)}>
+                    View
+                  </Button>
+                  {viewCollector && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                      <Card className="w-1/2">
+                        <CardHeader>
+                          <CardTitle>Collector Details</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p><strong>Name:</strong> {viewCollector.name}</p>
+                          <p><strong>Email:</strong> {viewCollector.email}</p>
+                          <p><strong>Phone:</strong> {viewCollector.phone}</p>
+                          <p><strong>Status:</strong> {viewCollector.status}</p>
+                        </CardContent>
+                        <CardFooter>
+                          <Button onClick={() => setViewCollector(null)}>Close</Button>
+                        </CardFooter>
+                      </Card>
+                    </div>
+                  )}
+                        <Button variant="outline" size="sm" className="ml-2" onClick={() => setEditCollector(collector)}>
+  Edit
+</Button>
+
+{editCollector && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <Card className="w-1/2">
+      <CardHeader>
+        <CardTitle>Edit Collector</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            updateCollector(editCollector);
+            setEditCollector(null);
+        }}>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-name">Name</Label>
+              <Input
+                id="edit-name"
+                type="text"
+                value={editCollector.name}
+                onChange={(e) => setEditCollector({...editCollector, name: e.target.value})}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-email">Email</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                value={editCollector.email}
+                onChange={(e) => setEditCollector({...editCollector, email: e.target.value})}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-phone">Phone</Label>
+              <Input
+                id="edit-phone"
+                type="text"
+                value={editCollector.phone}
+                onChange={(e) => setEditCollector({...editCollector, phone: e.target.value})}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-status">Status</Label>
+              <Select onValueChange={(value) => setEditCollector({...editCollector, status: value})} value={editCollector.status}>
+                <SelectTrigger id="edit-status">
+                  <SelectValue placeholder="Select a status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button type="submit" className="mr-2">Save</Button>
+            <Button variant="outline" onClick={() => setEditCollector(null)}>Cancel</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  </div>
+)}
                     </TableCell>
                   </TableRow>
                 ))}

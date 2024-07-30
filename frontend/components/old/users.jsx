@@ -39,6 +39,7 @@ export function UsersPage() {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+       <h1 className="text-4xl font-bold mb-4">Users</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <Card>
           <CardHeader>

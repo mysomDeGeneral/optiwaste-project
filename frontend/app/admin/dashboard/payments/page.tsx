@@ -1,4 +1,4 @@
-import { PaymentPage } from "@/components/old/payment";
+import PaymentPage from "@/components/old/payment";
 
 export default function Payment(){
     return (
