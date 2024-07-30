@@ -26,6 +26,7 @@ require('dotenv').config();
 //   };
 
   var serviceAccount = require('/etc/secrets/serviceAccountKey.json');
+  console.log('serviceAccount',serviceAccount);
 
   
   admin.initializeApp({
