@@ -27,15 +27,15 @@ const nextConfig = {
         unoptimized: true,
     },
 
-    webpack: (config, { isServer, dev }) => {
-        if (!isServer && !dev) {
-            config.resolve.fallback.fs = {
-                ...config.resolve.fallback,
-                fs: false,
-        };
-    }
+    webpack: (config, { isServer }) => {
+        if (!isServer) {
+          config.resolve.fallback = {
+            ...config.resolve.fallback,
+            fs: 'empty'
+          };
+        }
         return config;
-    },
+      },
 
     rewrites: async () => [
         {
