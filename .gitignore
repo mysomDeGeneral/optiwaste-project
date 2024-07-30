@@ -173,4 +173,5 @@ capacitor.config.ts
 # service worker
 workbox-*
 swe-worker-*
-/public/sw*
+/public/sw.js
+/public/sw.js.map
