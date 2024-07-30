@@ -41,6 +41,14 @@ interface RequestStatusProps {
   };
 }
 
+const wasteTypePrices: { [key: string]: number } = {
+  'Domestic': 10,
+  'Metal': 15,
+  'Plastic': 12,
+  'Hazardous': 25,
+  'E-Waste': 20,
+  'Construction': 30,};
+
 export function RequestStatus({ params }: RequestStatusProps) {
   const { user } = useAuth();
   const { request, fetchRequest } = useRequest();
@@ -49,7 +57,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const router = useRouter();
   const { id } = params;
-  const [ amount ] = useState<number>(10);
+  const [ amount, setAmount ] = useState<number>(0);
 
 
   useEffect(() => {
@@ -57,6 +65,13 @@ export function RequestStatus({ params }: RequestStatusProps) {
      fetchRequest(id);
     }
   }, [id, fetchRequest]);
+
+  useEffect(() => {
+    if (request.wasteType) {
+      const price = wasteTypePrices[request.wasteType] || 10; 
+      setAmount(price);
+    }
+  }, [request.wasteType]);
 
  
   return (
@@ -93,6 +108,10 @@ export function RequestStatus({ params }: RequestStatusProps) {
                   <div className="font-bold">Payment Status</div>
                   <div>{request.paymentStatus}</div>
                 </div>
+                <div>
+                  <div className="font-bold">Amount Due</div>
+                  <div>GH₵{amount.toFixed(2)}</div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -125,7 +144,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
                   <DialogHeader>
                     <DialogTitle>Confirm Payment</DialogTitle>
                     <DialogDescription>
-                      You are about to make a payment to confirm your request.
+                    You are about to make a payment of GH₵{amount.toFixed(2)} for {request.wasteType} waste collection.
                     </DialogDescription>
                   </DialogHeader>
                   <PaymentComponent
