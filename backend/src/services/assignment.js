@@ -25,7 +25,7 @@ require('dotenv').config();
 //     client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${process.env.FIREBASE_CLIENT_EMAIL.replace('@', '%40')}`
 //   };
 
-  var serviceAccount = require("/etc/secrets/serviceAccountKey.json");
+  var serviceAccount = require('/etc/secrets/serviceAccountKey.json');
 
   
   admin.initializeApp({
