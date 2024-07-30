@@ -1,4 +1,3 @@
-export function registerPushListeners(self) {
   self.addEventListener('push', function (event) {
     const data = event.data.json();
     const options = {
@@ -49,5 +48,4 @@ export function registerPushListeners(self) {
     );
   });
   
-}
 

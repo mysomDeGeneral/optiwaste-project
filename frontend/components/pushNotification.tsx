@@ -139,7 +139,6 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
       return null;
     }
     const payload = decodeJwt(token);
-    // setCollectorId(payload.id as string);
     return payload.id as string;
 
   }
