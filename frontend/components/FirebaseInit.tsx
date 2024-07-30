@@ -9,7 +9,7 @@ import axios from "axios";
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
+    apiKey: process.env.NEXT_PUBLIC_API_KEY,
     authDomain: "optiwaste-19300.firebaseapp.com",
     projectId: "optiwaste-19300",
     storageBucket: "optiwaste-19300.appspot.com",
