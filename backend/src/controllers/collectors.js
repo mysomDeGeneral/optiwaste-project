@@ -155,3 +155,21 @@ exports.deleteCollectorProfile = async (req, res) => {
     }
 }
 
+exports.updateFMCToken = async (req, res) => {
+    const { fmcToken } = req.body;
+    try {
+        const collector = await Collector.findById(req.collector._id);
+        if (collector) {
+            if(fmcToken !== undefined) collector.fmcToken = fmcToken;
+            await collector.save();
+            res.json({ 
+                fmcToken: collector.fmcToken,
+                message: 'FMC token updated' 
+            });
+        } else {
+            res.status(404).json({ message: 'Collector not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error updating fmcToken"});
+    }
+}

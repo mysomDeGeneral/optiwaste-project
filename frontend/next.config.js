@@ -1,19 +1,13 @@
 const withPWA = require("@ducanh2912/next-pwa").default({
     dest: 'public',
-    disable: process.env.NODE_ENV === 'development',
-    // disable: false,
+    // disable: process.env.NODE_ENV === 'development',
+    disable: false,
     register: true,
     skipWaiting: true,
     customWorkerSrc: "service-worker",
     customWorkerDest: "somewhere-else", // defaults to `dest`
     customWorkerPrefix: "not/a-worker",
-    // cacheOnFrontEndNav : true,
-    // aggresiveFrontEndNavCaching : true,
-    // reloadOnOnline : true,
-    // swcMinify : true,
-    // workboxOptions: {
-    //   disableDevLogs: true,
-    // },
+   
   });
   
 /** @type {import('next').NextConfig} */
@@ -33,12 +27,22 @@ const nextConfig = {
         unoptimized: true,
     },
 
-    experimental: {
-        missingSuspenseWithCSRBailout: false,
-        fontLoaders: [
-            { loader: '@next/font/google', options: { subsets: ['latin'] } },
-          ],
+    webpack: (config, { isServer, dev }) => {
+        if (!isServer && !dev) {
+            config.resolve.fallback.fs = {
+                ...config.resolve.fallback,
+                fs: false,
+        };
+    }
+        return config;
     },
+
+    rewrites: async () => [
+        {
+            source: '/firebase-messaging-sw-js',
+            destination: '/_next/static/firebase-messaging-sw.js',
+        },
+    ],
 };
 
 module.exports = withPWA(nextConfig);

@@ -136,7 +136,7 @@ export function Requests() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <PushNotification onRequestOpen={(requestId: string) => setOpenRequestId(requestId)}/>
+      {/* <PushNotification onRequestOpen={(requestId: string) => setOpenRequestId(requestId)}/> */}
       <main className="flex-1 overflow-y-auto flex items-center justify-center">
         <div className="grid gap-4 p-4 md:p-6">
           <Card>
@@ -179,6 +179,10 @@ export function Requests() {
                           <span className="col-span-3">
                             <Badge variant={getBadgeVariant(request.status)}>{request.requestStatus}</Badge>
                           </span>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <span className="font-bold">Bin ID:</span>
+                          <span className="col-span-3">{request.binId}</span>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Pickup Time:</span>

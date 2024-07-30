@@ -91,7 +91,7 @@ export function RequestHistory() {
                           </div>
                         </div>
                         <DrawerFooter>
-                          <Button variant="outline" className="w-full">Cancel Request</Button>
+                          <Button variant="outline" className="w-full" >Cancel Request</Button>
                           <Button className="w-full">Make Payment</Button>
                         </DrawerFooter>
                       </div>
