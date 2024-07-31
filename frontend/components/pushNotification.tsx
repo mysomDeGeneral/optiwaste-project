@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/contexts/auth-context';
@@ -8,10 +8,10 @@ import Cookies from 'js-cookie';
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 interface PushNotificationProps {
-    onRequestOpen: (requestId: string ) => void;
+  onRequestOpen: (requestId: string) => void;
 }
 
-const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => {
+const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen }) => {
   const { user, token } = useAuth();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +20,6 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
     const fetchData = async () => {
       if ('serviceWorker' in navigator && 'PushManager' in window) {
         try {
-          // Register the service worker
           const registration = await navigator.serviceWorker.register('/sw-push.js');
           console.log('Service Worker registered successfully:', registration);
 
@@ -36,17 +35,17 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
         setError('Push notifications are not supported in this browser');
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
   const initializePushNotifications = async (registration: ServiceWorkerRegistration) => {
     try {
       console.log('Initializing push notifications...');
 
       navigator.serviceWorker.addEventListener('message', event => {
         if (event.data.type === 'NOTIFICATION_CLICKED') {
-            onRequestOpen(event.data.requestId);
+          onRequestOpen(event.data.requestId);
         }
       });
 
@@ -80,7 +79,7 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
     };
-    
+
     try {
       console.log('Subscribing user to push...');
       const subscription = await registration.pushManager.subscribe(subscribeOptions);
@@ -97,22 +96,22 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
 
   const sendSubscriptionToBackend = async (subscription: PushSubscription, collectorId: any) => {
     try {
-        console.log('Sending subscription to backend...');
-        const response = await axios.post(`${API_URL}/subscribe`, {
-            collectorId,
-            subscription: JSON.stringify(subscription)
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        console.log('Backend subscription response:', response.data);
-        if (response.data.collector) {
-            console.log('Updated collector document:', response.data.collector);
+      console.log('Sending subscription to backend...');
+      const response = await axios.post(`${API_URL}/subscribe`, {
+        collectorId,
+        subscription: JSON.stringify(subscription)
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
         }
+      });
+      console.log('Backend subscription response:', response.data);
+      if (response.data.collector) {
+        console.log('Updated collector document:', response.data.collector);
+      }
     } catch (error) {
-        console.error('Error sending subscription to backend:', error);
-        throw error;
+      console.error('Error sending subscription to backend:', error);
+      throw error;
     }
   };
 
@@ -138,7 +137,6 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
     }
     const payload = decodeJwt(token);
     return payload.id as string;
-
   }
 
   return (
@@ -149,11 +147,9 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
       ) : (
         <p>Not subscribed to push notifications</p>
       )}
-      {error && <p style={{color: 'red'}}>Error: {error}</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
     </div>
   );
 };
 
 export default PushNotification;
-
-

@@ -8,8 +8,10 @@ const requestSchema = new mongoose.Schema({
     // quantity: { type: Number, required: true },
     instructions: { type: String },
     address: { type: String, required: true }, //location in frontend
-    requestStatus: { type: String, enum: ['Unassigned', 'Assigned', 'Pending', 'Accepted', 'Rejected'], default: 'Pending' },
+    requestStatus: { type: String, enum: ['Unassigned', 'Assigned', 'Pending', 'Accepted', 'Rejected', 'Collected'], default: 'Pending' },
     paymentStatus: { type: String, required: true, default: 'unpaid' },
+    amount: { type: Number },
+    feedbackComment: { type: String},
 }, {
     timestamps: true,
 });

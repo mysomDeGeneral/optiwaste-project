@@ -5,14 +5,15 @@ const { assignCollectorToRequest } = require('../services/assignment');
 
 exports.createRequest = async (req, res) => {
     try {
-        const { binId, wasteType, address, instructions } = req.body;
+        const { binId, wasteType, address, instructions, amount } = req.body;
 
         const request = new Request({
             user: req.user._id,
             binId,
             wasteType,
             address,
-            instructions
+            instructions, 
+            amount
         });
 
         await request.save();
@@ -66,14 +67,31 @@ exports.getRequest = async (req, res) => {
 }
 
 exports.updateRequest = async (req, res) => {
-    const { requestStatus, address } = req.body;
+    const { requestStatus} = req.body;
 
     try {
         const request = await Request.findById(req.params.id);
 
         if (request) {
-            request.requestStatus = requestStatus || request.requestStatus;
-            request.address = address || request.address;
+            if (requestStatus !== undefined) request.requestStatus  = requestStatus;
+            await request.save();
+            res.json(request);
+        } else {
+            res.status(404).json({ message: 'Request not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating request', error: error.message});
+    }
+}
+
+exports.updateFeedback = async (req, res) => {
+    const { feedbackComment } = req.body;
+
+    try {
+        const request = await Request.findById(req.params.id);
+
+        if (request) {
+            if (feedbackComment !== undefined) request.feedbackComment  = feedbackComment;
             await request.save();
             res.json(request);
         } else {

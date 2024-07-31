@@ -41,13 +41,7 @@ interface RequestStatusProps {
   };
 }
 
-const wasteTypePrices: { [key: string]: number } = {
-  'Domestic': 10,
-  'Metal': 15,
-  'Plastic': 12,
-  'Hazardous': 25,
-  'E-Waste': 20,
-  'Construction': 30,};
+
 
 export function RequestStatus({ params }: RequestStatusProps) {
   const { user } = useAuth();
@@ -57,8 +51,9 @@ export function RequestStatus({ params }: RequestStatusProps) {
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const router = useRouter();
   const { id } = params;
-  const [ amount, setAmount ] = useState<number>(0);
 
+
+  
 
   useEffect(() => {
     if (id) {
@@ -66,12 +61,16 @@ export function RequestStatus({ params }: RequestStatusProps) {
     }
   }, [id, fetchRequest]);
 
-  useEffect(() => {
-    if (request.wasteType) {
-      const price = wasteTypePrices[request.wasteType] || 10; 
-      setAmount(price);
-    }
-  }, [request.wasteType]);
+  // useEffect(() => {
+  //   if (request.wasteType) {
+  //     const price = wasteTypePrices[request.wasteType] || 10; 
+  //     setAmount(price);
+  //   }
+  // }, [request.wasteType]);
+
+  const handleCloseRequest = () => {
+    router.push('/users/request');
+  };
 
  
   return (
@@ -110,7 +109,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
                 </div>
                 <div>
                   <div className="font-bold">Amount Due</div>
-                  <div>GH₵{amount.toFixed(2)}</div>
+                  <div>GH₵{request.amount.toFixed(2)}</div>
                 </div>
               </div>
             </CardContent>
@@ -132,8 +131,9 @@ export function RequestStatus({ params }: RequestStatusProps) {
             </CardContent>
           </Card>
           <div className="flex justify-end gap-2">
-            <Button variant="outline">Cancel Request</Button>
-            {
+          
+              <Button variant="outline" onClick={handleCloseRequest}>Close</Button>
+              {
               (request.paymentStatus === 'unpaid') && (
               
               <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
@@ -144,14 +144,14 @@ export function RequestStatus({ params }: RequestStatusProps) {
                   <DialogHeader>
                     <DialogTitle>Confirm Payment</DialogTitle>
                     <DialogDescription>
-                    You are about to make a payment of GH₵{amount.toFixed(2)} for {request.wasteType} waste collection.
+                    You are about to make a payment of GH₵{request.amount.toFixed(2)} for {request.wasteType} waste collection.
                     </DialogDescription>
                   </DialogHeader>
                   <PaymentComponent
-                    initialEmail={user?.email}
-                    initialAmount={amount.toString()}
+                    initialEmail={user?.email || ''}
+                    initialAmount={request.amount.toString()}
                     requestId={id}
-                    />
+                  />
                   <DialogFooter>
                     <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>

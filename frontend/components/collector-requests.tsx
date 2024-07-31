@@ -30,21 +30,12 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { useRequest } from "@/contexts/request-context"
 import { useAuth } from "@/contexts/auth-context"
 import PushNotification from "@/components/pushNotification";
+import { updateRequest } from "@/apis/api"
+import Cookies from "js-cookie"
 
 
 // // Mock data for requests
-// const mockRequests = [
-//   { id: 1, address: "AOK6806973", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
-//   { id: 2, address: "AE08423132", status: "Accepted", pickupTime: "2024-07-16 2:30 PM" },
-//   { id: 3, address: "AT03613653", status: "Rejected", pickupTime: "2024-07-17 9:00 AM" },
-//   { id: 4, address: "AC08832667", status: "Pending", pickupTime: "2024-07-15 10:00 AM" },
-//   { id: 5, address: "AH05597737, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
-//   { id: 6, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
-//   { id: 7, address: "123 Main St, Anytown USA", status: "Pending", pickupTime: "2023-07-15 10:00 AM" },
-//   { id: 8, address: "456 Oak Rd, Somewhere City", status: "Accepted", pickupTime: "2023-07-16 2:30 PM" },
-//   { id: 9, address: "789 Elm St, Othertown", status: "Rejected", pickupTime: "2023-07-17 9:00 AM" },
-//   // ... add more mock requests here
-// ]
+
 
 export function Requests() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -130,6 +121,14 @@ export function Requests() {
     }
   }
 
+  const handleComplete = async (id: string) => {
+    const token = Cookies.get('token')!;
+    const requestStatus = "Collected";
+
+    const response = await updateRequest(id, requestStatus, token);
+
+  } 
+
   const handleNavigation = (address: string) => {
     router.push(`route/${address}`)
   }
@@ -162,7 +161,7 @@ export function Requests() {
                           <div className="font-medium">{request.address}</div>
                           <Badge variant={getBadgeVariant(request.status)}>{request.requestStatus}</Badge>
                         </div>
-                        <div className="text-sm text-muted-foreground">Pickup Time: {request.pickupTime || "2024-07-15 10:00 AM"}</div>
+                        <div className="text-sm text-muted-foreground">Pickup Time: {request.pickupTime || "2024-07-26 10:00 AM"}</div>
                       </div>
                     </DialogTrigger>
                     <DialogContent>
@@ -184,14 +183,24 @@ export function Requests() {
                           <span className="font-bold">Bin ID:</span>
                           <span className="col-span-3">{request.binId}</span>
                         </div>
+                        {(request.requestStatus === 'Collected') ?
+                        (<><div className="grid grid-cols-4 items-center gap-4">
+                          <span className="font-bold">Feedback Comment</span>
+                          <span className="col-span-3">{request.feedbackComment}</span>
+                        </div>
+                          </>)
+                          :
+                          (
                         <div className="grid grid-cols-4 items-center gap-4">
                           <span className="font-bold">Pickup Time:</span>
                           <span className="col-span-3">{request.pickupTime || "2024-07-15 10:00 AM"}</span>
-                        </div>
+                        </div> 
+                      )}
                       </div>
+                       
+
                       <DialogFooter>
-                        <Button variant="outline" onClick={() => console.log("Accept request", request._id)}>Accept</Button>
-                        <Button variant="destructive" onClick={() => console.log("Reject request", request._id)}>Reject</Button>
+                        <Button variant="outline" onClick={() => handleComplete(request._id)}>Complete</Button>
                         <Button variant="secondary" onClick={() => handleNavigation(request.address)}>Navigate</Button>
                         <DialogClose asChild>
                           <Button variant="secondary">Close</Button>

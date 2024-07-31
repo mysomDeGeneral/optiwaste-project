@@ -62,7 +62,6 @@ export const updateUserProfile = async (token, data) => {
               Authorization: `Bearer ${token}`
           }
       });
-      console.log("update",response);
       return response.data;
   } catch (error) {
       return error.response;
@@ -81,7 +80,6 @@ export const registerCollector = async (data) => {
 export const loginCollector = async (credentials) => {
     try {
         const response = await api.post('/collectors/login', credentials);
-        console.log(response.message);
         return response;
     } catch (error) {
         return error.response;
@@ -104,7 +102,6 @@ export const getCollectorProfile = async (token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log('collector response:' , response)
         return response.data;
     } catch (error) {
         return error.response;
@@ -141,13 +138,11 @@ export const getRequests = async (token) => {
 export const createRequest = async (data, token) => {
   try {
     // console.log('data:', data);
-    console.log('token:', token);
     const response = await api.post('/requests', data, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log('response:', response);
     return response;
   } catch (error) {
     return error.response;
@@ -167,9 +162,22 @@ export const getRequest = async (id, token) => {
   }
 }
 
-export const updateRequest = async (id, data, token) => {
+export const updateRequest = async (id, requestStatus, token) => {
   try {
-    const response = await api.put(`/requests/${id}`, data, {
+    const response = await api.put(`/requests/${id}`, {requestStatus}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export const updateFeedback = async (id, feedbackComment, token) => {
+  try {
+    const response = await api.put(`/requests/feedback/${id}`, {feedbackComment}, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -231,7 +239,6 @@ export const getLocation = async (address) => {
 
 export const getAddress = async (longitude, latitude) => {
     try {
-      console.log(longitude, latitude);
       const response = await api.post('/location/get-address', {longitude,latitude});
       return response.data;
     } catch (error) {

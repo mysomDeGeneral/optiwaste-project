@@ -12,6 +12,15 @@ import { getAddress } from "@/apis/api"
 import { useRequest } from "@/contexts/request-context"
 import { useRouter } from "next/navigation"
 
+const wasteTypePrices: { [key: string]: number } = {
+  'Domestic': 10,
+  'Metal': 15,
+  'Plastic': 12,
+  'Hazardous': 25,
+  'E-Waste': 20,
+  'Construction': 30,
+};
+
 export function RequestDetails() {
   const { createNewRequest, request } = useRequest();
   const [address, setLocation] = useState('');
@@ -23,6 +32,8 @@ export function RequestDetails() {
   const [binId, setBinId] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const router = useRouter();
+
+
 
   const handleLocationSelect = (lng: number, lat: number) => {
     setSelectedLng(lng);
@@ -50,12 +61,15 @@ export function RequestDetails() {
     e.preventDefault();
     console.log({ address, wasteType, instructions });
 
+    const amount = wasteTypePrices[wasteType] || 10;
+
     const requestData = {
       address, 
       wasteType,
       // quantity,
       instructions,
-      binId
+      binId,
+      amount
     };
 
     try {
