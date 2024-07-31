@@ -109,7 +109,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
                 </div>
                 <div>
                   <div className="font-bold">Amount Due</div>
-                  <div>GH₵{request.amount.toFixed(2)}</div>
+                  <div>GH₵{request.amount?.toFixed(2)}</div>
                 </div>
               </div>
             </CardContent>
@@ -144,12 +144,12 @@ export function RequestStatus({ params }: RequestStatusProps) {
                   <DialogHeader>
                     <DialogTitle>Confirm Payment</DialogTitle>
                     <DialogDescription>
-                    You are about to make a payment of GH₵{request.amount.toFixed(2)} for {request.wasteType} waste collection.
+                    You are about to make a payment of GH₵{request.amount?.toFixed(2)} for {request.wasteType} waste collection.
                     </DialogDescription>
                   </DialogHeader>
                   <PaymentComponent
                     initialEmail={user?.email || ''}
-                    initialAmount={request.amount.toString()}
+                    initialAmount={request.amount?.toString()}
                     requestId={id}
                   />
                   <DialogFooter>

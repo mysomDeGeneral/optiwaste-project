@@ -17,16 +17,27 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen }) =>
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'NOTIFICATION_CLICKED') {
+        onRequestOpen(event.data.requestId);
+      }
+    };
+
+    navigator.serviceWorker.addEventListener('message', handleMessage);
+
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', handleMessage);
+    };
+  }, [onRequestOpen]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if ('serviceWorker' in navigator && 'PushManager' in window) {
         try {
           const registration = await navigator.serviceWorker.register('/sw-push.js');
           console.log('Service Worker registered successfully:', registration);
 
-          initializePushNotifications(registration).catch(error => {
-            console.error('Failed to initialize push notifications:', error);
-            setError(error.message);
-          });
+          await initializePushNotifications(registration);
         } catch (error) {
           console.error('Service Worker registration failed:', error);
           setError(`Service Worker registration failed: ${error}`);
@@ -87,14 +98,11 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen }) =>
       return subscription;
     } catch (error) {
       console.error('Failed to subscribe the user: ', error);
-      if (error instanceof DOMException) {
-        console.error('DOMException details:', error.name, error.message);
-      }
       throw error;
     }
   };
 
-  const sendSubscriptionToBackend = async (subscription: PushSubscription, collectorId: any) => {
+  const sendSubscriptionToBackend = async (subscription: PushSubscription, collectorId: string) => {
     try {
       console.log('Sending subscription to backend...');
       const response = await axios.post(`${API_URL}/subscribe`, {
@@ -106,9 +114,6 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen }) =>
         }
       });
       console.log('Backend subscription response:', response.data);
-      if (response.data.collector) {
-        console.log('Updated collector document:', response.data.collector);
-      }
     } catch (error) {
       console.error('Error sending subscription to backend:', error);
       throw error;
@@ -118,7 +123,7 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen }) =>
   const urlBase64ToUint8Array = (base64String: string): Uint8Array => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding)
-      .replace(/\-/g, '+')
+      .replace(/-/g, '+')
       .replace(/_/g, '/');
 
     const rawData = window.atob(base64);
@@ -133,7 +138,7 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen }) =>
   const getCollectorId = async () => {
     const token = Cookies.get('token');
     if (!token) {
-      return null;
+      throw new Error('No token found');
     }
     const payload = decodeJwt(token);
     return payload.id as string;

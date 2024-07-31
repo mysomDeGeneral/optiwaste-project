@@ -1,20 +1,28 @@
-self.addEventListener('push', function (event) {
-  const data = event.data.json();
-  console.log('New notification', data);
-  const options = {
-    body: data.message,
-    icon: '/icon-192x192.png',
-    data: {
-      requestId: data.requestId
-    }
-  };
+self.addEventListener('push', function(event) {
+  console.log('Push event received');
+  try {
+    const data = event.data.json();
+    console.log('Push data:', data);
 
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+    const options = {
+      body: data.message,
+      icon: '/icon-192x192.png',
+      data: {
+        requestId: data.requestId
+      }
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
+  } catch (error) {
+    console.error('Error processing push event:', error);
+  }
 });
 
-self.addEventListener('notificationclick', function (event) {
+
+self.addEventListener('notificationclick', function(event) {
+  console.log('Notification clicked');
   event.notification.close();
 
   const requestId = event.notification.data.requestId;
