@@ -2,8 +2,8 @@
     const data = event.data.json();
     const options = {
       body: data.message,
-      icon: '/icon.png',
-      badge: '/badge.png',
+      icon: '/icon-192x192.png',
+      // badge: '/badge.png',
       data: {
         requestId: data.requestId
       }

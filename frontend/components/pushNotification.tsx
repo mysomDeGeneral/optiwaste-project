@@ -1,4 +1,3 @@
-//pushNotification.tsx
 "use client"
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -16,21 +15,23 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
   const { user, token } = useAuth();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // const [collectorId, setCollectorId] = useState<string | null>(null);
-  // const collectorId = user?._id;
-
-  // const payload = decodeJwt(token!);
-  // const collectorId = payload.id as string;
-  // console.log('collectorId:', collectorId);
-
 
   useEffect(() => {
     const fetchData = async () => {
-      if ('PushManager' in window) {
-        initializePushNotifications().catch(error => {
-          console.error('Failed to initialize push notifications:', error);
-          setError(error.message);
-        });
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+          // Register the service worker
+          const registration = await navigator.serviceWorker.register('/sw-push.js');
+          console.log('Service Worker registered successfully:', registration);
+
+          initializePushNotifications(registration).catch(error => {
+            console.error('Failed to initialize push notifications:', error);
+            setError(error.message);
+          });
+        } catch (error) {
+          console.error('Service Worker registration failed:', error);
+          setError(`Service Worker registration failed: ${error}`);
+        }
       } else {
         setError('Push notifications are not supported in this browser');
       }
@@ -39,12 +40,9 @@ const PushNotification: React.FC<PushNotificationProps> = ({ onRequestOpen}) => 
     fetchData();
   }, []);
   
-
-  const initializePushNotifications = async () => {
+  const initializePushNotifications = async (registration: ServiceWorkerRegistration) => {
     try {
-      console.log('Initialzing push notifications...');
-      const registration = await navigator.serviceWorker.ready;
-      console.log('registration successful: ', registration);
+      console.log('Initializing push notifications...');
 
       navigator.serviceWorker.addEventListener('message', event => {
         if (event.data.type === 'NOTIFICATION_CLICKED') {
