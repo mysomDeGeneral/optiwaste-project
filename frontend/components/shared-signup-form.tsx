@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 interface SharedFormData {
   name: string;
@@ -34,6 +35,7 @@ export const SharedSignUpForm: React.FC<SharedSignUpFormProps> = ({
   handleInputChange,
 //   handleCheckboxChange
 }) => {
+  const [showPassword, setShowPassword] = React.useState(false);
   return (
     <>
       <div className="grid gap-2">
@@ -61,15 +63,24 @@ export const SharedSignUpForm: React.FC<SharedSignUpFormProps> = ({
         {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
       </div>
       <div className="grid gap-2">
+        <div className="relative">
         <Input 
           id="password" 
           name="password"
-          type="password" 
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={formData.password}
           onChange={handleInputChange}
           required
         />
+         <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
+                </button>
+                </div>
         {errors.password && <p className="text-red-600 text-sm">{errors.password}</p>}
       </div>
       <div className="grid gap-2">

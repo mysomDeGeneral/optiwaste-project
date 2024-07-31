@@ -39,14 +39,16 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
 
             if (assignedCollector && assignedCollector.pushSubscription) {
                 console.log('Sending push notification');
+                try { 
+                const pushSubscription = assignedCollector.pushSubscription;
                 const payload = JSON.stringify({
                     title: 'New Waste Collection Request',
                     message: `You have been assigned a new request at ${request.address}`,
                     requestId: request._id.toString(),
                 });
 
-                try {
-                    await webPush.sendNotification(JSON.parse(assignedCollector.pushSubscription), payload);
+                    console.log('pushSubscription:', pushSubscription);
+                    await webPush.sendNotification(assignedCollector.pushSubscription, payload);
                     console.log('Push notification sent successfully');
                 } catch (error) {
                     console.error('Error sending push notification:', error);

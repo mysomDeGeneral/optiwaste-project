@@ -17,12 +17,19 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+"use client"
 import Link from "next/link"
+import Image from "next/image"
 
 
 export function LandingPage() {
   return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <main className="flex min-h-screen flex-col items-center justify-between p-10">
+          <header className="w-full flex items-center justify-start p-4">
+            <Image src={"/icon-512x512.png"} width={50} height={50} alt="OptiWaste" />
+            <span className="logoText ml-2 text-2xl font-bold">OptiWaste</span>
+
+            </header>
           <section className="w-full py-12 md:py-24 lg:py-32 bg-background dark:bg-background-dark">
             <div className="container px-4 md:px-6">
               <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
@@ -67,7 +74,7 @@ export function LandingPage() {
             <div className="container px-4 md:px-6">
               <div className="flex flex-col items-center justify-center space-y-4 text-center">
                 <div className="space-y-2">
-                  <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm dark:bg-muted-dark dark:text-muted-foreground-dark">
+                  <div className="inline-block rounded-lg bg-muted px-3 py-1 text-2xl dark:bg-muted-dark dark:text-muted-foreground-dark">
                     Our Services
                   </div>
                   <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Waste Collection and Recycling</h2>
@@ -79,6 +86,28 @@ export function LandingPage() {
               </div>
             </div>
           </section>
+          <style jsx>{`
+        .logoText {
+          display: inline-block;
+          opacity: 0;
+          animation: fadeIn 2s forwards, slideIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideIn {
+          from {
+            transform: translateX(-20px);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+      `}</style>
         </main>
   )
 }

@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { CircleDashed } from "lucide-react";
+import { CircleDashed, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 
 export function SignIn() {
@@ -19,6 +19,8 @@ export function SignIn() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ export function SignIn() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat " style={{ backgroundImage: 'url(/waste-truck.svg)', opacity: 0.5 }}>
       <Card className="w-full max-w-md shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="border-b border-gray-200 dark:border-gray-700">
           <CardTitle className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">OptiWaste Login</CardTitle>
@@ -90,14 +92,23 @@ export function SignIn() {
                 />
               </div>
               <div className="space-y-2">
+                <div className="relative">
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
+                </button>
+                </div>
               </div>
               
               {error && <div className="flex items-center justify-between"><span className="text-red-500 text-sm">{error}</span></div>}
