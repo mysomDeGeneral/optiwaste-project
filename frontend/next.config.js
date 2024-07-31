@@ -1,14 +1,14 @@
-const withPWA = require("@ducanh2912/next-pwa").default({
-    dest: 'public',
-    // disable: process.env.NODE_ENV === 'development',
-    disable: false,
-    register: true,
-    skipWaiting: true,
-    customWorkerSrc: "service-worker",
-    customWorkerDest: "somewhere-else", // defaults to `dest`
-    customWorkerPrefix: "not/a-worker",
+// const withPWA = require("@ducanh2912/next-pwa").default({
+//     dest: 'public',
+//     // disable: process.env.NODE_ENV === 'development',
+//     disable: false,
+//     register: true,
+//     skipWaiting: true,
+//     customWorkerSrc: "service-worker",
+//     customWorkerDest: "somewhere-else", // defaults to `dest`
+//     customWorkerPrefix: "not/a-worker",
    
-  });
+//   });
   
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -27,23 +27,25 @@ const nextConfig = {
         unoptimized: true,
     },
 
-    webpack: (config, { isServer }) => {
-        if (!isServer) {
-          config.resolve.fallback = {
-            ...config.resolve.fallback,
-            fs: 'empty'
-          };
-        }
-        return config;
-      },
+    // webpack: (config, { isServer }) => {
+    //     if (!isServer) {
+    //       config.resolve.fallback = {
+    //         ...config.resolve.fallback,
+    //         fs: 'empty'
+    //       };
+    //     }
+    //     return config;
+    //   },
 
-    rewrites: async () => [
-        {
-            source: '/firebase-messaging-sw-js',
-            destination: '/_next/static/firebase-messaging-sw.js',
-        },
-    ],
+    // rewrites: async () => [
+    //     {
+    //         source: '/firebase-messaging-sw-js',
+    //         destination: '/_next/static/firebase-messaging-sw.js',
+    //     },
+    // ],
 };
 
-module.exports = withPWA(nextConfig);
+// module.exports = withPWA(nextConfig);
+module.exports = nextConfig;
+
 

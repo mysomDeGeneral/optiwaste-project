@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, getToken, Messaging, onMessage } from 'firebase/messaging';
 import { useAuth, getTokenFromCookie } from '@/contexts/auth-context';
 import axios from "axios";
 
@@ -20,17 +20,18 @@ const firebaseConfig = {
 
 const FirebaseInit = () => {
   const { user } = useAuth();
+  const messagingRef = useRef<Messaging | null>(null);
+  const tokenSentRef = useRef(false);
 
   useEffect(() => {
-    const initFirebase = async () => {
-      const app = initializeApp(firebaseConfig);
-      const messaging = getMessaging(app);
+    const app = initializeApp(firebaseConfig);
+    messagingRef.current = getMessaging(app);
 
+    const initFirebase = async () => {
       await registerServiceWorker();
       await requestPermission();
-      await getMessagingToken(messaging);
 
-      const unsubscribe = onMessage(messaging, (payload) => {
+      const unsubscribe = onMessage(messagingRef.current!, (payload) => {
         console.log('Message received. ', payload);
         if (payload.notification) {
           new Notification(payload.notification.title!, {
@@ -45,7 +46,13 @@ const FirebaseInit = () => {
     };
 
     initFirebase();
-  }, [user]);
+  }, []); // Empty dependency array means this runs once on mount
+
+  useEffect(() => {
+    if (user && !tokenSentRef.current) {
+      getMessagingToken();
+    }
+  }, [user]); // This effect runs when user changes
 
   const registerServiceWorker = async () => {
     if ('serviceWorker' in navigator) {
@@ -69,22 +76,23 @@ const FirebaseInit = () => {
     }
   };
 
-  const getMessagingToken = async (messaging: any) => {
+  const getMessagingToken = async () => {
     try {
-      if (user) {
+      if (user && messagingRef.current) {
         const token = getTokenFromCookie();
         console.log('token:', token);
-        
+
         // Wait for the Service Worker to be ready
         await navigator.serviceWorker.ready;
-        
-        const currentToken = await getToken(messaging, { 
+
+        const currentToken = await getToken(messagingRef.current, {
           vapidKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
           serviceWorkerRegistration: await navigator.serviceWorker.getRegistration()
         });
         console.log('current token:', currentToken);
         if (currentToken) {
           await sendTokenToServer(token!, currentToken!);
+          tokenSentRef.current = true;
         } else {
           console.log('No registration token available. Request permission to generate one.');
           await requestPermission();
