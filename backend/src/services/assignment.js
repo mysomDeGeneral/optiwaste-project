@@ -57,7 +57,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
             collectorsWithDistances.sort((a, b) => a.distance - b.distance);
 
             const nearestCollector = collectorsWithDistances[0].collector;
-            request.collector = nearestCollector._id;
+            // request.collector = nearestCollector._id;
             // request.requestStatus = 'Assigned';
             const updatedRequest = await Request.findByIdAndUpdate(
                 request._id,
