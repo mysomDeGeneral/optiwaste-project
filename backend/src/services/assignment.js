@@ -2,6 +2,7 @@ const webPush = require('web-push');
 const Request = require('../models/request');
 const Collector = require('../models/collector');
 const { getLocationCoordinates } = require('../apis/ghanaPostGPS')
+
 webPush.setVapidDetails(
     'mailto:fianyekukokonumichael@gmail.com',
     process.env.VAPID_PUBLIC_KEY,
@@ -30,9 +31,19 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
         const suitableCollectors = await Collector.find(query);
 
         if (suitableCollectors.length === 0) {
-            request.collector = null;
-            request.requestStatus = 'Unassigned';
-        } else {
+            await Request.findByIdAndUpdate(
+                request._id,
+                {
+                    $set: {
+                        collector: null,
+                        requestStatus: 'Unassigned'
+                    }
+                },
+                { new: true, runValidators: true }
+            );
+            return request;
+        } 
+
             // request.collector = suitableCollectors[0]._id;
 
             const requestCoordinates = await getLocationCoordinates(request.address);
@@ -48,7 +59,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
             const nearestCollector = collectorsWithDistances[0].collector;
             request.collector = nearestCollector._id;
             // request.requestStatus = 'Assigned';
-            await Request.findByIdAndUpdate(
+            const updatedRequest = await Request.findByIdAndUpdate(
                 request._id,
                 {
                     $set: {
@@ -68,7 +79,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
                 const payload = JSON.stringify({
                     title: 'New Waste Collection Request',
                     message: `You have been assigned a new request at ${request.address}`,
-                    requestId: request._id.toString(),
+                    requestId: pdatedRequest._id.toString(),
                 });
 
                     await webPush.sendNotification(assignedCollector.pushSubscription, payload);
@@ -77,10 +88,10 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
                     console.error('Error sending push notification:', error);
                 }
             }
-        }
+        
 
         
-        return request;
+        return pdatedRequest;
     } catch (error) {
         console.error('Error in assignCollectorToRequest:', error);
         throw error;
