@@ -64,9 +64,11 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
                 {
                     $set: {
                         requestStatus: 
-                            "Assigned"
+                            "Assigned",
+                        collector: nearestCollector._id,       
                     }
                 },
+                
                 { new: true, runValidators: true }
             );
 
