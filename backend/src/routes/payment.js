@@ -59,7 +59,6 @@ router.post('/paystack-webhook', async (req, res) => {
           }
         );
   
-        console.log(verifyResponse.data.status);
         if (verifyResponse.data.status) {
           // Payment successful, update your database
           await updatePaymentStatus(reference, 'paid');
