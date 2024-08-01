@@ -93,23 +93,23 @@ export function RequestStatus({ params }: RequestStatusProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <div className="font-bold">Location</div>
-                  <div>{request.address}</div>
+                  <div>{request?.address}</div>
                 </div>
                 <div>
                   <div className="font-bold">Waste Type</div>
-                  <div>{request.wasteType}</div>
+                  <div>{request?.wasteType}</div>
                 </div>
                 <div>
                   <div className="font-bold">Special Instructions</div>
-                  <div>{request.instructions}</div>
+                  <div>{request?.instructions}</div>
                 </div>
                 <div>
                   <div className="font-bold">Payment Status</div>
-                  <div>{request.paymentStatus}</div>
+                  <div>{request?.paymentStatus}</div>
                 </div>
                 <div>
                   <div className="font-bold">Amount Due</div>
-                  <div>GH₵{request.amount?.toFixed(2)}</div>
+                  <div>GH₵{request?.amount?.toFixed(2)}</div>
                 </div>
               </div>
             </CardContent>
@@ -121,12 +121,12 @@ export function RequestStatus({ params }: RequestStatusProps) {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="font-bold">Status</div>
-                <div className="text-green-500 font-medium">{request.requestStatus}</div>
+                <div className="text-green-500 font-medium">{request?.requestStatus}</div>
               </div>
               <Separator className="my-4" />
               <div className="flex items-center justify-between">
                 <div className="font-bold">Scheduled Pickup</div>
-                <div>June 15, 2023</div>
+                <div>August 2, 2024</div>
               </div>
             </CardContent>
           </Card>
@@ -134,7 +134,7 @@ export function RequestStatus({ params }: RequestStatusProps) {
           
               <Button variant="outline" onClick={handleCloseRequest}>Close</Button>
               {
-              (request.paymentStatus === 'unpaid') && (
+              (request?.paymentStatus === 'unpaid') && (
               
               <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
                 <DialogTrigger asChild>
@@ -144,12 +144,12 @@ export function RequestStatus({ params }: RequestStatusProps) {
                   <DialogHeader>
                     <DialogTitle>Confirm Payment</DialogTitle>
                     <DialogDescription>
-                    You are about to make a payment of GH₵{request.amount?.toFixed(2)} for {request.wasteType} waste collection.
+                    You are about to make a payment of GH₵{request?.amount.toFixed(2)} for {request.wasteType} waste collection.
                     </DialogDescription>
                   </DialogHeader>
                   <PaymentComponent
                     initialEmail={user?.email || ''}
-                    initialAmount={request.amount?.toString()}
+                    initialAmount={request?.amount?.toString()}
                     requestId={id}
                   />
                   <DialogFooter>

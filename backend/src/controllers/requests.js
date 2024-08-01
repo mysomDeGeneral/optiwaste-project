@@ -4,8 +4,26 @@ const User = require('../models/user');
 const { assignCollectorToRequest } = require('../services/assignment');
 
 exports.createRequest = async (req, res) => {
+    const wasteTypeAmount = [
+        { "plastic" : 10 },
+        { "paper": 10 },
+        { "glass": 12 },
+        { "metal": 15 },
+        { "domestic": 10 },
+        { "e-waste": 15 },
+        { "hazardous": 20 },
+        { "construction": 25 },
+      ];
     try {
-        const { binId, wasteType, address, instructions, amount } = req.body;
+        const { binId, wasteType, address, instructions } = req.body;
+
+         const matchingWasteType = wasteTypeAmount.find(item => Object.keys(item)[0] === wasteType);
+        
+        if (!matchingWasteType) {
+            return res.status(400).json({ message: 'Invalid waste type' });
+        }
+
+        const amount = matchingWasteType[wasteType];
 
         const request = new Request({
             user: req.user._id,
