@@ -87,7 +87,7 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Active Collectors</CardTitle>
+            <CardTitle>Collectors</CardTitle>
             <CardDescription>The number of collectors currently active and collecting waste.</CardDescription>
           </CardHeader>
           <CardContent>
