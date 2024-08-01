@@ -79,7 +79,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
                 const payload = JSON.stringify({
                     title: 'New Waste Collection Request',
                     message: `You have been assigned a new request at ${request.address}`,
-                    requestId: pdatedRequest._id.toString(),
+                    requestId: updatedRequest._id.toString(),
                 });
 
                     await webPush.sendNotification(assignedCollector.pushSubscription, payload);
@@ -91,7 +91,7 @@ async function assignCollectorToRequest(requestId, rejectedCollectorId = null) {
         
 
         
-        return pdatedRequest;
+        return updatedRequest;
     } catch (error) {
         console.error('Error in assignCollectorToRequest:', error);
         throw error;
